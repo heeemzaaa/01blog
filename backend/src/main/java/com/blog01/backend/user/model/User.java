@@ -1,8 +1,8 @@
 package com.blog01.backend.user.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,11 +12,13 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode(of = "id")
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -33,10 +35,18 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(columnDefinition = "TEXT")
     private String profileImage;
 
+    public enum Role {
+        ADMIN,
+        USER
+    }
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean admin = false;
+    @Builder.Default
+    private Role role = Role.USER;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
