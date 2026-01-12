@@ -20,7 +20,7 @@ public class UserService {
 
     }
 
-    public ResponseData<User> Login(UserLogin requestUser) {
+    public ResponseData<User> login(UserLogin requestUser) {
         Optional<User> userOpt = ur.findByEmail(requestUser.getEmail());
         if (!userOpt.isPresent()) {
             // case of error user doesn't exists
@@ -37,7 +37,7 @@ public class UserService {
         return ResponseData.success("User logged in successfully !", user);
     }
 
-    public ResponseData<User> Register(UserRegister userRequest) {  
+    public ResponseData<User> register(UserRegister userRequest) {  
         if (ur.existsByEmail(userRequest.getEmail())) {
             return ResponseData.error("Email already existed, try another one !");
         }
