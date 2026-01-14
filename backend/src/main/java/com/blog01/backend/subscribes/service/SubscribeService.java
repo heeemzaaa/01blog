@@ -2,12 +2,14 @@ package com.blog01.backend.subscribes.service;
 
 import org.springframework.stereotype.Service;
 import java.util.*;
+
+import com.blog01.backend.auth.model.*;
+import com.blog01.backend.auth.repository.UserRepository;
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
-import com.blog01.backend.user.repository.UserRepository;
-import com.blog01.backend.user.response.UserResponse;
-import com.blog01.backend.user.model.*;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -48,13 +50,13 @@ public class SubscribeService {
                 .orElseThrow(() -> new RuntimeException("User to subscribe doesn't exist"));
         // I need to check if the user is me (if yes refuse)
         if (subscriber.getId().equals(target.getId())) {
-            ResponseData.error("You cannot subscribe to yourself !");
+            return ResponseData.error("You cannot subscribe to yourself !");
         }
 
         // I need to check if I'm already a follower
         boolean exists = sr.existsBySubscriberAndUser(subscriber, target);
         if (exists) {
-            ResponseData.error("You are already a subscriber to this user !");
+            return ResponseData.error("You are already a subscriber to this user !");
         }
 
         Subscribe subscribe = Subscribe.builder()

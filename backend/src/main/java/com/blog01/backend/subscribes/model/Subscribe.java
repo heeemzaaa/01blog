@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.blog01.backend.user.model.User;
+import com.blog01.backend.auth.model.User;
 
 import jakarta.persistence.*;
 import lombok.*;

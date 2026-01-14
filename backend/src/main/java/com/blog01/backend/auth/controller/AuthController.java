@@ -1,13 +1,14 @@
-package com.blog01.backend.user.controller;
+package com.blog01.backend.auth.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.blog01.backend.auth.dto.UserLogin;
+import com.blog01.backend.auth.dto.UserRegister;
+import com.blog01.backend.auth.response.AuthResponse;
+import com.blog01.backend.auth.response.UserResponse;
+import com.blog01.backend.auth.service.AuthService;
 import com.blog01.backend.common.response.ResponseData;
-import com.blog01.backend.user.dto.UserLogin;
-import com.blog01.backend.user.dto.UserRegister;
-import com.blog01.backend.user.response.AuthResponse;
-import com.blog01.backend.user.response.UserResponse;
-import com.blog01.backend.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserController {
-    private final UserService us;
+public class AuthController {
+    private final AuthService us;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseData<AuthResponse>> login(@RequestBody UserLogin request) {

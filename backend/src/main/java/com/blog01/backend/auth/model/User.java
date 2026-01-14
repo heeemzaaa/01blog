@@ -1,4 +1,4 @@
-package com.blog01.backend.user.model;
+package com.blog01.backend.auth.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

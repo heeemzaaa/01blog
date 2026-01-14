@@ -1,8 +1,9 @@
 package com.blog01.backend.admin.controller;
 
 import com.blog01.backend.admin.service.AdminService;
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
-import com.blog01.backend.user.response.UserResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

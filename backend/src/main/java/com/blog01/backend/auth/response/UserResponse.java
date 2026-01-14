@@ -1,18 +1,23 @@
-package com.blog01.backend.user.response;
+package com.blog01.backend.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
+
+import com.blog01.backend.auth.model.User.Role;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    private String token;
+public class UserResponse {
+    private UUID id;
+    private String firstName;
+    private String lastName;
     private String email;
     private String username;
-    private String role;
+    private Role role;
     private String profileImage;
 }

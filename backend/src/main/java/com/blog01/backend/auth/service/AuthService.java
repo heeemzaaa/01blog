@@ -1,17 +1,18 @@
-package com.blog01.backend.user.service;
+package com.blog01.backend.auth.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.blog01.backend.user.model.User;
-import com.blog01.backend.user.dto.*;
+
+import com.blog01.backend.auth.dto.*;
+import com.blog01.backend.auth.model.User;
+import com.blog01.backend.auth.repository.UserRepository;
+import com.blog01.backend.auth.response.AuthResponse;
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.*;
 import com.blog01.backend.security.CustomUserDetailsService;
 import com.blog01.backend.security.JwtUtils;
-import com.blog01.backend.user.repository.UserRepository;
-import com.blog01.backend.user.response.AuthResponse;
-import com.blog01.backend.user.response.UserResponse;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
     private final UserRepository ur;
     private final PasswordEncoder pe;
     private final JwtUtils jwtUtils;

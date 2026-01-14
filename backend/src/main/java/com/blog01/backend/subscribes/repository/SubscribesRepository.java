@@ -2,8 +2,9 @@ package com.blog01.backend.subscribes.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.blog01.backend.auth.model.User;
 import com.blog01.backend.subscribes.model.Subscribe;
-import com.blog01.backend.user.model.User;
 
 import java.util.*;
 

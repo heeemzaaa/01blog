@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.blog01.backend.user.model.*;
+import com.blog01.backend.auth.model.*;
 
 @Entity
 @Getter

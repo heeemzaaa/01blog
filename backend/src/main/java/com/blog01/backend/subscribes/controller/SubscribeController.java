@@ -2,9 +2,11 @@ package com.blog01.backend.subscribes.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
 import com.blog01.backend.subscribes.service.SubscribeService;
-import com.blog01.backend.user.response.UserResponse;
+
 import lombok.RequiredArgsConstructor;
 import java.security.Principal;
 import java.util.*;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @RestController
-@RequestMapping("api/connection")
+@RequestMapping("/api/connection")
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscribeService subscribeService;

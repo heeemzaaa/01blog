@@ -1,11 +1,12 @@
 package com.blog01.backend.common;
 
-import com.blog01.backend.user.model.User;
-import com.blog01.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.blog01.backend.auth.model.User;
+import com.blog01.backend.auth.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor

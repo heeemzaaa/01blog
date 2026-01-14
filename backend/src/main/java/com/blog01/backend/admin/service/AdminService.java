@@ -1,9 +1,10 @@
 package com.blog01.backend.admin.service;
 
+import com.blog01.backend.auth.model.User;
+import com.blog01.backend.auth.repository.UserRepository;
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
-import com.blog01.backend.user.model.User;
-import com.blog01.backend.user.repository.UserRepository;
-import com.blog01.backend.user.response.UserResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
