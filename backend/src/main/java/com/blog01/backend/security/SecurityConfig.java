@@ -34,6 +34,8 @@ public class SecurityConfig {
                         // Allow anyone to access Login and Register
                         .requestMatchers("/api/auth/**").permitAll()
 
+                        .requestMatchers("/error").permitAll()  // <--- ADD THIS LINE
+
                         // Example: Restrict Admin endpoints to "ADMIN" role only
                         // Note: "hasRole" automatically adds "ROLE_" prefix, so it checks for
                         // "ROLE_ADMIN"

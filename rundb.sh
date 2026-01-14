@@ -1,0 +1,1 @@
+docker exec -it social-postgres psql -U hamza -d socialdb

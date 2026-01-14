@@ -5,24 +5,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog01.backend.common.response.ResponseData;
 import com.blog01.backend.user.dto.UserLogin;
 import com.blog01.backend.user.dto.UserRegister;
-import com.blog01.backend.user.model.User;
+import com.blog01.backend.user.response.AuthResponse;
+import com.blog01.backend.user.response.UserResponse;
 import com.blog01.backend.user.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService us;
 
-    public UserController(UserService us) {
-        this.us = us;
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<ResponseData<User>> login(@RequestBody UserLogin request) {
-        ResponseData<User> response = us.login(request);
+    public ResponseEntity<ResponseData<AuthResponse>> login(@RequestBody UserLogin request) {
+        ResponseData<AuthResponse> response = us.login(request);
 
         if (!response.isSuccess()) {
             return ResponseEntity.status(401).body(response);
@@ -32,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseData<User>> register(@RequestBody UserRegister request) {
-        ResponseData<User> response = us.register(request);
+    public ResponseEntity<ResponseData<UserResponse>> register(@RequestBody UserRegister request) {
+        ResponseData<UserResponse> response = us.register(request);
 
         if (!response.isSuccess()) {
             return ResponseEntity.status(409).body(response);
