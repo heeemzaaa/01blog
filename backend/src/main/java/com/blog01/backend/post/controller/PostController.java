@@ -24,8 +24,9 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<ResponseData<List<PostResponse>>> getPosts() {
-        return ResponseEntity.ok(postService.getPosts());
+    public ResponseEntity<ResponseData<List<PostResponse>>> getPosts(Principal principal) {
+        String email = principal != null ? principal.getName() : null;
+        return ResponseEntity.ok(postService.getPosts(email));
     }
 
     @PostMapping("/create")

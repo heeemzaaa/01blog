@@ -1,11 +1,10 @@
 package com.blog01.backend.report.model;
 
+
 import java.time.LocalDateTime;
-
 import org.hibernate.annotations.CreationTimestamp;
-
 import com.blog01.backend.auth.model.User;
-
+import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,11 +13,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "reports")
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -35,7 +35,7 @@ public class Report {
     private Target targetType;
 
     @Column(nullable = false)
-    private String targetId;
+    private UUID targetId;
 
     @Column(nullable = false)
     private String reason;
@@ -51,8 +51,9 @@ public class Report {
     }
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(nullable = false)
-    private StatusOfReports status;
+    private StatusOfReports status = StatusOfReports.PENDING;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

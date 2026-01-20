@@ -6,10 +6,14 @@ import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
+import com.blog01.backend.notification.model.Notification.NotificationType;
+import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.post.dto.PostRequest;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.*;
 import com.blog01.backend.post.response.PostResponse;
+import com.blog01.backend.subscribes.repository.SubscribesRepository;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -22,34 +26,50 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
+    private final NotificationService notificationService;
+    private final SubscribesRepository subscribesRepository;
 
-    public ResponseData<List<PostResponse>> getPosts() {
+    public ResponseData<List<PostResponse>> getPosts(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
         List<PostResponse> response = posts.stream()
-            .map(this::mapToPostResponse)
-            .collect(Collectors.toList());
-        
+                .map((post) -> mapToPostResponse(post, user))
+                .collect(Collectors.toList());
+
         return ResponseData.success("Posts fetched successfully !", response);
     }
 
     public ResponseData<PostResponse> createPost(String email, PostRequest postToCreate) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("There is no user with this email !"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
 
         Post post = Post.builder()
-            .user(user)
-            .title(postToCreate.getTitle())
-            .content(postToCreate.getContent())
-            .media(postToCreate.getMedia())
-            .build();
+                .user(user)
+                .title(postToCreate.getTitle())
+                .content(postToCreate.getContent())
+                .media(postToCreate.getMedia())
+                .build();
 
         Post saved = postRepository.save(post);
 
-        return ResponseData.success("Post created successfully !", mapToPostResponse(saved));
+            List<User> followers = subscribesRepository.findSubscribersByUser(user);
+
+        for (User follower : followers) {
+            notificationService.sendNotification(
+                    follower,
+                    user,
+                    NotificationType.NEW_POST,
+                    saved.getId());
+        }
+
+        return ResponseData.success("Post created successfully !", mapToPostResponse(saved, user));
     }
 
     public ResponseData<PostResponse> updatePost(String email, UUID id, PostRequest postToUpdate) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("There is no user with this email !"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
 
         Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find this post !"));
 
@@ -65,7 +85,7 @@ public class PostService {
 
         Post saved = postRepository.save(post);
 
-        return ResponseData.success("Post updated successfully !", mapToPostResponse(saved));
+        return ResponseData.success("Post updated successfully !", mapToPostResponse(saved, user));
     }
 
     public ResponseData<String> deletePost(String email, UUID postId) {
@@ -80,13 +100,15 @@ public class PostService {
         }
 
         postRepository.delete(post);
-        
+
         return ResponseData.success("Post deleted successfully", null);
     }
 
-    private PostResponse mapToPostResponse(Post p) {
+    private PostResponse mapToPostResponse(Post p, User currentUser) {
         long likesCount = likeRepository.countByPost(p);
         long commentsCount = commentRepository.countByPost(p);
+        boolean isLiked = likeRepository.existsByUserAndPost(currentUser, p);
+
         return PostResponse.builder()
                 .id(p.getId())
                 .title(p.getTitle())
@@ -95,6 +117,7 @@ public class PostService {
                 .createdAt(p.getCreatedAt())
                 .likesCount(likesCount)
                 .commentsCount(commentsCount)
+                .isLiked(isLiked)
                 .user(UserResponse.builder()
                         .id(p.getUser().getId())
                         .firstName(p.getUser().getFirstName())

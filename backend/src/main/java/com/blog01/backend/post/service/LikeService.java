@@ -4,6 +4,8 @@ import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
+import com.blog01.backend.notification.model.Notification.NotificationType;
+import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.post.model.Like;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.LikeRepository;
@@ -23,6 +25,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     public ResponseData<String> toggleLike(String email, UUID postId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
@@ -41,6 +44,13 @@ public class LikeService {
                     .post(post)
                     .build();
             likeRepository.save(like);
+
+            notificationService.sendNotification(
+                    post.getUser(), 
+                    user, 
+                    NotificationType.LIKE,
+                    post.getId()
+            );
             return ResponseData.success("Post liked successfully", null);
         }
     }

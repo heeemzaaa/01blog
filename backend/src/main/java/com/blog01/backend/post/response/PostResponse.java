@@ -19,6 +19,7 @@ public class PostResponse {
     private String content;
     private String media;
     private LocalDateTime createdAt;
+    private boolean isLiked;
     private long likesCount;
     private long commentsCount;
 }

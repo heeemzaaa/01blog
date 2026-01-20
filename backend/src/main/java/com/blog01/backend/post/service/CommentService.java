@@ -6,6 +6,8 @@ import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
+import com.blog01.backend.notification.model.Notification.NotificationType;
+import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.post.dto.CommentRequest;
 import com.blog01.backend.post.model.Comment;
 import com.blog01.backend.post.model.Post;
@@ -22,6 +24,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final NotificationService notificationService;
 
     public ResponseData<List<CommentResponse>> getCommentsByPost(UUID postId, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
@@ -44,6 +47,13 @@ public class CommentService {
                 .build();
 
         Comment saved = commentRepository.save(comment);
+
+        notificationService.sendNotification(
+                post.getUser(),
+                user,
+                NotificationType.COMMENT,
+                post.getId());
+                
         return ResponseData.success("Comment added successfully !", mapToCommentResponse(saved, user.getId()));
     }
 

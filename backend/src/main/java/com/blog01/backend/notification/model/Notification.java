@@ -1,62 +1,51 @@
 package com.blog01.backend.notification.model;
 
+
+import com.blog01.backend.auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-
 import org.hibernate.annotations.CreationTimestamp;
-
-import com.blog01.backend.auth.model.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "notifications")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User recipient;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User actor;
 
     public enum NotificationType {
-        NEW_POST,
-        LIKE,
+        LIKE,           
         COMMENT,
-        FOLLOW,
-        REPORT_UPDATE
+        NEW_POST,       
+        REPORT_CREATED,
+        REPORT_UPDATE    
     }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType type;
 
-    public enum NotificationTargetType {
-        POST,
-        USER,
-        COMMENT
-    }
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private NotificationTargetType targetType;
+    private UUID relatedEntityId;
 
-    @Column(nullable = false)
-    private String targetID;
-
-    @Column(nullable = false)
+    @Builder.Default
     private boolean isRead = false;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }
