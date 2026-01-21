@@ -37,7 +37,7 @@
     margin: 0;
 }
 
-.card-title > p {
+.card-title>p {
     color: darkgray;
     font-size: 15px;
 }
@@ -61,12 +61,14 @@ label {
     font-size: 15px;
 }
 
-.submit-btn {
+.next-btn {
     margin-top: 4px;
     padding: 10px 24px;
     border-radius: 8px;
     border: white;
     font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
 }
 
 .error-alert {
@@ -90,4 +92,77 @@ a:hover {
 .footer>p {
     color: darkgray;
     font-size: 15px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.submit-btn {
+    margin-top: 4px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: white;
+    font-weight: bold;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.back-btn {
+    margin-top: 4px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background-color: black;
+    color: white;
+    border: .5px solid darkgray;
+    font-weight: bold;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: rgb(69, 69, 69);
+}
+
+.submit-btn:hover {
+    background-color: rgb(184, 184, 184);
+}
+
+.progress-wrapper {
+  margin-top: 5px;             
+  display: flex;                
+  justify-content: center;      
+  gap: 1px;                
+}
+
+/* bars */
+.progress-bar {
+  height: 6px;                   /* h-1.5 */
+  flex: 1;                       /* flex-1 */
+  max-width: 24px;               /* max-w-6 */
+  border-radius: 9999px; 
+  border: .5px solid white;        
+  background-color: #000000;     
+  transition: background-color 0.3s ease; 
+}
+
+/* active state */
+.progress-bar.active {
+  background-color: #ffffff;  
+}
+
+/* responsive (sm breakpoint ≈ 640px) */
+@media (min-width: 640px) {
+  .progress-wrapper {
+    gap: 0.5rem;                 
+  }
+
+  .progress-bar {
+    height: 8px;                 /* sm:h-2 */
+    max-width: 32px;             /* sm:max-w-8 */
+  }
 }

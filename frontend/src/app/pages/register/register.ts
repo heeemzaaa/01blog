@@ -20,7 +20,8 @@ export class RegisterComponent {
     username: '',
     email: '',
     about: '',
-    password: ''
+    password: '',
+    profileImage: ''
   };
 
   errorMessage = '';
