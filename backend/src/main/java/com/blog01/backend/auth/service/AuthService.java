@@ -43,6 +43,7 @@ public class AuthService {
                 .token(jwtToken)
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .about(user.getAbout())
                 .role(user.getRole().name())
                 .profileImage(user.getProfileImage())
                 .build();
@@ -62,6 +63,7 @@ public class AuthService {
                 .lastName(userRequest.getLastName())
                 .username(userRequest.getUsername())    
                 .email(userRequest.getEmail())
+                .about(userRequest.getAbout())
                 .password(pe.encode(userRequest.getPassword()))
                 .profileImage(userRequest.getProfileImage())
                 .build();
@@ -73,6 +75,7 @@ public class AuthService {
             .firstName(saved.getFirstName())
             .lastName(saved.getLastName())
             .email(saved.getEmail())
+            .about(saved.getAbout())
             .username(saved.getUsername())
             .role(saved.getRole())
             .profileImage(saved.getProfileImage())

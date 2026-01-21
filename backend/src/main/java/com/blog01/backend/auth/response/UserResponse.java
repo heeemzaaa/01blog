@@ -18,6 +18,7 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String username;
+    private String about;
     private Role role;
     private String profileImage;
 }

@@ -48,6 +48,8 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
+    private String about;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

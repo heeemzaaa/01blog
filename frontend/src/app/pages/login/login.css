@@ -1,0 +1,97 @@
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 24px;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    border: .5px solid rgb(33, 33, 33);
+    border-radius: 12px;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.card-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 0px;
+    margin-bottom: 32px;
+    margin-top: 10px;
+}
+
+.subtitle {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+
+.card-title > p {
+    color: darkgray;
+    font-size: 15px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 8px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.error-alert {
+    color: red;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.submit-btn {
+    margin-top: 4px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: white;
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+}
+
+.footer>p {
+    color: darkgray;
+    font-size: 15px;
+}

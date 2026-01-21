@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 /* 1. Global Reset */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -9,9 +10,11 @@ html, body {
 
 /* 2. Your Requested Theme */
 body {
-  background-color: #000000; /* Black Background */
-  color: #ffffff;            /* White Text */
-  
+  background-color: #000000;
+  /* Black Background */
+  color: #ffffff;
+  /* White Text */
+
   /* Your Grid Pattern */
   background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
@@ -23,11 +26,15 @@ input {
   background-color: #1a1a1a;
   border: 1px solid #333;
   color: white;
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 200px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   border-radius: 4px;
   outline: none;
 }
 
 input:focus {
-  border-color: #007bff; /* Blue highlight on focus */
+  border: 1px solid #878787;
+  box-shadow: 0 0 0 3px #585858;
 }

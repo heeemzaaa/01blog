@@ -1,6 +1,9 @@
 package com.blog01.backend.security;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -29,12 +35,14 @@ public class SecurityConfig {
                 // 1. Disable CSRF (because we use stateless JWTs, not browser sessions)
                 .csrf(csrf -> csrf.disable())
 
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 // 2. Define URL Permissions
                 .authorizeHttpRequests(auth -> auth
                         // Allow anyone to access Login and Register
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        .requestMatchers("/error").permitAll()  // <--- ADD THIS LINE
+                        .requestMatchers("/error").permitAll() // <--- ADD THIS LINE
 
                         // Example: Restrict Admin endpoints to "ADMIN" role only
                         // Note: "hasRole" automatically adds "ROLE_" prefix, so it checks for
@@ -53,7 +61,28 @@ public class SecurityConfig {
                 // 5. Add our JWT Filter BEFORE the standard Username/Password filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+        return http.build();    
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Allow your Angular Frontend
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Allow specific headers (Authorization is vital for JWT)
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        // Allow sending credentials (if you ever use cookies/sessions)
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply to all endpoints
+        return source;
     }
 
     @Bean
