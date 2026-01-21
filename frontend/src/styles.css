@@ -16,21 +16,21 @@ body {
   /* White Text */
 
   /* Your Grid Pattern */
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 /* 3. Global Input Styling (Dark Theme) */
 input {
   background-color: #1a1a1a;
-  border: 1px solid #333;
+  border: .5px solid #2c2c2c;
   color: white;
   padding-left: 10px;
   padding-right: 200px;
   padding-bottom: 10px;
   padding-top: 10px;
-  border-radius: 4px;
+  border-radius: 8px;
   outline: none;
 }
 

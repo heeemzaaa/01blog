@@ -1,0 +1,74 @@
+<div class="login-wrapper">
+    <h1>01Blog</h1>
+
+    <div class="login-card">
+        <div class="card-title">
+            <h2 class="subtitle">Join 01Blog</h2>
+            <p class="subtitle">Join our community today</p>
+        </div>
+
+        <form class="form" (ngSubmit)="onRegister()">
+
+            @if (part == 1) {
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstName" [(ngModel)]="formData.firstName" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastName" [(ngModel)]="formData.lastName" placeholder="Last Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" [(ngModel)]="formData.email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" [(ngModel)]="formData.password" placeholder="Create a password"
+                    required>
+            </div>
+
+            @if (errorMessage) {
+            <div class="error-alert">
+                {{ errorMessage }}
+            </div>
+            }
+
+            <button type="button" class="submit-btn" (click)="onNext()">Next</button>
+            } @else {
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="userName" [(ngModel)]="formData.username" placeholder="User Name" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastName" [(ngModel)]="formData.lastName" placeholder="Last Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Bio (Optional)</label>
+                <input type="email" name="about" [(ngModel)]="formData.about" placeholder="About me">
+            </div>
+
+            @if (errorMessage) {
+            <div class="error-alert">
+                {{ errorMessage }}
+            </div>
+            }
+
+            <div class="buttons">
+                <button type="button" class="back-btn" (click)="onBack()">Back</button>
+                <button type="submit" class="submit-btn">Register</button>
+
+            </div>
+            }
+        </form>
+
+
+        <div class="footer">
+            <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+        </div>
+    </div>
+</div>
