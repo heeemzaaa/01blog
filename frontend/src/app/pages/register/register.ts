@@ -73,17 +73,14 @@ export class RegisterComponent {
       return;
     }
 
-    // Call the Service
     this.authService.register(this.formData).subscribe({
       next: (response) => {
         console.log('Registration successful');
 
-        // Save token immediately so they don't have to login again
         if (response.data.token) {
           this.authService.saveToken(response.data.token);
         }
 
-        // Go to Home Page
         this.router.navigate(['/']);
       },
       error: (err) => {

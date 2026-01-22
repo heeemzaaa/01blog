@@ -5,12 +5,12 @@ import { ApiResponse } from '../models/api-response.model';
 import { AuthResponse } from '../models/auth.model';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class AuthService {
     private baseUrl = 'http://localhost:8080/api/auth';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     login(credentials: any): Observable<ApiResponse<AuthResponse>> {
         return this.http.post<ApiResponse<AuthResponse>>(

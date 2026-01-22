@@ -9,7 +9,6 @@ import com.blog01.backend.auth.dto.*;
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.AuthResponse;
-import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.*;
 import com.blog01.backend.security.CustomUserDetailsService;
 import com.blog01.backend.security.JwtUtils;
@@ -30,23 +29,25 @@ public class AuthService {
 
     public ResponseData<AuthResponse> login(UserLogin requestUser) {
         try {
-           authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword())     
-           );
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
 
-           User user = ur.findByEmail(requestUser.getEmail()).orElseThrow();
+            User user = ur.findByEmail(requestUser.getEmail()).orElseThrow();
 
-           UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-           String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+            String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
 
-           AuthResponse authResponse = AuthResponse.builder()
-                .token(jwtToken)
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .about(user.getAbout())
-                .role(user.getRole().name())
-                .profileImage(user.getProfileImage())
-                .build();
+            AuthResponse authResponse = AuthResponse.builder()
+                    .token(jwtToken)
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .about(user.getAbout())
+                    .role(user.getRole().name())
+                    .profileImage(user.getProfileImage())
+                    .build();
 
             return ResponseData.success("User logged in successfully !", authResponse);
         } catch (AuthenticationException e) {
@@ -54,14 +55,14 @@ public class AuthService {
         }
     }
 
-    public ResponseData<UserResponse> register(UserRegister userRequest) {
+    public ResponseData<AuthResponse> register(UserRegister userRequest) {
         if (ur.existsByEmail(userRequest.getEmail())) {
             return ResponseData.error("Email already existed, try another one !");
         }
         User userToCreate = User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
-                .username(userRequest.getUsername())    
+                .username(userRequest.getUsername())
                 .email(userRequest.getEmail())
                 .about(userRequest.getAbout())
                 .password(pe.encode(userRequest.getPassword()))
@@ -70,17 +71,21 @@ public class AuthService {
 
         User saved = ur.save(userToCreate);
 
-        UserResponse userResponse = UserResponse.builder()
-            .id(saved.getId())
-            .firstName(saved.getFirstName())
-            .lastName(saved.getLastName())
-            .email(saved.getEmail())
-            .about(saved.getAbout())
-            .username(saved.getUsername())
-            .role(saved.getRole())
-            .profileImage(saved.getProfileImage())
-            .build();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(saved.getEmail());
+        String jwtToken = jwtUtils.generateToken(userDetails, saved.getId());
 
-        return ResponseData.success("User registered successfully !", userResponse);
+        AuthResponse authResponse = AuthResponse.builder()
+                .token(jwtToken)
+                .id(saved.getId())
+                .email(saved.getEmail())
+                .username(saved.getUsername())
+                .firstName(saved.getFirstName())
+                .lastName(saved.getLastName())
+                .about(saved.getAbout())
+                .role(saved.getRole().name())
+                .profileImage(saved.getProfileImage())
+                .build();
+
+        return ResponseData.success("User registered successfully !", authResponse);
     }
 }

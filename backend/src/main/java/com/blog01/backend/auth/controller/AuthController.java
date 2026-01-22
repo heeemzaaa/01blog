@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog01.backend.auth.dto.UserLogin;
 import com.blog01.backend.auth.dto.UserRegister;
 import com.blog01.backend.auth.response.AuthResponse;
-import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.auth.service.AuthService;
 import com.blog01.backend.common.response.ResponseData;
 
@@ -34,8 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseData<UserResponse>> register(@RequestBody UserRegister request) {
-        ResponseData<UserResponse> response = us.register(request);
+    public ResponseEntity<ResponseData<AuthResponse>> register(@RequestBody UserRegister request) {
+        ResponseData<AuthResponse> response = us.register(request);
 
         if (!response.isSuccess()) {
             return ResponseEntity.status(409).body(response);
