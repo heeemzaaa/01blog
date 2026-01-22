@@ -14,6 +14,6 @@ public class NotificationResponse {
     private UserResponse actor; 
     private NotificationType type;
     private UUID relatedEntityId;
-    private boolean isRead;
+    private boolean isSeen;
     private LocalDateTime createdAt;
 }

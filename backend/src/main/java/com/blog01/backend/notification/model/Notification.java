@@ -44,7 +44,7 @@ public class Notification {
     private UUID relatedEntityId;
 
     @Builder.Default
-    private boolean isRead = false;
+    private boolean seen = false;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

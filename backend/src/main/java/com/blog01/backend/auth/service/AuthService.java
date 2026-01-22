@@ -9,9 +9,13 @@ import com.blog01.backend.auth.dto.*;
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.AuthResponse;
+import com.blog01.backend.auth.response.MeResponse;
 import com.blog01.backend.common.response.*;
+import com.blog01.backend.notification.repository.NotificationRepository;
+import com.blog01.backend.post.repository.PostRepository;
 import com.blog01.backend.security.CustomUserDetailsService;
 import com.blog01.backend.security.JwtUtils;
+import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +30,9 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
+    private final PostRepository postRepository;
+    private final NotificationRepository notificationRepository;
+    private final SubscribesRepository subscribesRepository;
 
     public ResponseData<AuthResponse> login(UserLogin requestUser) {
         try {
@@ -87,5 +94,28 @@ public class AuthService {
                 .build();
 
         return ResponseData.success("User registered successfully !", authResponse);
+    }
+
+
+    public ResponseData<MeResponse> getMe(String email) {
+        User user = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        long nbr_of_posts = postRepository.countByUser(user);
+        long nbr_of_following = subscribesRepository.countBySubscriber(user);
+        long nbr_of_followers = subscribesRepository.countByUser(user);
+        long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
+
+        MeResponse me = MeResponse.builder()
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .profileImage(user.getProfileImage())
+                .nbr_of_posts(nbr_of_posts)
+                .nbr_of_followers(nbr_of_followers)
+                .nbr_of_following(nbr_of_following)
+                .nbr_of_notifications(nbr_of_notifications)
+                .build();
+
+        return ResponseData.success("User validated", me);
     }
 }

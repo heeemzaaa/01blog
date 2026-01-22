@@ -32,7 +32,7 @@ public class NotificationService {
                 .actor(actor)
                 .type(type)
                 .relatedEntityId(relatedId)
-                .isRead(false)
+                .seen(false)
                 .build();
 
         notificationRepository.save(notification);
@@ -59,7 +59,7 @@ public class NotificationService {
             return ResponseData.error("You are not authorized to access this notification");
         }
 
-        notification.setRead(true);
+        notification.setSeen(true);
         notificationRepository.save(notification);
 
         return ResponseData.success("Notification marked as read", null);
@@ -70,8 +70,8 @@ public class NotificationService {
         List<Notification> unread = notificationRepository.findByRecipientOrderByCreatedAtDesc(user);
         
         for (Notification n : unread) {
-            if (!n.isRead()) {
-                n.setRead(true);
+            if (!n.isSeen()) {
+                n.setSeen(true);
                 notificationRepository.save(n);
             }
         }
@@ -95,7 +95,7 @@ public class NotificationService {
                 .actor(actorResponse)
                 .type(n.getType())
                 .relatedEntityId(n.getRelatedEntityId())
-                .isRead(n.isRead())
+                .isSeen(n.isSeen())
                 .createdAt(n.getCreatedAt())
                 .build();
     }

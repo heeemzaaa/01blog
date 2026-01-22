@@ -32,33 +32,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Disable CSRF (because we use stateless JWTs, not browser sessions)
                 .csrf(csrf -> csrf.disable())
 
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // 2. Define URL Permissions
                 .authorizeHttpRequests(auth -> auth
-                        // Allow anyone to access Login and Register
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/me").authenticated()
 
-                        .requestMatchers("/error").permitAll() // <--- ADD THIS LINE
+                        .requestMatchers("/error").permitAll() 
 
-                        // Example: Restrict Admin endpoints to "ADMIN" role only
-                        // Note: "hasRole" automatically adds "ROLE_" prefix, so it checks for
-                        // "ROLE_ADMIN"
+                       
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Any other request requires the user to be logged in
                         .anyRequest().authenticated())
 
-                // 3. Stateless Session Management (Don't store session in server memory)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 4. Set our custom Authentication Provider
                 .authenticationProvider(authenticationProvider())
 
-                // 5. Add our JWT Filter BEFORE the standard Username/Password filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();    

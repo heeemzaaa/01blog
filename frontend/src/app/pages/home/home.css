@@ -1,0 +1,112 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    border-left: 1px solid #2f3336;
+    border-right: 1px solid #2f3336;
+    min-height: 100vh;
+}
+
+/* COVER PHOTO */
+.cover-image {
+    background-color: #333639;
+    height: 200px;
+    width: 100%;
+}
+
+/* PROFILE INFO ROW */
+.profile-info-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 20px;
+    margin-top: -75px; /* Pulls the image up into the cover */
+}
+
+/* PROFILE IMAGE */
+.profile-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid black; /* Matches body background to look "cut out" */
+    object-fit: cover;
+}
+
+.profile-placeholder {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: #555;
+    border: 4px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+/* EDIT BUTTON */
+.btn-edit {
+    background: transparent;
+    border: 1px solid #536471;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.btn-edit:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* TEXT INFO */
+.text-info {
+    padding: 15px 20px;
+}
+
+.fullname {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.username {
+    margin: 0;
+    color: #71767b;
+    font-size: 15px;
+}
+
+.bio {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* STATS */
+.stats-row {
+    display: flex;
+    gap: 20px;
+    padding: 0 20px 20px;
+}
+
+.stat-item {
+    display: flex;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.count {
+    font-weight: bold;
+    color: white;
+}
+
+.label {
+    color: #71767b;
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #71767b;
+}

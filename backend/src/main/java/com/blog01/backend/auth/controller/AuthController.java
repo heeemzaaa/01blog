@@ -6,12 +6,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog01.backend.auth.dto.UserLogin;
 import com.blog01.backend.auth.dto.UserRegister;
 import com.blog01.backend.auth.response.AuthResponse;
+import com.blog01.backend.auth.response.MeResponse;
 import com.blog01.backend.auth.service.AuthService;
 import com.blog01.backend.common.response.ResponseData;
 
 import lombok.RequiredArgsConstructor;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -41,6 +45,12 @@ public class AuthController {
         }
 
         return ResponseEntity.status(201).body(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ResponseData<MeResponse>> getMe(Principal principal) {
+        ResponseData<MeResponse> response = us.getMe(principal.getName());
+        return ResponseEntity.ok(response);
     }
 
 }
