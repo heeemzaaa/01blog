@@ -72,6 +72,7 @@ label {
 }
 
 .error-alert {
+    text-align: center;
     color: red;
 }
 
@@ -133,36 +134,96 @@ a:hover {
 }
 
 .progress-wrapper {
-  margin-top: 5px;             
-  display: flex;                
-  justify-content: center;      
-  gap: 1px;                
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    gap: 1px;
 }
 
-/* bars */
 .progress-bar {
-  height: 6px;                   /* h-1.5 */
-  flex: 1;                       /* flex-1 */
-  max-width: 24px;               /* max-w-6 */
-  border-radius: 9999px; 
-  border: .5px solid white;        
-  background-color: #000000;     
-  transition: background-color 0.3s ease; 
+    height: 6px;
+    flex: 1;
+    max-width: 24px;
+    border-radius: 9999px;
+    border: .5px solid white;
+    background-color: #000000;
+    transition: background-color 0.3s ease;
 }
 
-/* active state */
 .progress-bar.active {
-  background-color: #ffffff;  
+    background-color: #ffffff;
 }
+
+.file-input {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.image-preview {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-preview img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: .3px solid #383838;
+}
+
+.btn-remove {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: .5px solid #2c2c2c;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #ffffff;
+    background-color: #1a1a1a;
+}
+
+/* Focus effect */
+.form-group textarea:focus {
+    border: 1px solid #878787;
+    box-shadow: 0 0 0 3px #585858;
+}
+
+/* Placeholder style */
+.form-group textarea::placeholder {
+    color: #ffffff;
+}
+
 
 /* responsive (sm breakpoint ≈ 640px) */
 @media (min-width: 640px) {
-  .progress-wrapper {
-    gap: 0.5rem;                 
-  }
+    .progress-wrapper {
+        gap: 0.5rem;
+    }
 
-  .progress-bar {
-    height: 8px;                 /* sm:h-2 */
-    max-width: 32px;             /* sm:max-w-8 */
-  }
+    .progress-bar {
+        height: 8px;
+        /* sm:h-2 */
+        max-width: 32px;
+        /* sm:max-w-8 */
+    }
 }
