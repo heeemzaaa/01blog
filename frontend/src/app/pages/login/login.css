@@ -9,9 +9,8 @@
 }
 
 .title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    font-weight: bolder;
 }
 
 .login-card {
@@ -41,11 +40,13 @@
     display: block;
     text-align: center;
     margin: 0;
+    font-weight: bolder;
 }
 
-.card-title > p {
+.card-title>p {
     color: darkgray;
     font-size: 15px;
+    font-weight: normal;
 }
 
 .form {
@@ -96,6 +97,7 @@ a:hover {
 }
 
 .footer {
+    margin-top: 5px;
     text-align: center;
 }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
@@ -14,13 +14,13 @@ import { AuthService } from '../../services/auth';
 export class Login {
   email = '';
   password = '';
-  errorMessage = '';
+  errorMessage = signal<string | null>(null);
 
   constructor(private authService: AuthService, private router: Router) { }
 
   onLogin() {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Please fill in all fields';
+      this.errorMessage.set('Please fill in all fields');
       return;
     }
 
@@ -42,7 +42,7 @@ export class Login {
 
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Invalid email or password';
+        this.errorMessage.set('Invalid email or password');
       }
     })
   }

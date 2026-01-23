@@ -1,0 +1,16 @@
+<nav class="c-border custom-h d-flex justify-content-between align-items-center px-c bg-black mb-4">
+
+  <div class="d-flex gap-5 align-items-center">
+    <h2 class="fw-bolder" role="button" (click)="toHome()">01Blog</h2>
+    <input type="search" class="form-control custom-input" placeholder="Search posts, users, topics..." />
+
+  </div>
+
+  <div class="d-flex gap-4 align-items-center">
+    <mat-icon class="c-icon" (click)="toNotifications()">notifications</mat-icon>
+    <button role="button" class="c-button px-4 py-2 rounded fw-bold" (click)="toAddPost()">
+      + New Post
+    </button>
+    <img src="profile.png" alt="profile" class="c-image">
+  </div>
+</nav>

@@ -21,10 +21,9 @@
                 <input type="password" id="password" name="password" [(ngModel)]="password"
                     placeholder="Enter your password" required>
             </div>
-
-            @if (errorMessage) {
+            @if (errorMessage()) {
                 <div class="error-alert">
-                    {{ errorMessage }}
+                    {{ errorMessage() }}
                 </div>  
             }
 

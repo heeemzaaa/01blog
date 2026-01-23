@@ -8,6 +8,11 @@
     gap: 24px;
 }
 
+.title {
+    text-align: center;
+    font-weight: bolder;
+}
+
 .login-card {
     background-color: black;
     border: .5px solid rgb(33, 33, 33);
@@ -35,11 +40,13 @@
     display: block;
     text-align: center;
     margin: 0;
+    font-weight: bolder;
 }
 
 .card-title>p {
     color: darkgray;
     font-size: 15px;
+    font-weight: normal;
 }
 
 .form-group {
@@ -87,6 +94,7 @@ a:hover {
 }
 
 .footer {
+    margin-top: 5px;
     text-align: center;
 }
 
