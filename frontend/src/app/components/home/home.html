@@ -1,6 +1,6 @@
 @if (currentUser()) {
 <section class="d-flex justify-content-start gap-5 px-custom">
-  <div id="first_part" class="d-flex flex-column justify-content-start gap-3">
+  <div id="first_part" class="d-flex flex-column justify-content-start gap-3 w-25">
     <div id="user_infos" class="d-flex flex-column justify-content-start align-items-between gap-5 custom1 bg-black px-5 py-3">
       <div id="profile_and_names" class="d-flex justify-content-start align-items-center gap-3">
         <div id="profile_image" class="d-flex justify-content-start">
@@ -11,7 +11,7 @@
           <span class="text-secondary p-0 m-0">@{{ currentUser()?.username }}</span>
         </div>
       </div>
-      <div id="user_numbers" class="d-flex justify-content-between gap-5">
+      <div id="user_numbers" class="d-flex justify-content-between">
         <div class="d-flex flex-column justify-content-center align-items-center">
           <p class="fw-bold fs-4 p-0 m-0">{{ currentUser()?.nbr_of_posts }}</p>
           <span class="text-secondary small">Posts</span>
