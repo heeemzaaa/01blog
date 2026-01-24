@@ -11,12 +11,6 @@
     padding-right: 10%;
 }
 
-
-
-
-
-
-
 .c-button {
     background-color: white;
     border: .2px solid rgb(38, 38, 38);
@@ -72,4 +66,48 @@
 ::placeholder {
     color: #585858;
     opacity: 1;
+}
+
+.profile-menu-wrapper {
+    position: relative;
+}
+
+.c-image.clickable {
+    cursor: pointer;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #000;
+    border: 1px solid #2c2c2c;
+    border-radius: 8px;
+    min-width: 140px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .6);
+    z-index: 1000;
+}
+
+.dropdown-item {
+    width: 100%;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s ease, text-shadow 0.2s ease;
+}
+
+.dropdown-item:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.dropdown-item.logout {
+    color: #ff5c5c;
+}
+
+.custom-border {
+    border-bottom: .2px solid #2c2c2c;
 }

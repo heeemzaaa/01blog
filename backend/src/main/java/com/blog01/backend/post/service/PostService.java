@@ -12,6 +12,7 @@ import com.blog01.backend.post.dto.PostRequest;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.*;
 import com.blog01.backend.post.response.PostResponse;
+import com.blog01.backend.postmedia.service.PostMediaService;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
 import java.util.UUID;
@@ -19,29 +20,40 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final NotificationService notificationService;
     private final SubscribesRepository subscribesRepository;
+    private final PostMediaService postMediaService;
 
     public ResponseData<List<PostResponse>> getPosts(String email) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
         List<PostResponse> response = posts.stream()
-                .map((post) -> mapToPostResponse(post, user))
+                .map(post -> mapToPostResponse(post, user))
                 .collect(Collectors.toList());
 
         return ResponseData.success("Posts fetched successfully !", response);
     }
 
-    public ResponseData<PostResponse> createPost(String email, PostRequest postToCreate) {
+    public ResponseData<PostResponse> createPost(
+            String email,
+            PostRequest postToCreate,
+            List<MultipartFile> medias
+    ) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
 
@@ -49,13 +61,15 @@ public class PostService {
                 .user(user)
                 .title(postToCreate.getTitle())
                 .content(postToCreate.getContent())
-                .media(postToCreate.getMedia())
                 .build();
 
         Post saved = postRepository.save(post);
 
-            List<User> followers = subscribesRepository.findSubscribersByUser(user);
+        // ✅ MEDIA HANDLING
+        postMediaService.handlePostMedias(saved, medias);
 
+        // Notifications
+        List<User> followers = subscribesRepository.findSubscribersByUser(user);
         for (User follower : followers) {
             notificationService.sendNotification(
                     follower,
@@ -64,14 +78,24 @@ public class PostService {
                     saved.getId());
         }
 
-        return ResponseData.success("Post created successfully !", mapToPostResponse(saved, user));
+        return ResponseData.success(
+                "Post created successfully !",
+                mapToPostResponse(saved, user)
+        );
     }
 
-    public ResponseData<PostResponse> updatePost(String email, UUID id, PostRequest postToUpdate) {
+    public ResponseData<PostResponse> updatePost(
+            String email,
+            UUID id,
+            PostRequest postToUpdate,
+            List<MultipartFile> medias
+    ) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
 
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find this post !"));
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cannot find this post !"));
 
         if (!post.getUser().getId().equals(user.getId())) {
             return ResponseData.error("You can't modify this post because it is not yours !");
@@ -79,16 +103,20 @@ public class PostService {
 
         post.setTitle(postToUpdate.getTitle());
         post.setContent(postToUpdate.getContent());
-        if (postToUpdate.getMedia() != null) {
-            post.setMedia(postToUpdate.getMedia());
-        }
 
         Post saved = postRepository.save(post);
 
-        return ResponseData.success("Post updated successfully !", mapToPostResponse(saved, user));
+        // ✅ MEDIA HANDLING (add new medias)
+        postMediaService.handlePostMedias(saved, medias);
+
+        return ResponseData.success(
+                "Post updated successfully !",
+                mapToPostResponse(saved, user)
+        );
     }
 
     public ResponseData<String> deletePost(String email, UUID postId) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -99,12 +127,16 @@ public class PostService {
             return ResponseData.error("You are not authorized to delete this post");
         }
 
+        // ✅ delete medias first (DB, disk later)
+        postMediaService.deleteAllByPost(post);
+
         postRepository.delete(post);
 
         return ResponseData.success("Post deleted successfully", null);
     }
 
     private PostResponse mapToPostResponse(Post p, User currentUser) {
+
         long likesCount = likeRepository.countByPost(p);
         long commentsCount = commentRepository.countByPost(p);
         boolean isLiked = likeRepository.existsByUserAndPost(currentUser, p);
@@ -113,7 +145,7 @@ public class PostService {
                 .id(p.getId())
                 .title(p.getTitle())
                 .content(p.getContent())
-                .media(p.getMedia())
+                .medias(postMediaService.buildResponses(p)) // ✅ FIXED
                 .createdAt(p.getCreatedAt())
                 .likesCount(likesCount)
                 .commentsCount(commentsCount)

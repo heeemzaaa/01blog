@@ -11,8 +11,5 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./home.css']
 })
 export class HomeComponent {
-  // currentUser$: Observable<any> | undefined;
   currentUser = inject(AuthService).currentUser;
-
-  
 }

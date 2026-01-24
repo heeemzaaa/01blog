@@ -3,9 +3,12 @@ package com.blog01.backend.post.model;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import com.blog01.backend.auth.model.User;
+import com.blog01.backend.postmedia.model.PostMedia;
+
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
+
+import java.util.*;
 
 @Entity
 @Getter
@@ -24,7 +27,8 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
-    private String media;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PostMedia> medias;
 
     @Column(nullable = false)
     private String title;

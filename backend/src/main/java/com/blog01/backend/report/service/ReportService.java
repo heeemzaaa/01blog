@@ -99,7 +99,6 @@ public class ReportService {
                 .reporter(UserResponse.builder()
                         .id(r.getReporter().getId())
                         .username(r.getReporter().getUsername())
-                        .email(r.getReporter().getEmail())
                         .build())
                 .build();
     }

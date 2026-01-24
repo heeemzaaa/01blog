@@ -45,9 +45,7 @@ public class AdminService {
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .email(user.getEmail())
                 .username(user.getUsername())
-                .role(user.getRole())
                 .profileImage(user.getProfileImage())
                 .build();
     }

@@ -1,15 +1,22 @@
 package com.blog01.backend.auth.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog01.backend.auth.dto.*;
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
-import com.blog01.backend.auth.response.AuthResponse;
-import com.blog01.backend.auth.response.MeResponse;
+import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.*;
 import com.blog01.backend.notification.repository.NotificationRepository;
 import com.blog01.backend.post.repository.PostRepository;
@@ -34,7 +41,7 @@ public class AuthService {
     private final NotificationRepository notificationRepository;
     private final SubscribesRepository subscribesRepository;
 
-    public ResponseData<AuthResponse> login(UserLogin requestUser) {
+    public ResponseData<UserResponse> login(UserLogin requestUser) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
@@ -44,28 +51,39 @@ public class AuthService {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
             String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
 
-            AuthResponse authResponse = AuthResponse.builder()
+            long nbr_of_posts = postRepository.countByUser(user);
+            long nbr_of_following = subscribesRepository.countBySubscriber(user);
+            long nbr_of_followers = subscribesRepository.countByUser(user);
+            long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
+
+            UserResponse userResponse = UserResponse.builder()
                     .token(jwtToken)
                     .id(user.getId())
-                    .email(user.getEmail())
                     .username(user.getUsername())
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
-                    .about(user.getAbout())
-                    .role(user.getRole().name())
                     .profileImage(user.getProfileImage())
+                    .nbr_of_posts(nbr_of_posts)
+                    .nbr_of_followers(nbr_of_followers)
+                    .nbr_of_following(nbr_of_following)
+                    .nbr_of_notifications(nbr_of_notifications)
                     .build();
 
-            return ResponseData.success("User logged in successfully !", authResponse);
+            return ResponseData.success("User logged in successfully !", userResponse);
         } catch (AuthenticationException e) {
             return ResponseData.error("Invalid credentials !");
         }
     }
 
-    public ResponseData<AuthResponse> register(UserRegister userRequest) {
+    public ResponseData<UserResponse> register(
+            UserRegister userRequest,
+            MultipartFile profileImage) {
         if (ur.existsByEmail(userRequest.getEmail())) {
             return ResponseData.error("Email already existed, try another one !");
         }
+
+        String imagePath = saveProfileImage(profileImage);
+
         User userToCreate = User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
@@ -73,7 +91,7 @@ public class AuthService {
                 .email(userRequest.getEmail())
                 .about(userRequest.getAbout())
                 .password(pe.encode(userRequest.getPassword()))
-                .profileImage(userRequest.getProfileImage())
+                .profileImage(imagePath)
                 .build();
 
         User saved = ur.save(userToCreate);
@@ -81,23 +99,28 @@ public class AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(saved.getEmail());
         String jwtToken = jwtUtils.generateToken(userDetails, saved.getId());
 
-        AuthResponse authResponse = AuthResponse.builder()
+        long nbr_of_posts = postRepository.countByUser(saved);
+        long nbr_of_following = subscribesRepository.countBySubscriber(saved);
+        long nbr_of_followers = subscribesRepository.countByUser(saved);
+        long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(saved);
+
+        UserResponse userResponse = UserResponse.builder()
                 .token(jwtToken)
                 .id(saved.getId())
-                .email(saved.getEmail())
                 .username(saved.getUsername())
                 .firstName(saved.getFirstName())
                 .lastName(saved.getLastName())
-                .about(saved.getAbout())
-                .role(saved.getRole().name())
                 .profileImage(saved.getProfileImage())
+                .nbr_of_posts(nbr_of_posts)
+                .nbr_of_followers(nbr_of_followers)
+                .nbr_of_following(nbr_of_following)
+                .nbr_of_notifications(nbr_of_notifications)
                 .build();
 
-        return ResponseData.success("User registered successfully !", authResponse);
+        return ResponseData.success("User registered successfully !", userResponse);
     }
 
-
-    public ResponseData<MeResponse> getMe(String email) {
+    public ResponseData<UserResponse> getMe(String email) {
         User user = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
         long nbr_of_posts = postRepository.countByUser(user);
@@ -105,7 +128,7 @@ public class AuthService {
         long nbr_of_followers = subscribesRepository.countByUser(user);
         long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
 
-        MeResponse me = MeResponse.builder()
+        UserResponse me = UserResponse.builder()
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -118,4 +141,31 @@ public class AuthService {
 
         return ResponseData.success("User validated", me);
     }
+
+    private String saveProfileImage(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return "/media/users/default.png";
+        }
+
+        try {
+            String uploadDir = "uploads/users/";
+            Files.createDirectories(Paths.get(uploadDir));
+
+            String extension = Optional.ofNullable(file.getOriginalFilename())
+                    .filter(name -> name.contains("."))
+                    .map(name -> name.substring(name.lastIndexOf(".")))
+                    .orElse(".jpg");
+
+            String fileName = UUID.randomUUID() + extension;
+            Path filePath = Paths.get(uploadDir + fileName);
+
+            Files.write(filePath, file.getBytes());
+
+            return "/media/users/" + fileName;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store profile image", e);
+        }
+    }
+
 }

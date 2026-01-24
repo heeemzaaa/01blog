@@ -1,1 +1,51 @@
-<p>add-post works!</p>
+<main class="d-flex flex-column justify-content-center align-items-center p-5">
+    <form class="d-flex flex-column post-border w-50 p-5 bg-black gap-4" (ngSubmit)="addPost()">
+        <div>
+            <h3 class="fw-bold">Share your learning</h3>
+            <p class="fs-6 clr">Document your progress, share insights, or ask questions</p>
+        </div>
+
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="small fw-bold">What is this post about ?</label>
+            <input type="text" class="ps-3" placeholder="Short summary or main idea" required>
+        </div>
+
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="small fw-bold">Tell us more</label>
+            <textarea class="" placeholder="Share your learning experience, insights, challenges, or questions..."
+                required></textarea>
+        </div>
+
+        <div class="form-group d-flex flex-column gap-2">
+            <label class="small fw-bold">Add media (Optional)</label>
+            <div class="d-flex flex-column dashed justify-content-center align-items-center p-2 gap-3">
+                <div class="icons p-2 d-flex justify-content-center align-items-center gap-4">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <mat-icon class="c-icon">image</mat-icon>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <mat-icon class="c-icon">videocam</mat-icon>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <p class="fw-bold p-0 m-0">Upload an images or videos</p>
+                    <span class="small text-secondary">PNG, JPG, MP4 up to 10MB</span>
+                </div>
+                <input type="file" id="file-upload" accept="image/*,video/*" hidden (change)="onFileSelected($event)" />
+
+                <label for="file-upload">
+                    <button type="button" class="upload-btn">
+                        <mat-icon class="me-2">upload</mat-icon>
+                        Choose File
+                    </button>
+                </label>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="px-3 py-1 c-border fw-bold fs-6">Cancel</button>
+            <button type="submit" class="px-3 py-1 c-border-1 fw-bold fs-6">Share Post</button>
+        </div>
+    </form>
+</main>

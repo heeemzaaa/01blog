@@ -40,9 +40,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
 
-                        .requestMatchers("/error").permitAll() 
+                        .requestMatchers(
+                                "/media/**",
+                                "/error")
+                        .permitAll()
 
-                       
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated())
@@ -53,7 +55,7 @@ public class SecurityConfig {
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();    
+        return http.build();
     }
 
     @Bean

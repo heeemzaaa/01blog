@@ -210,19 +210,16 @@ a:hover {
     background-color: #1a1a1a;
 }
 
-/* Focus effect */
 .form-group textarea:focus {
     border: 1px solid #878787;
     box-shadow: 0 0 0 3px #585858;
 }
 
-/* Placeholder style */
 .form-group textarea::placeholder {
     color: #ffffff;
 }
 
 
-/* responsive (sm breakpoint ≈ 640px) */
 @media (min-width: 640px) {
     .progress-wrapper {
         gap: 0.5rem;
@@ -230,8 +227,6 @@ a:hover {
 
     .progress-bar {
         height: 8px;
-        /* sm:h-2 */
         max-width: 32px;
-        /* sm:max-w-8 */
     }
 }

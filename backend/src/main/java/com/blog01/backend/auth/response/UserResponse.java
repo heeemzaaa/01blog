@@ -1,12 +1,8 @@
 package com.blog01.backend.auth.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.util.UUID;
 
-import com.blog01.backend.auth.model.User.Role;
+import lombok.*;
 
 @Data
 @Builder
@@ -16,9 +12,11 @@ public class UserResponse {
     private UUID id;
     private String firstName;
     private String lastName;
-    private String email;
     private String username;
-    private String about;
-    private Role role;
+    private long nbr_of_posts;
+    private long nbr_of_followers;
+    private long nbr_of_following;
+    private long nbr_of_notifications;
     private String profileImage;
+    private String token;
 }

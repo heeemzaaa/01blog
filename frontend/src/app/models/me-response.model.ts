@@ -1,4 +1,4 @@
-export interface MeResponse {
+export interface UserResponse {
     firstName: string;
     lastName: string;
     username: string;
@@ -7,5 +7,5 @@ export interface MeResponse {
     nbr_of_followers: number;
     nbr_of_following: number;
     nbr_of_notifications: number;
-    token?: string;
+    token: string;
 }

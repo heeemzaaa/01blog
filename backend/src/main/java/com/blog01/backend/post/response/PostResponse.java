@@ -2,11 +2,13 @@ package com.blog01.backend.post.response;
 
 import java.time.LocalDateTime;
 import com.blog01.backend.auth.response.UserResponse;
+import com.blog01.backend.postmedia.response.PostMediaResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Builder
@@ -17,7 +19,7 @@ public class PostResponse {
     private UserResponse user;
     private String title;
     private String content;
-    private String media;
+    private List<PostMediaResponse> medias;
     private LocalDateTime createdAt;
     private boolean isLiked;
     private long likesCount;
