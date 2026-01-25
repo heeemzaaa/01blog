@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 1. Check if the request has a header that starts with "Bearer "
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // If not, pass it to the next filter (request is not authenticated)
+            filterChain.doFilter(request, response);
             return;
         }
 
