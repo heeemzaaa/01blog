@@ -9,13 +9,16 @@
 
         <div class="form-group d-flex flex-column gap-2">
             <label class="small fw-bold">What is this post about ?</label>
-            <input type="text" class="ps-3" placeholder="Short summary or main idea" required />
+            <input #titleInput type="text" class="ps-3" placeholder="Short summary or main idea" required
+                (input)="title.set(titleInput.value)" />
         </div>
 
         <div class="form-group d-flex flex-column gap-2">
             <label class="small fw-bold">Tell us more</label>
-            <textarea placeholder="Share your learning experience, insights, challenges, or questions..."
-                required></textarea>
+            <textarea #contentInput placeholder="Share your learning experience, insights, challenges, or questions..."
+                required (input)="content.set(contentInput.value)"></textarea>
+
+
         </div>
 
         <div class="form-group d-flex flex-column gap-2">
