@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'add-post', component: AddPost },
   { path: 'notifications', component: Notifications },
-  { path: 'profile', component: Profile },
+  { path: 'profile/:id', component: Profile },
   // { path: 'post/:id', component: Notifications },
   // { path: 'notifications', component: Notifications },
   // { path: 'notifications', component: Notifications },

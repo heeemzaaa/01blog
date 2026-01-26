@@ -29,8 +29,8 @@
         </div>
       </div>
       <div id="buttons">
-        <div>
-          <button class="dropdown-item" routerLink="/profile">
+        <div class="custom-border">
+          <button class="dropdown-item" [routerLink]="['profile', currentUser()?.id]">
             Profile
           </button>
           <button class="dropdown-item" routerLink="/profile">

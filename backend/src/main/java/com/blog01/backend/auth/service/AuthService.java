@@ -129,6 +129,7 @@ public class AuthService {
         long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
 
         UserResponse me = UserResponse.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
