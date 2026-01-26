@@ -1,15 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
   imports: [MatIconModule, RouterLink, CommonModule],
-  templateUrl: './nav-bar.html',
-  styleUrl: './nav-bar.css',
+  templateUrl: './nav-bar.component.html',
+  styleUrl: './nav-bar.component.css',
 })
 
 export class NavBar {

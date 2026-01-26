@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
-import { Post } from '../post/post';
-import { PostService } from '../../services/post';
+import { Post } from '../post/post.component';
+import { PostService } from '../../services/post.service';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, MatIconModule, Post],
-  templateUrl: './profile.html',
-  styleUrl: './profile.css',
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.css',
 })
 export class Profile {
 

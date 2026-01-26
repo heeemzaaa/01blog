@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'; 
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from './services/auth'; 
+import { AuthService } from './services/auth.service'; 
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({

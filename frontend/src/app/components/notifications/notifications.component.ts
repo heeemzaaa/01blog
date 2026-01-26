@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-notifications',
   imports: [MatIconModule, CommonModule],
-  templateUrl: './notifications.html',
-  styleUrl: './notifications.css',
+  templateUrl: './notifications.component.html',
+  styleUrl: './notifications.component.css',
 })
 export class Notifications {
 

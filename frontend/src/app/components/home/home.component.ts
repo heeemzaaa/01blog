@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Post } from '../post/post';
-import { PostService } from '../../services/post';
+import { Post } from '../post/post.component';
+import { PostService } from '../../services/post.service';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 
@@ -11,8 +11,8 @@ import { signal } from '@angular/core';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, MatIconModule, Post],
-  templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
 

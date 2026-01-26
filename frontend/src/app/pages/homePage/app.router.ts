@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from '../../components/home/home';
-import { AddPost } from '../../components/add-post/add-post';
-import { Notifications } from '../../components/notifications/notifications';
-import { Profile } from '../../components/profile/profile';
+import { HomeComponent } from '../../components/home/home.component';
+import { AddPost } from '../../components/add-post/add-post.component';
+import { Notifications } from '../../components/notifications/notifications.component';
+import { Profile } from '../../components/profile/profile.component';
 
 
 export const routes: Routes = [

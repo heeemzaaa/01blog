@@ -6,8 +6,8 @@ import { PostResponse } from '../../models/post-response.model';
 @Component({
   selector: 'PostComponent',
   imports: [MatIconModule, CommonModule],
-  templateUrl: './post.html',
-  styleUrl: './post.css',
+  templateUrl: './post.component.html',
+  styleUrl: './post.component.css',
 })
 export class Post {
   @Input() post!: PostResponse;

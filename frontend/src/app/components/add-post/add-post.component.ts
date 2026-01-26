@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MediaPreview } from '../../models/media-preview.model';
 import { PostRequest } from '../../models/post-request.model';
-import { PostService } from '../../services/post';
+import { PostService } from '../../services/post.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -11,8 +11,8 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-add-post',
   standalone: true,
   imports: [CommonModule, MatIconModule, FormsModule],
-  templateUrl: './add-post.html',
-  styleUrl: './add-post.css',
+  templateUrl: './add-post.component.html',
+  styleUrl: './add-post.component.css',
 })
 export class AddPost {
   postService = inject(PostService);
