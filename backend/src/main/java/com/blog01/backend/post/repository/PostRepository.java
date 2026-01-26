@@ -8,10 +8,13 @@ import com.blog01.backend.post.model.Post;
 import java.util.UUID;
 import java.util.List;
 
-
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findAllByOrderByCreatedAtDesc();
+
+    List<Post> findByUserInOrderByCreatedAtDesc(List<User> users);
+
+    List<Post> findByUserOrderByCreatedAtDesc(User user);
 
     long countByUser(User user);
 }
