@@ -17,4 +17,11 @@ export class ProfileService {
             `${this.baseUrl}/${userId}`
         );
     }
+
+    updateProfile(userId: string, data: FormData) {
+        return this.http.put<any>(
+            `${this.baseUrl}/${userId}`,
+            data
+        );
+    }
 }

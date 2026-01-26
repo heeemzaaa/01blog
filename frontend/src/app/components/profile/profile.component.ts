@@ -9,6 +9,7 @@ import { ProfileResponse } from '../../models/profile-response.model';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,6 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './profile.component.css',
 })
 export class Profile {
-
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
   private postService = inject(PostService);
@@ -86,11 +86,41 @@ export class Profile {
   }
 
   submitEdit() {
-    console.log('Edit payload:', this.editForm);
+    const profile = this.profile();
+    if (!profile) return;
 
-    // 🔜 Later:
-    // this.profileService.updateProfile(formData).subscribe(...)
+    const formData = new FormData();
 
-    this.closeEditPopup();
+    formData.append(
+      'data',
+      new Blob(
+        [JSON.stringify({
+          firstName: this.editForm.firstName,
+          lastName: this.editForm.lastName,
+          username: this.editForm.username,
+          email: this.editForm.email,
+          about: this.editForm.about,
+        })],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.editForm.profileImage) {
+      formData.append('profileImage', this.editForm.profileImage);
+    }
+
+    this.profileService.updateProfile(profile.id, formData)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.profile.set(res.data);
+            this.closeEditPopup();
+          }
+        },
+        error: (err) => {
+          console.error('Update failed', err);
+        }
+      });
   }
+
 }
