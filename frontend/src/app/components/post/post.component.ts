@@ -13,6 +13,12 @@ export class Post {
   @Input() post!: PostResponse;
 
   toggleLike() {
-    this.post.isLiked = !this.post.isLiked;
+    if (this.post.isLiked) {
+      this.post.isLiked = false;
+      this.post.likesCount -= 1;
+    } else {
+      this.post.isLiked = true;
+      this.post.likesCount += 1;
+    }
   }
 }

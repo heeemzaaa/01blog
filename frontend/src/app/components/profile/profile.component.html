@@ -1,63 +1,169 @@
+@if (profile()) {
 <main class="p-5 d-flex flex-column justify-content-center align-items-center gap-5 feed">
+
+    <!-- ================= USER DETAILS ================= -->
     <section id="user_details" class="d-flex flex-column p-5 bg-black gap-3 w-50 custom-border">
+
         <div class="d-flex flex-column custom-padding">
             <div class="d-flex gap-3 align-items-center">
+
                 <div>
-                    <h2 class="fw-bolder">{{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</h2>
+                    <h2 class="fw-bolder">
+                        {{ profile()?.firstName }} {{ profile()?.lastName }}
+                    </h2>
                 </div>
+
+                @if (profile()?.myProfile) {
                 <div>
-                    <button class="custom-button px-3 py-1 fw-bold">+ Follow</button>
+                    <button
+                        class="custom-button d-flex justify-content-center align-items-center px-2 py-1 fw-bold gap-2"
+                        (click)="openEditPopup()">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Profile</span>
+                    </button>
+
                 </div>
+                } @else {
+                <div>
+                    <button class="custom-button px-3 py-1 fw-bold">
+                        {{ profile()!.isFollowing ? 'Unfollow' : '+ Follow' }}
+                    </button>
+                </div>
+
+                }
+
                 <div class="d-flex align-items-center justify-content-center">
                     <div role="button" class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
                         <mat-icon>more_horiz</mat-icon>
                     </div>
                 </div>
+
             </div>
-            <span class="text-secondary p-0 m-0">@ {{ currentUser()?.username }}</span>
+
+            <span class="text-secondary p-0 m-0">
+                @{{ profile()?.username }}
+            </span>
         </div>
 
         <div class="d-flex align-items-center gap-4">
-            <img [src]="currentUser()?.profileImage 
-            ? 'http://localhost:8080' + currentUser()?.profileImage 
-            : '/profile.png'" alt="profile" class="custom-image" />
-            <!-- <p class="text-primary fs-5">{{ currentUser()?.about }}</p> -->
-            <p>this user doesn't have a Bio, if you wanna know more about him try to contact him !</p>
+            <img [src]="profile()?.profileImage
+                    ? 'http://localhost:8080' + profile()?.profileImage
+                    : '/profile.png'" alt="profile" class="custom-image" />
+
+            @if (profile()?.about) {
+            <p class="text-primary fs-5">
+                {{ profile()?.about }}
+            </p>
+            } @else {
+            <p>
+                This user doesn't have a Bio, if you wanna know more about him try to contact him !
+            </p>
+            }
         </div>
 
         <div class="d-flex gap-5 custom-padding">
             <div>
-                <span class="fw-bold">Contact user:</span> <span class="text-secondary">
-                    hamzaelkhawlani00@gmail.com</span>
+                <span class="fw-bold">Contact user:</span>
+                <span class="text-secondary">
+                    {{ profile()?.username }}@example.com
+                </span>
             </div>
-            <span class="text-secondary">Morroco</span>
+            <div class="d-flex justify-content-center align-items-center gap-1">
+                <mat-icon>location_on</mat-icon>
+                <span class="text-secondary p-0 m-0">Morroco</span>
+            </div>
         </div>
+
         <div id="user_numbers" class="d-flex justify-content-between px-6">
+
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <p class="fw-bold fs-4 p-0 m-0">{{ currentUser()?.nbr_of_posts }}</p>
+                <p class="fw-bold fs-4 p-0 m-0">
+                    {{ profile()?.nbr_of_posts }}
+                </p>
                 <span class="text-secondary small">Posts</span>
             </div>
 
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <p class="fw-bold fs-4 p-0 m-0">{{ currentUser()?.nbr_of_followers }}</p>
+                <p class="fw-bold fs-4 p-0 m-0">
+                    {{ profile()?.nbr_of_followers }}
+                </p>
                 <span class="text-secondary small">Followers</span>
             </div>
 
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <p class="fw-bold fs-4 p-0 m-0">{{ currentUser()?.nbr_of_following }}</p>
+                <p class="fw-bold fs-4 p-0 m-0">
+                    {{ profile()?.nbr_of_following }}
+                </p>
                 <span class="text-secondary small">Following</span>
             </div>
 
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <p class="fw-bold fs-4 p-0 m-0">{{ currentUser()?.nbr_of_following }}</p>
+                <p class="fw-bold fs-4 p-0 m-0">
+                    {{ profile()?.nbr_of_likes_received }}
+                </p>
                 <span class="text-secondary small">Likes Received</span>
             </div>
+
         </div>
     </section>
 
     <section id="posts_of_user" class="w-50">
+
         @for (post of posts(); track post.id) {
         <PostComponent [post]="post" />
         }
+
     </section>
+
 </main>
+} @else {
+
+<div class="loading d-flex justify-content-center align-items-center">
+    Loading profile...
+</div>
+
+}
+
+@if (showEditPopup()) {
+<div class="popup-backdrop">
+
+    <div class="popup-container bg-black custom-border p-4">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold">Edit Profile</h3>
+            <mat-icon role="button" (click)="closeEditPopup()">close</mat-icon>
+        </div>
+
+        <form class="d-flex flex-column gap-3" (ngSubmit)="submitEdit()">
+
+            <input class="custom-input" type="text" placeholder="First name" [(ngModel)]="editForm.firstName"
+                name="firstName" />
+
+            <input class="custom-input" type="text" placeholder="Last name" [(ngModel)]="editForm.lastName"
+                name="lastName" />
+
+            <input class="custom-input" type="text" placeholder="Username" [(ngModel)]="editForm.username"
+                name="username" />
+
+            <input class="custom-input" type="email" placeholder="Email" [(ngModel)]="editForm.email" name="email" />
+
+            <textarea class="custom-input" rows="3" placeholder="About" [(ngModel)]="editForm.about"
+                name="about"></textarea>
+
+            <input type="file" class="custom-input" accept="image/*" (change)="onImageSelected($event)" />
+
+            <div class="d-flex justify-content-end gap-3 mt-3">
+                <button type="button" class="custom-button-1 fw-bold px-3 py-1" (click)="closeEditPopup()">
+                    Cancel
+                </button>
+                <button type="submit" class="custom-button px-3 fw-bold">
+                    Save
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+}

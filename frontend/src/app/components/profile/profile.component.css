@@ -1,6 +1,23 @@
 .custom-button {
     border-radius: 10px;
     border: none;
+    transition: background-color 0.3 ease;
+}
+
+.custom-button-1 {
+    color: white;
+    border: .2px solid #2c2c2c;
+    background-color: black;
+    border-radius: 10px;
+    transition: background-color 0.3 ease;
+}
+
+.custom-button:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.custom-button-1:hover {
+    background-color: darkgray;
 }
 
 .dot-border {
@@ -22,7 +39,7 @@
     margin-top: 20px;
     padding-left: 10%;
     padding-right: 10%;
-} 
+}
 
 .custom-border {
     border: .2px solid #2c2c2c;
@@ -36,4 +53,33 @@
 
 .feed {
     overflow-y: auto;
+}
+
+.popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-container {
+    width: 500px;
+    max-width: 90%;
+    border-radius: 12px;
+}
+
+.custom-input {
+    background: black;
+    border: 1px solid #333;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+}
+
+.custom-input::placeholder {
+    color: #888;
 }
