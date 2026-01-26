@@ -3,10 +3,11 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { MatIconModule } from '@angular/material/icon';
+import { Post } from '../post/post';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, Post],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
