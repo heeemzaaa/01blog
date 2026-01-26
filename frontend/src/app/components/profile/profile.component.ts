@@ -9,7 +9,8 @@ import { ProfileResponse } from '../../models/profile-response.model';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { SubscribeService } from '../../services/subscribe.service';
+import { UserResponse } from '../../models/me-response.model';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +21,10 @@ import { AuthService } from '../../services/auth.service';
 export class Profile {
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
+  subscribeService = inject(SubscribeService);
+  showConnectionsPopup = signal(false);
+  popupTitle = signal<'Followers' | 'Following'>('Followers');
+  connections = signal<UserResponse[]>([]);
   private postService = inject(PostService);
   profile = signal<ProfileResponse | null>(null);
   posts = signal<PostResponse[]>([]);
@@ -121,6 +126,42 @@ export class Profile {
           console.error('Update failed', err);
         }
       });
+  }
+
+  openFollowers() {
+    const profile = this.profile();
+    if (!profile) return;
+
+    this.popupTitle.set('Followers');
+    this.showConnectionsPopup.set(true);
+
+    this.subscribeService.getSubscribers(profile.id)
+      .subscribe(res => {
+        if (res.success) {
+          this.connections.set(res.data);
+        }
+      });
+  }
+
+  openFollowing() {
+    const profile = this.profile();
+    if (!profile) return;
+
+    this.popupTitle.set('Following');
+    this.showConnectionsPopup.set(true);
+
+    this.subscribeService.getSubscribed(profile.id)
+      .subscribe(res => {
+        if (res.success) {
+          this.connections.set(res.data);
+        }
+      });
+  }
+
+
+  closeConnectionsPopup() {
+    this.showConnectionsPopup.set(false);
+    this.connections.set([]);
   }
 
 }

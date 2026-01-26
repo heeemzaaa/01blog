@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SubscribeController {
     private final SubscribeService subscribeService;
 
-    @GetMapping("/subscribers")
-    public ResponseEntity<ResponseData<List<UserResponse>>> getSubscribers(Principal principal) {
-        return ResponseEntity.ok(subscribeService.getSubscribers(principal.getName()));
+    @GetMapping("/subscribers/{userId}")
+    public ResponseEntity<ResponseData<List<UserResponse>>> getSubscribers(@PathVariable UUID userId) {
+        return ResponseEntity.ok(subscribeService.getSubscribers(userId));
     }
 
-    @GetMapping("/subscribed")
-    public ResponseEntity<ResponseData<List<UserResponse>>> getSubscribed(Principal principal) {
-        return ResponseEntity.ok(subscribeService.getSubscribed(principal.getName()));
+    @GetMapping("/subscribed/{userId}")
+    public ResponseEntity<ResponseData<List<UserResponse>>> getSubscribed(@PathVariable UUID userId) {
+        return ResponseEntity.ok(subscribeService.getSubscribed(userId));
     }
     
     @PostMapping("subscribe/{id}")

@@ -19,8 +19,8 @@ public class SubscribeService {
     private final SubscribesRepository sr;
     private final UserRepository ur;
 
-    public ResponseData<List<UserResponse>> getSubscribers(String email) {
-        User user = ur.findByEmail(email).orElseThrow();
+    public ResponseData<List<UserResponse>> getSubscribers(UUID userId) {
+        User user = ur.findById(userId).orElseThrow();
 
         List<Subscribe> subscribersList = sr.findByUser(user);
 
@@ -31,8 +31,8 @@ public class SubscribeService {
         return ResponseData.success("Subscribers fetched successfully", subscribers);
     }
 
-    public ResponseData<List<UserResponse>> getSubscribed(String email) {
-        User user = ur.findByEmail(email).orElseThrow();
+    public ResponseData<List<UserResponse>> getSubscribed(UUID userId) {
+        User user = ur.findById(userId).orElseThrow();
 
         List<Subscribe> subscribedList = sr.findBySubscriber(user);
 
