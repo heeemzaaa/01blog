@@ -4,6 +4,8 @@ import com.blog01.backend.post.model.Like;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +19,13 @@ public interface LikeRepository extends JpaRepository<Like, UUID> {
     Optional<Like> findByUserAndPost(User user, Post post);
 
     List<Like> findByPost(Post post);
-    
+
     long countByPost(Post post);
+
+    @Query("""
+                SELECT COUNT(l)
+                FROM Like l
+                WHERE l.post.user = :user
+            """)
+    long countLikesReceivedByUser(@Param("user") User user);
 }
