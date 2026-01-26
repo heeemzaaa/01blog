@@ -1,6 +1,9 @@
 package com.blog01.backend.common.exception;
 
 import com.blog01.backend.common.response.ResponseData;
+
+import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -19,6 +22,20 @@ public class GlobalExceptionHandler {
                 .body(ResponseData.error("Request method '" + ex.getMethod() + "' not supported"));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseData<Object>> handleBadRequest(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ResponseData.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ResponseData<Object>> handleNotFound(NoSuchElementException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ResponseData.error(ex.getMessage()));
+    }
+
     // 2. Handle 403 Forbidden (Security Block)
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseData<Object>> handleAccessDenied(AccessDeniedException ex) {
@@ -35,10 +52,9 @@ public class GlobalExceptionHandler {
                 .body(ResponseData.error("Invalid email or password"));
     }
 
-    // 4. Handle Any Other Unexpected Error (Fallback)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseData<Object>> handleGeneralException(Exception ex) {
-        ex.printStackTrace(); // Print log for you to debug
+        ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ResponseData.error("An unexpected error occurred: " + ex.getMessage()));

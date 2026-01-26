@@ -21,4 +21,17 @@ export class SubscribeService {
       `${this.baseUrl}/subscribed/${userId}`
     );
   }
+
+  subscribe(userId: string): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(
+      `${this.baseUrl}/subscribe/${userId}`,
+      {}
+    );
+  }
+
+  unsubscribe(userId: string): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(
+      `${this.baseUrl}/unsubscribe/${userId}`
+    );
+  }
 }

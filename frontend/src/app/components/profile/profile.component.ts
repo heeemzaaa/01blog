@@ -21,11 +21,11 @@ import { UserResponse } from '../../models/me-response.model';
 export class Profile {
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
-  subscribeService = inject(SubscribeService);
+  private postService = inject(PostService);
+  private subscribeService = inject(SubscribeService);
   showConnectionsPopup = signal(false);
   popupTitle = signal<'Followers' | 'Following'>('Followers');
   connections = signal<UserResponse[]>([]);
-  private postService = inject(PostService);
   profile = signal<ProfileResponse | null>(null);
   posts = signal<PostResponse[]>([]);
   showEditPopup = signal(false);
@@ -163,5 +163,41 @@ export class Profile {
     this.showConnectionsPopup.set(false);
     this.connections.set([]);
   }
+
+  toggleFollow() {
+    const profile = this.profile();
+    if (!profile || profile.myProfile) return;
+
+    if (profile.isFollowing) {
+      this.unsubscribe(profile.id);
+    } else {
+      this.subscribe(profile.id);
+    }
+  }
+
+  subscribe(userId: string) {
+    this.subscribeService.subscribe(userId).subscribe(res => {
+      if (res.success) {
+        this.profile.update(p => p && ({
+          ...p,
+          isFollowing: true,
+          nbr_of_followers: p.nbr_of_followers + 1
+        }));
+      }
+    });
+  }
+
+  unsubscribe(userId: string) {
+    this.subscribeService.unsubscribe(userId).subscribe(res => {
+      if (res.success) {
+        this.profile.update(p => p && ({
+          ...p,
+          isFollowing: false,
+          nbr_of_followers: p.nbr_of_followers - 1
+        }));
+      }
+    });
+  }
+
 
 }

@@ -3,7 +3,7 @@ package com.blog01.backend.subscribes.service;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
-import com.blog01.backend.auth.model.*;
+import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
@@ -19,93 +19,100 @@ public class SubscribeService {
     private final SubscribesRepository sr;
     private final UserRepository ur;
 
+    /* ===================== GET SUBSCRIBERS ===================== */
     public ResponseData<List<UserResponse>> getSubscribers(UUID userId) {
-        User user = ur.findById(userId).orElseThrow();
 
-        List<Subscribe> subscribersList = sr.findByUser(user);
+        User user = ur.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        List<UserResponse> subscribers = subscribersList.stream()
+        List<UserResponse> subscribers = sr.findByUser(user).stream()
                 .map(sub -> mapToUserResponse(sub.getSubscriber()))
                 .toList();
 
         return ResponseData.success("Subscribers fetched successfully", subscribers);
     }
 
+    /* ===================== GET SUBSCRIBED ===================== */
     public ResponseData<List<UserResponse>> getSubscribed(UUID userId) {
-        User user = ur.findById(userId).orElseThrow();
 
-        List<Subscribe> subscribedList = sr.findBySubscriber(user);
+        User user = ur.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        List<UserResponse> subscribed = subscribedList.stream()
+        List<UserResponse> subscribed = sr.findBySubscriber(user).stream()
                 .map(sub -> mapToUserResponse(sub.getUser()))
                 .toList();
 
-        return ResponseData.success("Subscribed users are fetched successfully", subscribed);
+        return ResponseData.success("Subscribed users fetched successfully", subscribed);
     }
 
-    public ResponseData<String> subscribe(String email, UUID targetUserId) {
-        User subscriber = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("Current user not found"));
-        // I need to check if the user exists
+    /* ===================== SUBSCRIBE ===================== */
+    public ResponseData<Void> subscribe(String email, UUID targetUserId) {
+
+        User subscriber = ur.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+
         User target = ur.findById(targetUserId)
-                .orElseThrow(() -> new RuntimeException("User to subscribe doesn't exist"));
-        // I need to check if the user is me (if yes refuse)
+                .orElseThrow(() -> new NoSuchElementException("User to subscribe doesn't exist"));
+
         if (subscriber.getId().equals(target.getId())) {
-            return ResponseData.error("You cannot subscribe to yourself !");
+            throw new IllegalArgumentException("You cannot subscribe to yourself");
         }
 
-        // I need to check if I'm already a follower
-        boolean exists = sr.existsBySubscriberAndUser(subscriber, target);
-        if (exists) {
-            return ResponseData.error("You are already a subscriber to this user !");
+        if (sr.existsBySubscriberAndUser(subscriber, target)) {
+            throw new IllegalArgumentException("You are already a subscriber to this user");
         }
 
-        Subscribe subscribe = Subscribe.builder()
+        sr.save(Subscribe.builder()
                 .subscriber(subscriber)
                 .user(target)
-                .build();
-
-        sr.save(subscribe);
+                .build());
 
         return ResponseData.success("You are now a subscriber to this user", null);
-
     }
 
-    public ResponseData<String> unsubscribe(String email, UUID targetUserId) {
-        User user = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("Current user not found"));
+    /* ===================== UNSUBSCRIBE ===================== */
+    public ResponseData<Void> unsubscribe(String email, UUID targetUserId) {
+
+        User user = ur.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
 
         User target = ur.findById(targetUserId)
-                .orElseThrow(() -> new RuntimeException("User to unsubscribe doesn't exist"));
-        // I need to check if the user is me (if yes refuse)
+                .orElseThrow(() -> new NoSuchElementException("User to unsubscribe doesn't exist"));
+
         if (user.getId().equals(target.getId())) {
-            return ResponseData.error("You cannot unsubscribe to yourself !");
+            throw new IllegalArgumentException("You cannot unsubscribe from yourself");
         }
 
         Subscribe subscribe = sr.findBySubscriberAndUser(user, target)
-                .orElseThrow(() -> new RuntimeException("You are not a subscriber to this user !"));
+                .orElseThrow(() -> new NoSuchElementException("You are not a subscriber to this user"));
 
         sr.delete(subscribe);
 
-        return ResponseData.success("You are now not a subscriber to this user", null);
-
+        return ResponseData.success("You are now unsubscribed from this user", null);
     }
 
-    public ResponseData<String> deleteSubscriber(String email, UUID deletedUserId) {
-        User user = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("Current user not found"));
+    /* ===================== DELETE SUBSCRIBER ===================== */
+    public ResponseData<Void> deleteSubscriber(String email, UUID deletedUserId) {
+
+        User user = ur.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+
         User deletedUser = ur.findById(deletedUserId)
-                .orElseThrow(() -> new RuntimeException("User to delete from you subscribers doesn't exist"));
+                .orElseThrow(() -> new NoSuchElementException("User to remove doesn't exist"));
 
         if (user.getId().equals(deletedUser.getId())) {
-            return ResponseData.error("You don't have any relation with yourself !");
+            throw new IllegalArgumentException("You don't have any relation with yourself");
         }
 
         Subscribe subscribe = sr.findBySubscriberAndUser(deletedUser, user)
-                .orElseThrow(() -> new RuntimeException("You are not a subscriber to this user !"));
+                .orElseThrow(() -> new NoSuchElementException("This user is not your subscriber"));
 
         sr.delete(subscribe);
 
-        return ResponseData.success("You deleted the user from your list successfully", null);
+        return ResponseData.success("Subscriber removed successfully", null);
     }
 
+    /* ===================== MAPPER ===================== */
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -115,5 +122,4 @@ public class SubscribeService {
                 .profileImage(user.getProfileImage())
                 .build();
     }
-
 }
