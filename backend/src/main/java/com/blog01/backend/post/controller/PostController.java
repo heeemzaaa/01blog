@@ -33,11 +33,13 @@ public class PostController {
                                 postService.getFeedPosts(principal.getName()));
         }
 
-        @GetMapping("/me")
-        public ResponseEntity<ResponseData<List<PostResponse>>> getMyPosts(
+        @GetMapping("/profile/{userId}")
+        public ResponseEntity<ResponseData<List<PostResponse>>> getProfilePosts(
+                        @PathVariable UUID userId,
                         Principal principal) {
+
                 return ResponseEntity.ok(
-                                postService.getMyPosts(principal.getName()));
+                                postService.getProfilePosts(userId, principal.getName()));
         }
 
         @PostMapping(value = "/create", consumes = "multipart/form-data")

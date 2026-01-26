@@ -89,19 +89,23 @@ public class PostService {
                                 mapToPostResponse(saved, user));
         }
 
-        public ResponseData<List<PostResponse>> getMyPosts(String email) {
+        public ResponseData<List<PostResponse>> getProfilePosts(UUID userId, String email) {
 
-                User currentUser = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+                User viewer = userRepository.findByEmail(email).orElseThrow();
+                User profileUser = userRepository.findById(userId).orElseThrow();
 
-                List<Post> posts = postRepository
-                                .findByUserOrderByCreatedAtDesc(currentUser);
+                List<Post> posts;
 
-                List<PostResponse> response = posts.stream()
-                                .map(post -> mapToPostResponse(post, currentUser))
-                                .toList();
+                if (viewer.getId().equals(profileUser.getId())) {
+                        posts = postRepository.findByUserOrderByCreatedAtDesc(profileUser);
+                } else {
+                        posts = postRepository.findByUserOrderByCreatedAtDesc(profileUser);
+                        // later: privacy rules
+                }
 
-                return ResponseData.success("My posts fetched successfully", response);
+                return ResponseData.success(
+                                "Profile posts fetched",
+                                mapToPostResponse(posts, viewer));
         }
 
         public ResponseData<PostResponse> updatePost(
@@ -125,7 +129,6 @@ public class PostService {
 
                 Post saved = postRepository.save(post);
 
-                // ✅ MEDIA HANDLING (add new medias)
                 postMediaService.handlePostMedias(saved, medias);
 
                 return ResponseData.success(
@@ -145,7 +148,6 @@ public class PostService {
                         return ResponseData.error("You are not authorized to delete this post");
                 }
 
-                // ✅ delete medias first (DB, disk later)
                 postMediaService.deleteAllByPost(post);
 
                 postRepository.delete(post);
@@ -163,7 +165,7 @@ public class PostService {
                                 .id(p.getId())
                                 .title(p.getTitle())
                                 .content(p.getContent())
-                                .medias(postMediaService.buildResponses(p)) // ✅ FIXED
+                                .medias(postMediaService.buildResponses(p))
                                 .createdAt(p.getCreatedAt())
                                 .likesCount(likesCount)
                                 .commentsCount(commentsCount)
@@ -177,4 +179,11 @@ public class PostService {
                                                 .build())
                                 .build();
         }
+
+        private List<PostResponse> mapToPostResponse(List<Post> posts, User currentUser) {
+                return posts.stream()
+                                .map(p -> mapToPostResponse(p, currentUser))
+                                .toList();
+        }
+
 }

@@ -1,25 +1,19 @@
+import { UserResponse } from "./me-response.model";
+import { PostMediaResponse } from "./post-media-response.model";
+
+
+
 export interface PostResponse {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt?: string;
-
-  author: {
     id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    profileImage?: string;
-  };
+    user: UserResponse;
 
-  medias: {
-    id: string;
-    url: string;
-    type: 'IMAGE' | 'VIDEO';
-  }[];
+    title: string;
+    content: string;
+    medias: PostMediaResponse[];
 
-  likesCount: number;
-  commentsCount: number;
-  likedByMe: boolean;
+    createdAt: string;
+
+    isLiked: boolean;
+    likesCount: number;
+    commentsCount: number;
 }

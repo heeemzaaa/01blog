@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { PostResponse } from '../../models/post-response.model';
 
 @Component({
   selector: 'PostComponent',
@@ -9,9 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './post.css',
 })
 export class Post {
-  isLiked = false;
+  @Input() post!: PostResponse;
 
   toggleLike() {
-    this.isLiked = !this.isLiked;
+    this.post.isLiked = !this.post.isLiked;
   }
 }

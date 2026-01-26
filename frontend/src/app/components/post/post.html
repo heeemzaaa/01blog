@@ -1,4 +1,4 @@
-<div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1">
+<!-- <div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1">
     <div class="d-flex justify-content-between">
         <div id="image_and_name" class="d-flex gap-2 align-items-center">
             <div id="image">
@@ -58,6 +58,93 @@
                 </mat-icon>
             </button>
             <span class="fw-bold fs-5 text-center">24</span>
+        </div>
+
+    </div>
+</div> -->
+
+
+
+<div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1">
+
+    <div class="d-flex justify-content-between">
+        <div id="image_and_name" class="d-flex gap-2 align-items-center">
+            <div id="image">
+                <img
+                    [src]="post.user.profileImage 
+                        ? 'http://localhost:8080' + post.user.profileImage 
+                        : '/profile.png'"
+                    class="custom_image">
+            </div>
+
+            <div id="names_ and_time">
+                <p class="fw-bold p-0 m-0">
+                    {{ post.user.firstName }} {{ post.user.lastName }}
+                </p>
+                <div class="d-flex gap-3">
+                    <span class="text-secondary">@{{ post.user.username }}</span>
+                    <span class="text-secondary">
+                        {{ post.createdAt | date:'short' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div role="button" class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
+            <mat-icon>more_horiz</mat-icon>
+        </div>
+    </div>
+
+    <div id="title_and_content" class="d-flex flex-column gap-3">
+        <h3 class="fw-bold">{{ post.title }}</h3>
+        <p class="fs-6">{{ post.content }}</p>
+    </div>
+
+    @if (post.medias && post.medias.length > 0) {
+        <div id="images" class="d-flex flex-column gap-2">
+
+            <div>
+                <img
+                    [src]="'http://localhost:8080' + post.medias[0].url"
+                    class="c_image chosen">
+            </div>
+
+            @if (post.medias.length > 1) {
+                <div id="all_images" class="d-flex gap-2">
+                    @for (media of post.medias.slice(1); track media.id) {
+                        <img
+                            [src]="'http://localhost:8080' + media.url"
+                            class="c_image">
+                    }
+                </div>
+            }
+        </div>
+    }
+
+    <div id="reactions" class="d-flex gap-5">
+
+        <div class="d-flex align-items-center gap-1">
+            <button mat-icon-button (click)="toggleLike()" class="bg-black c-border">
+                <mat-icon
+                    [class.liked]="post.isLiked"
+                    class="custom-heart">
+                    {{ post.isLiked ? 'favorite' : 'favorite_border' }}
+                </mat-icon>
+            </button>
+            <span class="fw-bold fs-5 text-center">
+                {{ post.likesCount }}
+            </span>
+        </div>
+
+        <div class="d-flex align-items-center gap-1">
+            <button mat-icon-button class="bg-black c-border">
+                <mat-icon class="custom-comment">
+                    chat_bubble_outline
+                </mat-icon>
+            </button>
+            <span class="fw-bold fs-5 text-center">
+                {{ post.commentsCount }}
+            </span>
         </div>
 
     </div>

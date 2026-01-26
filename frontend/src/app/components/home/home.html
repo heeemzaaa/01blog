@@ -44,7 +44,9 @@
 
   <section id="second_part" class="w-75 d-flex flex-column justify-content-start px-5 gap-3 feed">
     <h2 class="fw-bold">Your Feed</h2>
-    <PostComponent />
+    @for (post of posts(); track post.id) {
+    <PostComponent [post]="post" />
+    }
   </section>
 
 </main>
