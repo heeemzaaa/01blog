@@ -13,7 +13,7 @@ export interface PostResponse {
 
     createdAt: string;
 
-    isLiked: boolean;
+    liked: boolean;
     likesCount: number;
     commentsCount: number;
 }

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { PostResponse } from '../../models/post-response.model';
+import { LikeService } from '../../services/like.service';
 
 @Component({
   selector: 'PostComponent',
@@ -12,13 +13,25 @@ import { PostResponse } from '../../models/post-response.model';
 export class Post {
   @Input() post!: PostResponse;
 
+  private likeService = inject(LikeService);
+
   toggleLike() {
-    if (this.post.isLiked) {
-      this.post.isLiked = false;
-      this.post.likesCount -= 1;
-    } else {
-      this.post.isLiked = true;
-      this.post.likesCount += 1;
-    }
+    const previousState = this.post.liked;
+    const previousCount = this.post.likesCount;
+
+    this.post.liked = !this.post.liked;
+    this.post.likesCount += this.post.liked ? 1 : -1;
+
+    this.likeService.toggleLike(this.post.id).subscribe({
+      error: () => {
+        this.post.liked = previousState;
+        this.post.likesCount = previousCount;
+      },
+    });
+  }
+
+  reportPost() {
+    console.log('Report post:', this.post.id);
+    // later → call backend
   }
 }

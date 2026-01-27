@@ -28,6 +28,7 @@ export class HomeComponent {
   loadFeed() {
     this.postService.getFeedPosts().subscribe(res => {
       if (res.success) {
+        console.log(res.data);
         this.posts.set(res.data);
       }
     });

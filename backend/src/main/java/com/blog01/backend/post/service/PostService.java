@@ -38,7 +38,6 @@ public class PostService {
                 User currentUser = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                // users I follow
                 List<Subscribe> subscriptions = subscribesRepository.findBySubscriber(currentUser);
 
                 List<User> followedUsers = subscriptions.stream()
