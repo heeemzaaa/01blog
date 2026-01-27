@@ -3,16 +3,23 @@ import { Component, Input, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { PostResponse } from '../../models/post-response.model';
 import { LikeService } from '../../services/like.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportTarget } from '../../models/report-target.enum';
+import { ReportService } from '../../services/report.service';
+import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
+
 
 @Component({
   selector: 'PostComponent',
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, MatMenuModule],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
 })
 export class Post {
   @Input() post!: PostResponse;
-
+  private dialog = inject(MatDialog);
+  private reportService = inject(ReportService);
   private likeService = inject(LikeService);
 
   toggleLike() {
@@ -31,7 +38,27 @@ export class Post {
   }
 
   reportPost() {
-    console.log('Report post:', this.post.id);
-    // later → call backend
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '400px',
+      data: {
+        targetType: ReportTarget.POST,
+        targetId: this.post.id,
+        subjectLabel: this.post.title,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+
+      this.reportService.createReport(result).subscribe({
+        next: () => {
+          console.log('Report sent successfully');
+        },
+        error: () => {
+          console.error('Error while reporting');
+        },
+      });
+    });
   }
+
 }

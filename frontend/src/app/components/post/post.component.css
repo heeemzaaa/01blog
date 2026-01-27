@@ -30,6 +30,7 @@
 
 .c-border {
     border: none;
+    transition: transform 0.3 ease;
 }
 
 .c-b {
@@ -60,4 +61,8 @@
     color: white;
     border: none;
     transition: color 0.3s ease;
+}
+
+.c-border:hover {
+    transform: translateY(-2px);
 }

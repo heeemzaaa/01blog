@@ -3,11 +3,9 @@
     <div class="d-flex justify-content-between">
         <div id="image_and_name" class="d-flex gap-2 align-items-center">
             <div id="image">
-                <img
-                    [src]="post.user.profileImage 
+                <img [src]="post.user.profileImage 
                         ? 'http://localhost:8080' + post.user.profileImage 
-                        : '/profile.png'"
-                    class="custom_image">
+                        : '/profile.png'" class="custom_image">
             </div>
 
             <div id="names_ and_time">
@@ -23,9 +21,18 @@
             </div>
         </div>
 
-        <div role="button" class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
+        <button mat-icon-button class="bg-black c-border text-white" [matMenuTriggerFor]="postMenu">
             <mat-icon>more_horiz</mat-icon>
-        </div>
+        </button>
+
+        <mat-menu #postMenu="matMenu" panelClass="post-menu-panel">
+
+            <button mat-menu-item (click)="reportPost()" class="post-menu-item">
+                <mat-icon color="warn">flag</mat-icon>
+                <span>Report post</span>
+            </button>
+
+        </mat-menu>
     </div>
 
     <div id="title_and_content" class="d-flex flex-column gap-3">
@@ -34,33 +41,27 @@
     </div>
 
     @if (post.medias && post.medias.length > 0) {
-        <div id="images" class="d-flex flex-column gap-2">
+    <div id="images" class="d-flex flex-column gap-2">
 
-            <div>
-                <img
-                    [src]="'http://localhost:8080' + post.medias[0].url"
-                    class="c_image chosen">
-            </div>
+        <div>
+            <img [src]="'http://localhost:8080' + post.medias[0].url" class="c_image chosen">
+        </div>
 
-            @if (post.medias.length > 1) {
-                <div id="all_images" class="d-flex gap-2">
-                    @for (media of post.medias.slice(1); track media.id) {
-                        <img
-                            [src]="'http://localhost:8080' + media.url"
-                            class="c_image">
-                    }
-                </div>
+        @if (post.medias.length > 1) {
+        <div id="all_images" class="d-flex gap-2">
+            @for (media of post.medias.slice(1); track media.id) {
+            <img [src]="'http://localhost:8080' + media.url" class="c_image">
             }
         </div>
+        }
+    </div>
     }
 
     <div id="reactions" class="d-flex gap-5">
 
         <div class="d-flex align-items-center gap-1">
             <button mat-icon-button (click)="toggleLike()" class="bg-black c-border">
-                <mat-icon
-                    [class.liked]="post.liked"
-                    class="custom-heart">
+                <mat-icon [class.liked]="post.liked" class="custom-heart">
                     {{ post.liked ? 'favorite' : 'favorite_border' }}
                 </mat-icon>
             </button>

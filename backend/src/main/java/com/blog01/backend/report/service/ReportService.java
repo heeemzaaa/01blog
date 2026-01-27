@@ -31,11 +31,17 @@ public class ReportService {
     public ResponseData<ReportResponse> createReport(String email, ReportRequest request) {
         User reporter = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email not Found !"));
 
-        boolean targetExists = switch (request.getTargetType()) {
-            case POST -> postRepository.existsById(request.getTargetId());
-            case COMMENT -> commentRepository.existsById(request.getTargetId());
-            case USER -> userRepository.existsById(request.getTargetId());
-        };
+        boolean targetExists;
+
+        if (request.getTargetType() == Report.Target.POST) {
+            targetExists = postRepository.existsById(request.getTargetId());
+        } else if (request.getTargetType() == Report.Target.COMMENT) {
+            targetExists = commentRepository.existsById(request.getTargetId());
+        } else if (request.getTargetType() == Report.Target.USER) {
+            targetExists = userRepository.existsById(request.getTargetId());
+        } else {
+            targetExists = false;
+        }
 
         if (!targetExists) {
             return ResponseData.error("The " + request.getTargetType() + " you are trying to report does not exist.");
@@ -79,7 +85,7 @@ public class ReportService {
         Report saved = reportRepository.save(report);
 
         notificationService.sendNotification(
-                report.getReporter(), 
+                report.getReporter(),
                 null,
                 NotificationType.REPORT_UPDATE,
                 saved.getId());
