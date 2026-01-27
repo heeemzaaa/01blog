@@ -1,40 +1,40 @@
 <main class="w-100 d-flex flex-column justify-content-center align-items-center">
 
-    <section class="w-50 d-flex flex-column justify-content-center align-items-center">
-        @if (post()) {
-        <app-post [post]="post()!" [showActions]="false">
-        </app-post>
-        }
-    </section>
-    *<section class="comments-section border-top pt-3">
+        <section class="d-flex flex-column justify-content-center align-items-center">
+            @if (post()) {
+            <app-post [post]="post()!" [showActions]="false">
+            </app-post>
+            }
+        </section>
 
-        <h5 class="fw-bold mb-3">
-            Comments
-        </h5>
+        <section class="d-flex flex-column justify-content-start align-items-start c-border p-4 gap-2 w-50">
 
-        <!-- Add comment -->
-        <div class="add-comment d-flex gap-2 mb-4">
-            <input type="text" class="form-control" placeholder="Write a comment..." />
-            <button class="btn btn-dark">
-                Post
-            </button>
-        </div>
+            <h3 class="fw-bold mb-3">
+                Comments
+            </h3>
 
-        <!-- Comments list -->
-        <div class="comment-list d-flex flex-column gap-3">
+            <div class="d-flex flex-column gap-3">
+                <div class="comment d-flex justify-content-start align-items-start gap-2">
+                    <img src="/profile.png" alt="user-profile" class="c-image">
+                    <div class="custom-border p-3 d-flex flex-column gap-2">
+                        <div id="userInfos" class="d-flex gap-2">
+                            <span class="p-0 m-0 fw-bold">Hamza Elkhawlani</span>
+                            <span class="p-0 m-0 text-secondary">@heeemzaaa</span>
+                            <span class="p-0 m-0 text-secondary">2 hours ago</span>
+                        </div>
+                        <p class="p-0 m-0">This is a comment from a user</p>
+                    </div>
+                </div>
 
-            <div class="comment">
-                <strong>username</strong>
-                <p class="mb-0">This is a comment</p>
             </div>
 
-            <div class="comment">
-                <strong>another_user</strong>
-                <p class="mb-0">Another comment here</p>
+            <div class="add-comment d-flex gap-2">
+                <input type="text" placeholder="Write a comment..." />
+                <button class="bg-white fw-bold text-black c-border px-3 py-1">
+                    Comment
+                </button>
             </div>
 
-        </div>
-
-    </section>
+        </section>
 
 </main>

@@ -31,3 +31,9 @@ input:focus {
   box-shadow: 0 0 0 3px #585858;
 }
 
+.c-border {
+  border: .2px solid #2c2c2c;
+  border-radius: 10px;
+  background-color: #000000;
+}
+
