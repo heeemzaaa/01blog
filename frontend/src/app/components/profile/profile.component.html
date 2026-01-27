@@ -117,7 +117,7 @@
     <section id="posts_of_user" class="w-50">
 
         @for (post of posts(); track post.id) {
-        <PostComponent [post]="post" />
+        <app-post [post]="post" />
         }
 
     </section>

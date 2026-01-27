@@ -26,6 +26,14 @@ public class PostController {
 
         private final PostService postService;
 
+        @GetMapping("/{id}")
+        public ResponseEntity<ResponseData<PostResponse>> getPostById(
+                        @PathVariable UUID id,
+                        Principal principal) {
+                return ResponseEntity.ok(
+                                postService.getPostById(id, principal.getName()));
+        }
+
         @GetMapping("/feed")
         public ResponseEntity<ResponseData<List<PostResponse>>> getFeedPosts(
                         Principal principal) {

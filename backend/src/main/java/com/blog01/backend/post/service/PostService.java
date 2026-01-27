@@ -151,11 +151,25 @@ public class PostService {
                 return ResponseData.success("Post deleted successfully", null);
         }
 
+        public ResponseData<PostResponse> getPostById(UUID postId, String email) {
+
+                User currentUser = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+
+                Post post = postRepository.findById(postId)
+                                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+                return ResponseData.success(
+                                "Post fetched successfully",
+                                mapToPostResponse(post, currentUser));
+        }
+
         private PostResponse mapToPostResponse(Post p, User currentUser) {
 
                 long likesCount = likeRepository.countByPost(p);
                 long commentsCount = commentRepository.countByPost(p);
                 boolean isLiked = likeRepository.existsByUserAndPost(currentUser, p);
+                boolean isMyPost = p.getUser().getId().equals(currentUser.getId());
 
                 return PostResponse.builder()
                                 .id(p.getId())
@@ -166,6 +180,7 @@ public class PostService {
                                 .likesCount(likesCount)
                                 .commentsCount(commentsCount)
                                 .isLiked(isLiked)
+                                .isMyPost(isMyPost)
                                 .user(UserResponse.builder()
                                                 .id(p.getUser().getId())
                                                 .firstName(p.getUser().getFirstName())

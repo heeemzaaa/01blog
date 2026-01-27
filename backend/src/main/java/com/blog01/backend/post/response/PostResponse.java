@@ -24,4 +24,5 @@ public class PostResponse {
     private boolean isLiked;
     private long likesCount;
     private long commentsCount;
+    private boolean isMyPost;
 }

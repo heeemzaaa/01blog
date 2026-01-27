@@ -8,19 +8,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportTarget } from '../../models/report-target.enum';
 import { ReportService } from '../../services/report.service';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
-  selector: 'PostComponent',
-  imports: [MatIconModule, CommonModule, MatMenuModule],
+  selector: 'app-post',
+  imports: [MatIconModule, CommonModule, MatMenuModule, RouterLink],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
 })
 export class Post {
   @Input() post!: PostResponse;
+  @Input() showActions = true;
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private likeService = inject(LikeService);
+  router = inject(Router);
 
   toggleLike() {
     const previousState = this.post.liked;

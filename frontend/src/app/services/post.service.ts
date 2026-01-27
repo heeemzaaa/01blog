@@ -30,4 +30,10 @@ export class PostService {
             `${this.basedUrl}/profile/${userId}`
         );
     }
+
+    getPostById(userId: string): Observable<ApiResponse<PostResponse>> {
+        return this.http.get<ApiResponse<PostResponse>>(
+            `${this.basedUrl}/${userId}`
+        )
+    }
 }
