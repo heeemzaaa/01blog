@@ -8,6 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,12 +22,10 @@ public class PostMediaService {
 
     private static final int MAX_MEDIA_COUNT = 5;
     private static final long MAX_MEDIA_SIZE = 10 * 1024 * 1024;
+    private static final Path UPLOAD_ROOT = Paths.get(System.getProperty("user.dir"), "uploads");
 
     private final PostMediaRepository postMediaRepository;
 
-    /**
-     * Called from PostService when creating or updating a post
-     */
     public void handlePostMedias(Post post, List<MultipartFile> medias) {
 
         if (medias == null || medias.isEmpty()) {
@@ -31,29 +34,63 @@ public class PostMediaService {
 
         long existingCount = postMediaRepository.countByPost(post);
         if (existingCount + medias.size() > MAX_MEDIA_COUNT) {
-            throw new RuntimeException("A post can contain at most 5 medias");
+            throw new IllegalArgumentException("A post can contain at most 5 medias");
         }
 
         for (MultipartFile media : medias) {
 
             if (media.isEmpty()) {
-                throw new RuntimeException("Media file is empty");
+                throw new IllegalArgumentException("Media file is empty");
             }
 
             if (media.getSize() > MAX_MEDIA_SIZE) {
-                throw new RuntimeException("Media size must not be more than 10MB");
+                throw new IllegalArgumentException("Media size must not be more than 10MB");
             }
 
             String contentType = media.getContentType();
             if (contentType == null ||
                     !(contentType.startsWith("image/") || contentType.startsWith("video/"))) {
-                throw new RuntimeException("Only image and video files are allowed");
+                throw new IllegalArgumentException("Only image and video files are allowed");
             }
+
+            String originalName = media.getOriginalFilename();
+            String extension = (originalName != null && originalName.contains("."))
+                    ? originalName.substring(originalName.lastIndexOf('.') + 1)
+                    : "bin";
+
+            String filename = UUID.randomUUID() + "." + extension;
+
+            Path fullPath = UPLOAD_ROOT
+                    .resolve("posts")
+                    .resolve(post.getId().toString())
+                    .resolve(filename);
+
+            try {
+                // create uploads/posts/{postId}
+                Files.createDirectories(fullPath.getParent());
+
+                // 🔥 WRITE FILE (RELIABLE)
+                Files.copy(
+                        media.getInputStream(),
+                        fullPath,
+                        StandardCopyOption.REPLACE_EXISTING);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(
+                        "Failed to store media file at path: " + fullPath.toAbsolutePath(),
+                        e);
+            }
+
+            String relativePath = "uploads/posts/"
+                    + post.getId()
+                    + "/"
+                    + filename;
 
             PostMedia mediaEntity = PostMedia.builder()
                     .post(post)
                     .type(resolveMediaType(contentType))
-                    .filePath(buildStoragePath(post.getId(), media))
+                    .filePath(relativePath)
                     .fileSize(media.getSize())
                     .build();
 
@@ -61,9 +98,6 @@ public class PostMediaService {
         }
     }
 
-    /**
-     * Used when building PostResponse
-     */
     public List<PostMediaResponse> buildResponses(Post post) {
         return postMediaRepository.findAllByPost(post)
                 .stream()
@@ -75,22 +109,10 @@ public class PostMediaService {
         postMediaRepository.deleteAllByPost(post);
     }
 
-    /* ================= Helpers ================= */
-
     private PostMedia.MediaType resolveMediaType(String contentType) {
         return contentType.startsWith("image/")
                 ? PostMedia.MediaType.IMAGE
                 : PostMedia.MediaType.VIDEO;
-    }
-
-    private String buildStoragePath(UUID postId, MultipartFile media) {
-
-        String originalName = media.getOriginalFilename();
-        String extension = (originalName != null && originalName.contains("."))
-                ? originalName.substring(originalName.lastIndexOf('.') + 1)
-                : "bin";
-
-        return "uploads/posts/" + postId + "/" + UUID.randomUUID() + "." + extension;
     }
 
     private PostMediaResponse toResponse(PostMedia media) {

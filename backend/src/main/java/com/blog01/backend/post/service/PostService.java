@@ -71,10 +71,8 @@ public class PostService {
 
                 Post saved = postRepository.save(post);
 
-                // ✅ MEDIA HANDLING
                 postMediaService.handlePostMedias(saved, medias);
 
-                // Notifications
                 List<User> followers = subscribesRepository.findSubscribersByUser(user);
                 for (User follower : followers) {
                         notificationService.sendNotification(
@@ -100,7 +98,6 @@ public class PostService {
                         posts = postRepository.findByUserOrderByCreatedAtDesc(profileUser);
                 } else {
                         posts = postRepository.findByUserOrderByCreatedAtDesc(profileUser);
-                        // later: privacy rules
                 }
 
                 return ResponseData.success(

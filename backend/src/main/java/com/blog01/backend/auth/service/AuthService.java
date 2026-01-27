@@ -145,7 +145,7 @@ public class AuthService {
 
     private String saveProfileImage(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            return "/media/users/default.png";
+            return null;
         }
 
         try {
