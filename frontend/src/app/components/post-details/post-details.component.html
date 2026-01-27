@@ -1,40 +1,41 @@
 <main class="w-100 d-flex flex-column justify-content-center align-items-center">
 
-        <section class="d-flex flex-column justify-content-center align-items-center">
-            @if (post()) {
-            <app-post [post]="post()!" [showActions]="false">
-            </app-post>
-            }
-        </section>
+    <section class="d-flex flex-column justify-content-center align-items-center">
+        @if (post()) {
+        <app-post [post]="post()!" [showActions]="false">
+        </app-post>
+        }
+    </section>
 
-        <section class="d-flex flex-column justify-content-start align-items-start c-border p-4 gap-2 w-50">
+    <section class="d-flex flex-column justify-content-start c-border p-4 gap-4 w-50">
 
-            <h3 class="fw-bold mb-3">
-                Comments
-            </h3>
+        <h3 class="fw-bold mb-3">
+            Comments
+        </h3>
 
-            <div class="d-flex flex-column gap-3">
-                <div class="comment d-flex justify-content-start align-items-start gap-2">
-                    <img src="/profile.png" alt="user-profile" class="c-image">
-                    <div class="custom-border p-3 d-flex flex-column gap-2">
-                        <div id="userInfos" class="d-flex gap-2">
-                            <span class="p-0 m-0 fw-bold">Hamza Elkhawlani</span>
-                            <span class="p-0 m-0 text-secondary">@heeemzaaa</span>
-                            <span class="p-0 m-0 text-secondary">2 hours ago</span>
-                        </div>
-                        <p class="p-0 m-0">This is a comment from a user</p>
+        <div class="d-flex flex-column gap-3">
+            <div class="comment d-flex justify-content-start align-items-start gap-2">
+                <img src="/profile.png" alt="user-profile" class="c-image">
+                <div class="custom-border p-3 d-flex flex-column gap-2 w-100">
+                    <div id="userInfos" class="d-flex gap-2">
+                        <span class="p-0 m-0 fw-bold">Hamza Elkhawlani</span>
+                        <span class="p-0 m-0 text-secondary">@heeemzaaa</span>
+                        <span class="p-0 m-0 text-secondary">2 hours ago</span>
                     </div>
+                    <p class="p-0 m-0">This is a comment from a user</p>
                 </div>
-
             </div>
 
-            <div class="add-comment d-flex gap-2">
-                <input type="text" placeholder="Write a comment..." />
-                <button class="bg-white fw-bold text-black c-border px-3 py-1">
-                    Comment
-                </button>
-            </div>
+        </div>
 
-        </section>
+        <div class="add-comment d-flex gap-2">
+            <img src="/profile.png" alt="user-profile" class="c-image">
+            <input type="text" placeholder="Write a comment..." class="w-100" />
+            <button class="bg-white fw-bold text-black c-border px-3 py-1">
+                Comment
+            </button>
+        </div>
+
+    </section>
 
 </main>
