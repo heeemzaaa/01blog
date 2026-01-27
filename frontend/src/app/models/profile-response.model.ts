@@ -11,5 +11,5 @@ export interface ProfileResponse {
     nbr_of_following: number;
     nbr_of_likes_received: number;
     myProfile: boolean;
-    isFollowing: boolean;
+    following: boolean;
 }

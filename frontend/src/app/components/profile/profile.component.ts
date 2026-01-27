@@ -46,6 +46,15 @@ export class Profile {
     }
   }
 
+  get isFollowing() {
+    return this.profile()?.following;
+  }
+
+  get isMyProfile() {
+    return this.profile()?.myProfile;
+  }
+
+
   loadProfile(userId: string) {
     this.profileService.getProfile(userId).subscribe(res => {
       if (res.success) {
@@ -168,7 +177,7 @@ export class Profile {
     const profile = this.profile();
     if (!profile || profile.myProfile) return;
 
-    if (profile.isFollowing) {
+    if (profile.following) {
       this.unsubscribe(profile.id);
     } else {
       this.subscribe(profile.id);
@@ -180,7 +189,7 @@ export class Profile {
       if (res.success) {
         this.profile.update(p => p && ({
           ...p,
-          isFollowing: true,
+          following: true,
           nbr_of_followers: p.nbr_of_followers + 1
         }));
       }
@@ -192,7 +201,7 @@ export class Profile {
       if (res.success) {
         this.profile.update(p => p && ({
           ...p,
-          isFollowing: false,
+          following: false,
           nbr_of_followers: p.nbr_of_followers - 1
         }));
       }

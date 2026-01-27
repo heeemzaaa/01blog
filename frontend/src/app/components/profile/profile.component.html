@@ -25,11 +25,12 @@
                 </div>
                 } @else {
                 <div>
-                    @if (profile() && !profile()!.myProfile) {
+                    @if (profile() && !isMyProfile) {
                     <button (click)="toggleFollow()" class="custom-button px-3 py-1 fw-bold">
-                        {{ profile()!.isFollowing ? 'Unfollow' : '+ Follow' }}
+                        {{ isFollowing ? 'Unfollow' : '+ Follow' }}
                     </button>
                     }
+
 
                 </div>
 
