@@ -9,3 +9,13 @@
     background-color: #1a1a1a;
     border-radius: 8px;
 }
+
+.c-border {
+    border: none;
+    background-color: #1a1a1a;
+    transition: background-color 0.3s ease;
+}
+
+.c-border:hover {
+    background-color: black;
+}

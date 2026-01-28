@@ -25,7 +25,6 @@ export class Post {
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private likeService = inject(LikeService);
-  private commentService = inject(CommentService);
   router = inject(Router);
 
   toggleLike() {

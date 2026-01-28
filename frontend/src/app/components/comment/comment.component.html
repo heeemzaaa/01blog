@@ -1,21 +1,28 @@
-
-   
-
-    <div class="d-flex flex-column gap-3">
-        <div class="comment d-flex justify-content-start align-items-start gap-2">
-            <img [src]="comment.user.profileImage 
+<div class="d-flex flex-column gap-3">
+    <div class="comment d-flex justify-content-start align-items-start gap-2">
+        <img [src]="comment.user.profileImage 
                         ? 'http://localhost:8080' + comment.user.profileImage 
                         : '/profile.png'" class="c-image">
-            <div class="custom-border p-3 d-flex flex-column gap-2 w-100">
+        <div class="custom-border p-3 d-flex flex-column gap-2 w-100">
+            <div class="d-flex justify-content-between">
                 <div id="userInfos" class="d-flex gap-2">
                     <span class="p-0 m-0 fw-bold">{{ comment.user.firstName }} {{ comment.user.lastName }}</span>
                     <span class="p-0 m-0 text-secondary">@{{ comment.user.username }}</span>
                     <span class="p-0 m-0 text-secondary">{{ comment.commentedAt | date:'short' }}</span>
                 </div>
-                <p class="p-0 m-0">{{comment.content}}</p>
+                <button mat-icon-button class="c-border text-white" (click)="toggleOpen()">
+                    <mat-icon class="d-flex justify-content-center align-items-center">more_horiz</mat-icon>
+                </button>
             </div>
+
+            <p class="p-0 m-0">{{comment.content}}</p>
         </div>
-
     </div>
+</div>
 
-   
+
+@if (openMenu()) {
+    <div class="border border-1 border-white">
+        this is the menu
+    </div>
+}
