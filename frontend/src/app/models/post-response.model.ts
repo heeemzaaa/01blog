@@ -16,4 +16,5 @@ export interface PostResponse {
     liked: boolean;
     likesCount: number;
     commentsCount: number;
+    myPost: boolean;
 }

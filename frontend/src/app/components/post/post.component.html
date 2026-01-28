@@ -27,10 +27,25 @@
 
         <mat-menu #postMenu="matMenu" panelClass="post-menu-panel">
 
+            @if (post.myPost){
+            <div class="d-flex flex-column">
+                <button mat-menu-item (click)="reportPost()" class="post-menu-item">
+                    <mat-icon>edit</mat-icon>
+                    <span>Update post</span>
+                </button>
+                <button mat-menu-item (click)="reportPost()" class="post-menu-item">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete post</span>
+                </button>
+            </div>
+            } @else {
             <button mat-menu-item (click)="reportPost()" class="post-menu-item">
                 <mat-icon color="warn">flag</mat-icon>
                 <span>Report post</span>
             </button>
+            }
+
+
 
         </mat-menu>
     </div>

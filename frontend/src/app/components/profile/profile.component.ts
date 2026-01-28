@@ -58,7 +58,6 @@ export class Profile {
   loadProfile(userId: string) {
     this.profileService.getProfile(userId).subscribe(res => {
       if (res.success) {
-        console.log('res.data :>> ', res.data);
         this.profile.set(res.data);
       }
     });
@@ -67,6 +66,7 @@ export class Profile {
   loadPosts(userId: string) {
     this.postService.getProfilePosts(userId).subscribe(res => {
       if (res.success) {
+        console.log('res.data :>> ', res.data);
         this.posts.set(res.data);
       }
     });
