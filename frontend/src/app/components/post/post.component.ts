@@ -9,6 +9,7 @@ import { ReportTarget } from '../../models/report-target.enum';
 import { ReportService } from '../../services/report.service';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { Router, RouterLink } from '@angular/router';
+import { CommentService } from '../../services/comment.service';
 
 
 @Component({
@@ -20,9 +21,11 @@ import { Router, RouterLink } from '@angular/router';
 export class Post {
   @Input() post!: PostResponse;
   @Input() showActions = true;
+  
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private likeService = inject(LikeService);
+  private commentService = inject(CommentService);
   router = inject(Router);
 
   toggleLike() {
@@ -63,5 +66,7 @@ export class Post {
       });
     });
   }
+
+  
 
 }

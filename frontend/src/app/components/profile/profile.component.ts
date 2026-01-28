@@ -10,7 +10,7 @@ import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SubscribeService } from '../../services/subscribe.service';
-import { UserResponse } from '../../models/me-response.model';
+import { UserResponse } from '../../models/user-response.model';
 
 @Component({
   selector: 'app-profile',

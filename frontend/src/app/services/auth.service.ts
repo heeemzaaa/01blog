@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ApiResponse } from '../models/api-response.model';
-import { UserResponse } from '../models/me-response.model';
+import { UserResponse } from '../models/user-response.model';
 
 @Injectable({
     providedIn: 'root',

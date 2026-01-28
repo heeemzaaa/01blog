@@ -1,4 +1,4 @@
-import { UserResponse } from "./me-response.model";
+import { UserResponse } from "./user-response.model";
 import { PostMediaResponse } from "./post-media-response.model";
 
 

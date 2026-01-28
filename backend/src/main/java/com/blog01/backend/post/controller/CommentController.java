@@ -12,14 +12,14 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
     // POST /api/posts/{postId}/comments
-    @PostMapping("/posts/{postId}/comments")
+    @PostMapping("/{postId}/comments")
     public ResponseEntity<ResponseData<CommentResponse>> addComment(@PathVariable UUID postId,
                                                                     @RequestBody CommentRequest request,
                                                                     Principal principal) {
@@ -27,7 +27,7 @@ public class CommentController {
     }
 
     // GET /api/posts/{postId}/comments
-    @GetMapping("/posts/{postId}/comments")
+    @GetMapping("/{postId}/comments")
     public ResponseEntity<ResponseData<List<CommentResponse>>> getComments(@PathVariable UUID postId,
                                                                            Principal principal) {
         return ResponseEntity.ok(commentService.getCommentsByPost(postId, principal.getName()));
@@ -35,7 +35,7 @@ public class CommentController {
 
     // DELETE /api/comments/{commentId}
     // Note: We don't need postId here, the commentId is unique enough
-    @DeleteMapping("posts/{postId}/comments/{commentId}")
+    @DeleteMapping("/{postId}/comments/{commentId}")
     public ResponseEntity<ResponseData<String>> deleteComment(@PathVariable UUID commentId,
                                                               @PathVariable UUID postId,
                                                               Principal principal) {
