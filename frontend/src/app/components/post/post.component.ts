@@ -29,6 +29,7 @@ export class Post {
   private likeService = inject(LikeService);
   private postService = inject(PostService)
   router = inject(Router);
+  showEdit = false;
 
   toggleLike() {
     const previousState = this.post.liked;
@@ -79,6 +80,11 @@ export class Post {
         console.error('err :>> ', err);
       }
     });
+  }
+
+
+  editPost() {
+    this.showEdit = true;
   }
 
 }

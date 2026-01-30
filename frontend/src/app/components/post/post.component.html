@@ -29,7 +29,7 @@
 
             @if (post.myPost){
             <div class="d-flex flex-column">
-                <button mat-menu-item (click)="reportPost()" class="post-menu-item">
+                <button mat-menu-item (click)="editPost()" class="post-menu-item">
                     <mat-icon>edit</mat-icon>
                     <span>Update post</span>
                 </button>
@@ -98,3 +98,10 @@
 
     </div>
 </div>
+
+
+@if (showEdit) {
+    <div>
+        this is the menu of the edit
+    </div>
+}
