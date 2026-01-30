@@ -1,7 +1,6 @@
 @if (profile()) {
 <main class="p-5 d-flex flex-column justify-content-center align-items-center gap-5 feed">
 
-    <!-- ================= USER DETAILS ================= -->
     <section id="user_details" class="d-flex flex-column p-5 bg-black gap-3 w-50 custom-border">
 
         <div class="d-flex flex-column custom-padding">
@@ -117,7 +116,7 @@
     <section id="posts_of_user" class="w-50">
 
         @for (post of posts(); track post.id) {
-        <app-post [post]="post" />
+        <app-post (postDeleted)="onPostDeleted(post.id)" [post]="post" />
         }
 
     </section>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { PostResponse } from '../../models/post-response.model';
 import { LikeService } from '../../services/like.service';
@@ -10,6 +10,7 @@ import { ReportService } from '../../services/report.service';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { Router, RouterLink } from '@angular/router';
 import { CommentService } from '../../services/comment.service';
+import { PostService } from '../../services/post.service';
 
 
 @Component({
@@ -21,10 +22,12 @@ import { CommentService } from '../../services/comment.service';
 export class Post {
   @Input() post!: PostResponse;
   @Input() showActions = true;
-  
+  @Output() postDeleted = new EventEmitter<string>();
+
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private likeService = inject(LikeService);
+  private postService = inject(PostService)
   router = inject(Router);
 
   toggleLike() {
@@ -66,6 +69,16 @@ export class Post {
     });
   }
 
-  
+  deletePost() {
+    this.postService.deletePost(this.post.id).subscribe({
+      next: (res) => {
+        this.postDeleted.emit(this.post.id);
+        console.log('res.data :>> ', res.data);
+      },
+      error: (err) => {
+        console.error('err :>> ', err);
+      }
+    });
+  }
 
 }

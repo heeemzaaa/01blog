@@ -16,6 +16,8 @@ import com.blog01.backend.postmedia.service.PostMediaService;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -132,6 +134,7 @@ public class PostService {
                                 mapToPostResponse(saved, user));
         }
 
+        @Transactional
         public ResponseData<String> deletePost(String email, UUID postId) {
 
                 User user = userRepository.findByEmail(email)

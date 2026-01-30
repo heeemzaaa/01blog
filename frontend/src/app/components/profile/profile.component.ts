@@ -19,16 +19,19 @@ import { UserResponse } from '../../models/user-response.model';
   styleUrl: './profile.component.css',
 })
 export class Profile {
+
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
   private postService = inject(PostService);
   private subscribeService = inject(SubscribeService);
+
   showConnectionsPopup = signal(false);
   popupTitle = signal<'Followers' | 'Following'>('Followers');
   connections = signal<UserResponse[]>([]);
   profile = signal<ProfileResponse | null>(null);
   posts = signal<PostResponse[]>([]);
   showEditPopup = signal(false);
+
   editForm = {
     firstName: '',
     lastName: '',
@@ -206,6 +209,10 @@ export class Profile {
         }));
       }
     });
+  }
+
+  onPostDeleted(postId: string) {
+    this.posts.update(posts => posts.filter(p => p.id !== postId));
   }
 
 

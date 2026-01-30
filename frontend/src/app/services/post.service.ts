@@ -36,4 +36,10 @@ export class PostService {
             `${this.basedUrl}/${userId}`
         )
     }
+
+    deletePost(postId: string): Observable<ApiResponse<string>> {
+        return this.http.delete<ApiResponse<string>>(
+            `${this.basedUrl}/delete/${postId}`
+        )
+    }
 }
