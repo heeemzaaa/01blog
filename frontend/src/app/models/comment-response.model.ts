@@ -4,6 +4,6 @@ export interface CommentResponse {
     id: string,
     user: UserResponse,
     content: string,
-    isMyComment: boolean,
+    myComment: boolean,
     commentedAt: string
 }

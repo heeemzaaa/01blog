@@ -24,4 +24,17 @@ export class CommentService {
             commentRequest
         );
     } 
+
+    deleteComment(commentId: string, postId: string): Observable<ApiResponse<string> | null> {
+        return this.http.delete<ApiResponse<string> | null>(
+            `${this.baseUrl}/${postId}/comments/${commentId}`
+        )
+    } 
+
+    updateComment(commentId: string,  data: FormData): Observable<ApiResponse<CommentResponse> | null> {
+        return this.http.put<ApiResponse<CommentResponse>>(
+            `${this.baseUrl}/comments/${commentId}`,
+            data
+        )
+    }
 }

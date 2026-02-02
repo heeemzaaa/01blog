@@ -1,28 +1,75 @@
 <div class="d-flex flex-column gap-3">
     <div class="comment d-flex justify-content-start align-items-start gap-2">
-        <img [src]="comment.user.profileImage 
-                        ? 'http://localhost:8080' + comment.user.profileImage 
+        <img [src]="commentState()?.user?.profileImage 
+                        ? 'http://localhost:8080' + commentState()?.user?.profileImage 
                         : '/profile.png'" class="c-image">
         <div class="custom-border p-3 d-flex flex-column gap-2 w-100">
             <div class="d-flex justify-content-between">
                 <div id="userInfos" class="d-flex gap-2">
-                    <span class="p-0 m-0 fw-bold">{{ comment.user.firstName }} {{ comment.user.lastName }}</span>
-                    <span class="p-0 m-0 text-secondary">@{{ comment.user.username }}</span>
-                    <span class="p-0 m-0 text-secondary">{{ comment.commentedAt | date:'short' }}</span>
+                    <span class="p-0 m-0 fw-bold">{{ commentState()?.user?.firstName }} {{ commentState()?.user?.lastName }}</span>
+                    <span class="p-0 m-0 text-secondary">@{{ commentState()?.user?.username }}</span>
+                    <span class="p-0 m-0 text-secondary">{{ commentState()?.commentedAt | date:'short' }}</span>
                 </div>
-                <button mat-icon-button class="c-border text-white" (click)="toggleOpen()">
+                <button mat-icon-button class="c-border text-white" [matMenuTriggerFor]="commentMenu">
                     <mat-icon class="d-flex justify-content-center align-items-center">more_horiz</mat-icon>
                 </button>
+
+                <mat-menu #commentMenu="matMenu" panelClass="comment-menu-panel">
+
+                    @if (commentState()?.myComment){
+                    <div class="d-flex flex-column">
+                        <button mat-menu-item (click)="openEditPopup()" class="comment-menu-item">
+                            <mat-icon>edit</mat-icon>
+                            <span>Update Comment</span>
+                        </button>
+                        <button mat-menu-item (click)="deleteComment()" class="comment-menu-item">
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete Comment</span>
+                        </button>
+                    </div>
+                    } @else {
+                    <button mat-menu-item (click)="reportComment()" class="comment-menu-item">
+                        <mat-icon color="warn">flag</mat-icon>
+                        <span>Report Comment</span>
+                    </button>
+                    }
+                </mat-menu>
             </div>
 
-            <p class="p-0 m-0">{{comment.content}}</p>
+            <p class="p-0 m-0">{{commentState()?.content}}</p>
         </div>
     </div>
 </div>
 
 
-@if (openMenu()) {
-    <div class="border border-1 border-white">
-        this is the menu
+@if (showEditPopup()) {
+<div class="popup-backdrop">
+
+    <div class="popup-container bg-black custom-border p-4">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold">Edit Comment</h3>
+            <mat-icon role="button" (click)="closeEditPopup()">close</mat-icon>
+        </div>
+
+        <form class="d-flex flex-column gap-3" (ngSubmit)="editComment()">
+            <textarea class="custom-input" rows="1" placeholder="New Content" [(ngModel)]="editForm.content"
+                name="content"></textarea>
+
+            <input type="file" class="custom-input" accept="image/*" (change)="onImageSelected($event)" />
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="custom-button-1 fw-bold px-3 py-1" (click)="closeEditPopup()">
+                    Cancel
+                </button>
+                <button type="submit" class="custom-button px-3 fw-bold">
+                    Edit
+                </button>
+            </div>
+
+        </form>
     </div>
+
+</div>
 }

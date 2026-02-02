@@ -5,7 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 
 import { Post } from '../post/post.component';
-import { CommentComponent } from '../comment/commentcomponent';
+import { CommentComponent } from '../comment/comment.component';
 
 import { PostService } from '../../services/post.service';
 import { CommentService } from '../../services/comment.service';

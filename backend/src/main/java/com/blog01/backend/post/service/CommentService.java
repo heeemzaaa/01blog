@@ -1,6 +1,7 @@
 package com.blog01.backend.post.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
@@ -57,7 +58,7 @@ public class CommentService {
         return ResponseData.success("Comment added successfully !", mapToCommentResponse(saved, user.getId()));
     }
 
-    public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate) {
+    public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate, MultipartFile commentImage) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found !"));

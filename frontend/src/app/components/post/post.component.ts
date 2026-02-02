@@ -9,7 +9,6 @@ import { ReportTarget } from '../../models/report-target.enum';
 import { ReportService } from '../../services/report.service';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { Router, RouterLink } from '@angular/router';
-import { CommentService } from '../../services/comment.service';
 import { PostService } from '../../services/post.service';
 
 
