@@ -22,6 +22,7 @@ import { FormsModule, NgModel } from '@angular/forms';
 })
 export class CommentComponent {
   comment = input<CommentResponse>();
+  postId = input<string>();
   commentState = signal<CommentResponse | null>(null);
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
@@ -118,7 +119,22 @@ export class CommentComponent {
 
 
   deleteComment() {
+    const comment = this.commentState();
+    const postId = this.postId();
 
+    if (!comment || !postId) return;
+
+    this.commentService.deleteComment(comment.id, postId).subscribe({
+      next: (res) => {
+        if (res?.success) {
+          this.commentState.set(null);
+        }
+      },
+
+      error: (err) => {
+        console.error(err);
+      }
+    })
   }
 
 

@@ -11,19 +11,25 @@ import { signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SubscribeService } from '../../services/subscribe.service';
 import { UserResponse } from '../../models/user-response.model';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
+import { ReportTarget } from '../../models/report-target.enum';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatIconModule, Post, FormsModule],
+  imports: [CommonModule, MatIconModule, Post, FormsModule, MatMenuModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class Profile {
-
+  private dialog = inject(MatDialog);
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
   private postService = inject(PostService);
   private subscribeService = inject(SubscribeService);
+  private reportService = inject(ReportService);
 
   showConnectionsPopup = signal(false);
   popupTitle = signal<'Followers' | 'Following'>('Followers');
@@ -215,5 +221,27 @@ export class Profile {
     this.posts.update(posts => posts.filter(p => p.id !== postId));
   }
 
+  reportProfile() {
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '400px',
+      data: {
+        targetType: ReportTarget.USER,
+        targetId: this.profile()?.id,
+        subjectLabel: this.profile()?.username,
+      },
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+
+      this.reportService.createReport(result).subscribe({
+        next: () => {
+          console.log('Report sent successfully');
+        },
+        error: () => {
+          console.error('Error while reporting');
+        },
+      });
+    });
+  }
 }

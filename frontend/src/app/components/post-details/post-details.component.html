@@ -14,7 +14,7 @@
 
         @if (comments() && comments()!.length > 0) {
         @for (comment of comments(); track comment.id) {
-        <app-comment [comment]="comment" />
+        <app-comment [comment]="comment" [postId]="post()?.id" />
         }
         } @else {
         <p class="fs-5 text-white text-center">There is no comments in this post !</p>

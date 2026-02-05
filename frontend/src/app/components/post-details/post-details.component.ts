@@ -28,9 +28,6 @@ export class PostDetailsComponent {
   private commentService = inject(CommentService);
   private paramMapSignal = toSignal(this.route.paramMap);
 
-
-  /* -------------------- ROUTE -------------------- */
-
   readonly postId = computed(() =>
     this.paramMapSignal()?.get('id') ?? ''
   );

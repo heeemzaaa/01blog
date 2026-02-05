@@ -29,16 +29,23 @@
                         {{ isFollowing ? 'Unfollow' : '+ Follow' }}
                     </button>
                     }
-
-
                 </div>
 
                 }
 
-                <div class="d-flex align-items-center justify-content-center">
-                    <div role="button" class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
-                        <mat-icon>more_horiz</mat-icon>
-                    </div>
+                <div class="d-flex align-items-center justify-content-center" [matMenuTriggerFor]="profileMenu">
+                    @if (profile() && !isMyProfile) {
+                        <button mat-icon-button class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                    } 
+
+                    <mat-menu #profileMenu="matMenu" panelClass="profile-menu-panel">
+                        <button mat-menu-item (click)="reportProfile()" class="profile-menu-item">
+                            <mat-icon color="warn">flag</mat-icon>
+                            <span>Report Profile</span>
+                        </button>
+                    </mat-menu>
                 </div>
 
             </div>

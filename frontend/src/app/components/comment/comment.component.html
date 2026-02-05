@@ -1,4 +1,5 @@
-<div class="d-flex flex-column gap-3">
+@if (commentState()) {
+    <div class="d-flex flex-column gap-3">
     <div class="comment d-flex justify-content-start align-items-start gap-2">
         <img [src]="commentState()?.user?.profileImage 
                         ? 'http://localhost:8080' + commentState()?.user?.profileImage 
@@ -40,6 +41,7 @@
         </div>
     </div>
 </div>
+}
 
 
 @if (showEditPopup()) {
