@@ -3,19 +3,19 @@
     <div class="d-flex justify-content-between">
         <div id="image_and_name" class="d-flex gap-2 align-items-center">
             <div id="image">
-                <img [src]="post.user.profileImage 
-                        ? 'http://localhost:8080' + post.user.profileImage 
+                <img [src]="postState()?.user?.profileImage 
+                        ? 'http://localhost:8080' + postState()?.user?.profileImage 
                         : '/profile.png'" class="custom_image">
             </div>
 
-            <div id="names_ and_time">
+            <div id="names_and_time">
                 <p class="fw-bold p-0 m-0">
-                    {{ post.user.firstName }} {{ post.user.lastName }}
+                    {{ postState()?.user?.firstName }} {{ postState()?.user?.lastName }}
                 </p>
                 <div class="d-flex gap-3">
-                    <span class="text-secondary">@{{ post.user.username }}</span>
+                    <span class="text-secondary">@{{ postState()?.user?.username }}</span>
                     <span class="text-secondary">
-                        {{ post.createdAt | date:'short' }}
+                        {{ postState()?.createdAt | date:'short' }}
                     </span>
                 </div>
             </div>
@@ -26,46 +26,77 @@
         </button>
 
         <mat-menu #postMenu="matMenu" panelClass="post-menu-panel">
+            @if (postState()?.myPost) {
+            <button mat-menu-item (click)="openEditPopup()">
+                <mat-icon>edit</mat-icon>
+                <span>Update Post</span>
+            </button>
 
-            @if (post.myPost){
-            <div class="d-flex flex-column">
-                <button mat-menu-item (click)="editPost()" class="post-menu-item">
-                    <mat-icon>edit</mat-icon>
-                    <span>Update post</span>
-                </button>
-                <button mat-menu-item (click)="deletePost()" class="post-menu-item">
-                    <mat-icon>delete</mat-icon>
-                    <span>Delete post</span>
-                </button>
-            </div>
+            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent" #deleteMenuTrigger="matMenuTrigger">
+                <mat-icon>delete</mat-icon>
+                <span>Delete post</span>
+            </button>
             } @else {
-            <button mat-menu-item (click)="reportPost()" class="post-menu-item">
+            <button mat-menu-item (click)="reportPost()">
                 <mat-icon color="warn">flag</mat-icon>
                 <span>Report post</span>
             </button>
             }
-
-
-
         </mat-menu>
     </div>
 
+    <mat-menu #deleteCurrent="matMenu" panelClass="delete-post">
+        <div class="p-3">
+            <p class="text-black fw-bold mb-3">
+                Are you sure you want to delete this post?
+            </p>
+
+            <div class="d-flex justify-content-end gap-3">
+                <button mat-button class="custom-button" (click)="closeDeleteMenu()">
+                    Cancel
+                </button>
+
+                <button mat-button class="custom-button-1 p-2" (click)="confirmDelete()">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </mat-menu>
+
     <div id="title_and_content" class="d-flex flex-column gap-3">
-        <h3 class="fw-bold">{{ post.title }}</h3>
-        <p class="fs-6">{{ post.content }}</p>
+        <h3 class="fw-bold text-break">{{ postState()?.title }}</h3>
+        <p class="fs-6 text-break">{{ postState()?.content }}</p>
     </div>
 
-    @if (post.medias && post.medias.length > 0) {
+    @if (postState()?.medias && postState()?.medias!.length > 0) {
     <div id="images" class="d-flex flex-column gap-2">
 
         <div>
-            <img [src]="'http://localhost:8080' + post.medias[0].url" class="c_image chosen">
+            @if (isImage(mainMedia())) {
+            <img [src]="'http://localhost:8080' + mainMedia()!.url" class="c_image chosen" />
+            }
+
+            @if (isVideo(mainMedia())) {
+            <video class="c_image chosen" controls [src]="'http://localhost:8080' + mainMedia()!.url">
+            </video>
+            }
         </div>
 
-        @if (post.medias.length > 1) {
+        @if (postState()?.medias!.length > 1) {
         <div id="all_images" class="d-flex gap-2">
-            @for (media of post.medias.slice(1); track media.id) {
-            <img [src]="'http://localhost:8080' + media.url" class="c_image">
+            @for (media of postState()?.medias; track media.id) {
+
+            @if (isImage(media)) {
+            <img [src]="'http://localhost:8080' + media.url" class="c_image" [class.chosen_one]="media === mainMedia()"
+                (click)="selectMedia(media)" />
+            }
+
+            @if (isVideo(media)) {
+            <video class="c_image" muted preload="metadata" [class.chosen_one]="media === mainMedia()"
+                (click)="selectMedia(media)">
+                <source [src]="'http://localhost:8080' + media.url" />
+            </video>
+            }
             }
         </div>
         }
@@ -76,32 +107,102 @@
 
         <div class="d-flex align-items-center gap-1">
             <button mat-icon-button (click)="toggleLike()" class="bg-black c-border">
-                <mat-icon [class.liked]="post.liked" class="custom-heart">
-                    {{ post.liked ? 'favorite' : 'favorite_border' }}
+                <mat-icon [class.liked]="postState()?.liked" class="custom-heart">
+                    {{ postState()?.liked ? 'favorite' : 'favorite_border' }}
                 </mat-icon>
             </button>
-            <span class="fw-bold fs-5 text-center">
-                {{ post.likesCount }}
+            <span class="fw-bold fs-5">
+                {{ postState()?.likesCount }}
             </span>
         </div>
 
-        <div role="button" class="d-flex align-items-center gap-1" [routerLink]="['/post', post.id]">
+        <div role="button" class="d-flex align-items-center gap-1" [routerLink]="['/post', postState()?.id]">
             <button mat-icon-button class="bg-black c-border">
-                <mat-icon class="custom-comment">
-                    chat_bubble_outline
-                </mat-icon>
+                <mat-icon class="custom-comment">chat_bubble_outline</mat-icon>
             </button>
-            <span class="fw-bold fs-5 text-center">
-                {{ post.commentsCount }}
+            <span class="fw-bold fs-5">
+                {{ postState()?.commentsCount }}
             </span>
         </div>
 
     </div>
 </div>
 
+@if (showEditPopup()) {
+<div class="popup-backdrop">
 
-@if (showEdit) {
-    <div>
-        this is the menu of the edit
+    <div class="popup-container bg-black custom-border p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold">Edit Profile</h3>
+            <mat-icon role="button" (click)="closeEditPopup()">close</mat-icon>
+        </div>
+
+        <form class="d-flex flex-column gap-3" (ngSubmit)="submitEdit()">
+
+            <input class="custom-input" type="text" placeholder="Title" [(ngModel)]="editForm().title" name="title" />
+
+            <textarea class="custom-textarea" rows="1" placeholder="Content" [(ngModel)]="editForm().content"
+                name="content">
+            </textarea>
+
+            <!-- EXISTING MEDIAS -->
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                @for (media of existingMedias(); track media.id) {
+                <div class="d-flex align-items-center gap-2">
+
+                    @if (isImage(media)) {
+                    <img [src]="'http://localhost:8080' + media.url" class="c_image" />
+                    }
+
+                    @if (isVideo(media)) {
+                    <video class="c_image" muted preload="metadata">
+                        <source [src]="'http://localhost:8080' + media.url" />
+                    </video>
+                    }
+
+                    <button type="button" class="custom-button-1 px-2" (click)="removeExistingMedia(media.id)">
+                        ✕
+                    </button>
+                </div>
+                }
+            </div>
+
+
+            <!-- NEW MEDIAS PREVIEW -->
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                @for (item of newMediaPreviews(); track $index) {
+                <div class="d-flex align-items-center gap-2">
+                    @if (item.file.type.startsWith('image')) {
+                    <img [src]="item.preview" class="c_image" />
+                    }
+
+                    @if (item.file.type.startsWith('video')) {
+                    <video class="c_image" muted preload="metadata" [src]="item.preview">
+                    </video>
+                    }
+
+                    <button type="button" class="custom-button-1 px-2" (click)="removeNewMedia($index)">
+                        ✕
+                    </button>
+                </div>
+                }
+            </div>
+
+
+            <input type="file" class="custom-input" accept="image/*,video/*" multiple
+                (change)="onFileSelected($event)" />
+
+            <div class="d-flex justify-content-end gap-3 mt-3">
+                <button type="button" class="custom-button-1 fw-bold px-3 py-1" (click)="closeEditPopup()">
+                    Cancel
+                </button>
+                <button type="submit" class="custom-button px-3 fw-bold">
+                    Update
+                </button>
+            </div>
+
+        </form>
     </div>
+</div>
 }

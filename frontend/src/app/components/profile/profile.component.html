@@ -120,7 +120,7 @@
         </div>
     </section>
 
-    <section id="posts_of_user" class="w-50">
+    <section id="posts_of_user" class="w-50 d-flex flex-column gap-3">
 
         @for (post of posts(); track post.id) {
         <app-post (postDeleted)="onPostDeleted(post.id)" [post]="post" />

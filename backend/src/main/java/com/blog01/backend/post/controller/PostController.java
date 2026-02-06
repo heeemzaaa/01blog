@@ -64,9 +64,15 @@ public class PostController {
                         @PathVariable UUID id,
                         @RequestPart("post") PostRequest request,
                         @RequestPart(value = "medias", required = false) List<MultipartFile> medias,
+                        @RequestPart(value = "deletedMediaIds", required = false) List<UUID> deletedMediaIds,
                         Principal principal) {
                 return ResponseEntity.ok(
-                                postService.updatePost(principal.getName(), id, request, medias));
+                                postService.updatePost(
+                                                principal.getName(),
+                                                id,
+                                                request,
+                                                medias,
+                                                deletedMediaIds));
         }
 
         @DeleteMapping("/delete/{id}")

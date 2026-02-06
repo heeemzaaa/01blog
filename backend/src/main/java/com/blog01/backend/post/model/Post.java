@@ -3,7 +3,7 @@ package com.blog01.backend.post.model;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import com.blog01.backend.auth.model.User;
-import com.blog01.backend.postmedia.model.PostMedia;
+import com.blog01.backend.medias.model.PostMedias;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +28,7 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<PostMedia> medias;
+    private List<PostMedias> medias;
 
     @Column(nullable = false)
     private String title;

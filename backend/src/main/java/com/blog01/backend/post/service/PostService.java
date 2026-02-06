@@ -6,13 +6,13 @@ import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
+import com.blog01.backend.medias.service.PostMediaService;
 import com.blog01.backend.notification.model.Notification.NotificationType;
 import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.post.dto.PostRequest;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.*;
 import com.blog01.backend.post.response.PostResponse;
-import com.blog01.backend.postmedia.service.PostMediaService;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
@@ -110,7 +110,8 @@ public class PostService {
                         String email,
                         UUID id,
                         PostRequest postToUpdate,
-                        List<MultipartFile> medias) {
+                        List<MultipartFile> medias,
+                        List<UUID> deletedMediaIds) {
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
@@ -126,6 +127,8 @@ public class PostService {
                 post.setContent(postToUpdate.getContent());
 
                 Post saved = postRepository.save(post);
+
+                postMediaService.deleteSelectedMedias(post, deletedMediaIds);
 
                 postMediaService.handlePostMedias(saved, medias);
 

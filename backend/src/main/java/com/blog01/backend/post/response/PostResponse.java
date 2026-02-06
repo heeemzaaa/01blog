@@ -2,7 +2,7 @@ package com.blog01.backend.post.response;
 
 import java.time.LocalDateTime;
 import com.blog01.backend.auth.response.UserResponse;
-import com.blog01.backend.postmedia.response.PostMediaResponse;
+import com.blog01.backend.medias.response.PostMediaResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

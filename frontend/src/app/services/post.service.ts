@@ -42,4 +42,11 @@ export class PostService {
             `${this.basedUrl}/delete/${postId}`
         )
     }
+
+    updatePost(formData: FormData, postId: string): Observable<ApiResponse<PostResponse>> {
+        return this.http.put<ApiResponse<PostResponse>>(
+            `${this.basedUrl}/update/${postId}`,
+            formData
+        );
+    }
 }
