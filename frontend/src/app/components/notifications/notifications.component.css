@@ -34,3 +34,11 @@
     background-color: #2c2c2c;
     color: rgb(125, 0, 0);
 }
+
+.unseen {
+    background-color: rgb(36, 36, 36);
+}
+
+.seen {
+    background-color: rgba(0, 0, 0);
+}

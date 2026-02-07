@@ -1,34 +1,53 @@
 <main class="w-100 d-flex justify-content-center p-4">
     <div class="w-50 d-flex flex-column justify-content-start align-items-center gap-5">
-        <section class="d-flex p-4 justify-content-between align-items-between w-100">
+        <section class="d-flex p-4 justify-content-between align-items-center w-100">
             <div>
                 <h2 class="fw-bold p-0 m-0">Notifications</h2>
-                <span class="text-secondary">You have 2 unread notifications</span>
+                <span class="text-secondary">
+                    You have {{ getUnreadCount() }} unread notifications
+                </span>
             </div>
+            <div id="actions" class="d-flex gap-2">
+                <button role="button" class="b_1 px-3 py-1 fw-bold d-flex gap-2" (click)="markAllAsRead()">
+                    <mat-icon>done</mat-icon>
+                    Mark all as read
+                </button>
 
-            <div role="button" class="c-b h-50 px-3 py-1 bg-black">
-                Mark all as read
             </div>
         </section>
 
+        @for(notification of notifications(); track notification.id) {
         <section class="w-100 d-flex flex-column justify-content-center align-items-center">
-            <div id="card" class="w-100 d-flex flex-column c-b p-4 justify-content-start bg-black gap-4" >
-                <div id="image_and_notif" class="d-flex justify-content-start align-items-center gap-3">
-                    <img src="/profile.png" class="c_image">
-                    <p id="notif" class="fw-normal p-0 m-0">Elfarssi  liked your post "React Hooks Deep Dive"</p>
+            <div id="card" class="w-100 d-flex flex-column c-b p-4 justify-content-start gap-4"
+                [class.seen]="notification.isSeen" [class.unseen]="!notification.isSeen">
+
+                <div class="d-flex gap-3 align-items-center">
+                    <img [src]="notification.actor.profileImage
+          ? 'http://localhost:8080' + notification.actor.profileImage
+          : '/profile.png'" class="c_image" />
+
+                    <p class="p-0 m-0">
+                        {{ getNotificationText(notification) }}
+                    </p>
                 </div>
 
-                <div id="time_and_actions" class="d-flex justify-content-between gap-5">
-                    <span class="text-secondary small">2 hours ago</span>
-                    <div id="actions" class="d-flex gap-2">
-                        <button class="b_1 px-3 py-1 fw-bold d-flex gap-2">
-                            <mat-icon class="d-flex justify-content-center align-items-center fw-bold">done</mat-icon>
+                <div class="d-flex justify-content-between">
+                    <span class="text-secondary small">
+                        {{ timeAgo(notification.createdAt) }}
+                    </span>
+
+                    <div class="d-flex gap-2">
+                        @if(!notification.isSeen) {
+                        <button class="b_1 px-3 py-1 fw-bold d-flex gap-2" (click)="markAsRead(notification.id)">
+                            <mat-icon>done</mat-icon>
                             Mark as Read
                         </button>
-                        <button class="b_2 fw-bold px-3">X</button>
+                        }
                     </div>
                 </div>
+
             </div>
-        </section>  
+        </section>
+        }
     </div>
 </main>

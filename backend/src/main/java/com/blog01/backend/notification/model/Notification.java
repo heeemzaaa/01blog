@@ -33,7 +33,8 @@ public class Notification {
         COMMENT,
         NEW_POST,       
         REPORT_CREATED,
-        REPORT_UPDATE    
+        REPORT_UPDATE,
+        FOLLOW
     }
 
     @Enumerated(EnumType.STRING)
