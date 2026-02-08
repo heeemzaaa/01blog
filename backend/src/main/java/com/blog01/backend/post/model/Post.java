@@ -23,7 +23,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
@@ -35,6 +35,14 @@ public class Post {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean visible = true;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean reviewed = false;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

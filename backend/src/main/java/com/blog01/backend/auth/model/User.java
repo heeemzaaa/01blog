@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @Setter
@@ -49,6 +48,13 @@ public class User {
     private Role role = Role.USER;
 
     private String about;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean active = true;
+
+    
+    private LocalDateTime bannedAt;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
