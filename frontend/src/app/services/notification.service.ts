@@ -22,6 +22,7 @@ export class NotificationService {
     fetchMyNotifications() {
         this.getMyNotifications().subscribe({
             next: (res) => {
+                console.log('res.data :>> ', res.data);
                 this.notifications.set(res.data);
             },
             error: (err) => {
@@ -41,6 +42,12 @@ export class NotificationService {
         return this.http.put<ApiResponse<string>>(
             `${this.baseUrl}/read-all`,
             null,
+        );
+    }
+
+    deleteNotification(notificationId: string): Observable<ApiResponse<string>> {
+        return this.http.delete<ApiResponse<string>>(
+            `${this.baseUrl}/${notificationId}`
         );
     }
 }

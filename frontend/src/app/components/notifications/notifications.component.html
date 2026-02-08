@@ -19,7 +19,7 @@
         @for(notification of notifications(); track notification.id) {
         <section class="w-100 d-flex flex-column justify-content-center align-items-center">
             <div id="card" class="w-100 d-flex flex-column c-b p-4 justify-content-start gap-4"
-                [class.seen]="notification.isSeen" [class.unseen]="!notification.isSeen">
+                [class.seen]="notification.seen" [class.unseen]="!notification.seen">
 
                 <div class="d-flex gap-3 align-items-center">
                     <img [src]="notification.actor.profileImage
@@ -37,13 +37,17 @@
                     </span>
 
                     <div class="d-flex gap-2">
-                        @if(!notification.isSeen) {
+                        @if(!notification.seen) {
                         <button class="b_1 px-3 py-1 fw-bold d-flex gap-2" (click)="markAsRead(notification.id)">
                             <mat-icon>done</mat-icon>
                             Mark as Read
                         </button>
                         }
+                        <div role="button" class="fw-bold b_2 px-3 py-1" (click)="deleteNotification(notification.id)">
+                            X
+                        </div>
                     </div>
+
                 </div>
 
             </div>

@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NotificationResponse } from '../../models/notification-response.model';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationType } from '../../models/notification-type.enum';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-notifications',
@@ -13,6 +14,7 @@ import { NotificationType } from '../../models/notification-type.enum';
 })
 export class Notifications {
   private notificationService = inject(NotificationService);
+  private utilsService = inject(UtilsService);
   notifications = this.notificationService.notifications;
 
 
@@ -22,13 +24,17 @@ export class Notifications {
     })
   }
 
+  timeAgo(date: string): string {
+    return this.utilsService.timeAgo(date);
+  }
+
 
   markAsRead(notificationId: string) {
     this.notificationService.markAsRead(notificationId).subscribe({
       next: () => {
         this.notifications.update(list =>
           list.map(n =>
-            n.id === notificationId ? { ...n, isSeen: true } : n
+            n.id === notificationId ? { ...n, seen: true } : n
           )
         );
       },
@@ -44,7 +50,7 @@ export class Notifications {
     this.notificationService.markAllAsRead().subscribe({
       next: () => {
         this.notifications.update(list =>
-          list.map(n => ({ ...n, isSeen: true }))
+          list.map(n => ({ ...n, seen: true }))
         );
       },
       error: (err) => {
@@ -53,9 +59,22 @@ export class Notifications {
     });
   }
 
+  deleteNotification(notificationId: string) {
+    this.notificationService.deleteNotification(notificationId).subscribe({
+      next: () => {
+        this.notifications.update(list => 
+          list.filter(n => n.id !== notificationId)
+        );
+      },
+      error: (err) => {
+        console.log("Error while deleting the notification: ", err);
+      }
+    })
+  }
+
 
   getUnreadCount() {
-    return this.notifications().filter(n => !n.isSeen).length;
+    return this.notifications().filter(n => !n.seen).length;
   }
 
   getNotificationText(n: NotificationResponse): string {
@@ -82,13 +101,6 @@ export class Notifications {
     }
   }
 
-  timeAgo(date: string): string {
-    const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
 
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-    return `${Math.floor(seconds / 86400)} days ago`;
-  }
 
 }

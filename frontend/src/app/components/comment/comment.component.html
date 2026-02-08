@@ -9,7 +9,7 @@
                 <div id="userInfos" class="d-flex gap-2">
                     <span class="p-0 m-0 fw-bold">{{ commentState()?.user?.firstName }} {{ commentState()?.user?.lastName }}</span>
                     <span class="p-0 m-0 text-secondary">@{{ commentState()?.user?.username }}</span>
-                    <span class="p-0 m-0 text-secondary">{{ commentState()?.commentedAt | date:'short' }}</span>
+                    <span class="p-0 m-0 text-secondary">{{timeAgo(commentState()!.commentedAt)}}</span>
                 </div>
                 <button mat-icon-button class="c-border text-white" [matMenuTriggerFor]="commentMenu">
                     <mat-icon class="d-flex justify-content-center align-items-center">more_horiz</mat-icon>

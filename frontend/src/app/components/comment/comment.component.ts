@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportTarget } from '../../models/report-target.enum';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, NgModel } from '@angular/forms';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-comment',
@@ -24,6 +25,7 @@ export class CommentComponent {
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private commentService = inject(CommentService);
+  private utilsService = inject(UtilsService);
   showEditPopup = signal(false);
   editForm = {
     content: '',
@@ -38,6 +40,10 @@ export class CommentComponent {
         this.commentState.set(c);
       }
     });
+  }
+
+  timeAgo(date: string): string {
+    return this.utilsService.timeAgo(date);
   }
 
   reportComment() {

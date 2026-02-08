@@ -32,4 +32,9 @@ public class NotificationController {
     public ResponseEntity<ResponseData<String>> markAllAsRead(Principal principal) {
         return ResponseEntity.ok(notificationService.markAllAsRead(principal.getName()));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<ResponseData<String>> deleteNotification(Principal principal, @PathVariable UUID id) {
+        return ResponseEntity.ok(notificationService.deleteNotification(principal.getName(), id));
+    }
 }

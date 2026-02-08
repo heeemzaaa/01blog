@@ -22,6 +22,7 @@ import { ReportService } from '../../services/report.service';
 import { PostService } from '../../services/post.service';
 import { ReportTarget } from '../../models/report-target.enum';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-post',
@@ -51,6 +52,7 @@ export class Post {
   private reportService = inject(ReportService);
   private postService = inject(PostService);
   private dialog = inject(MatDialog);
+  private utilsService = inject(UtilsService);
 
   /* ================= State ================= */
 
@@ -75,6 +77,10 @@ export class Post {
       const p = this.post();
       if (p) this.postState.set(p);
     });
+  }
+
+  timeAgo(date: string): string {
+    return this.utilsService.timeAgo(date);
   }
 
   /* ================= Media helpers ================= */

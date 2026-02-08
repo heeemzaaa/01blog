@@ -15,7 +15,7 @@
                 <div class="d-flex gap-3">
                     <span class="text-secondary">@{{ postState()?.user?.username }}</span>
                     <span class="text-secondary">
-                        {{ postState()?.createdAt | date:'short' }}
+                        {{timeAgo(postState()!.createdAt)}}
                     </span>
                 </div>
             </div>

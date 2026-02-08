@@ -6,6 +6,6 @@ export interface NotificationResponse {
     actor: UserResponse,
     type: NotificationType,
     relatedEntityId: string,
-    isSeen: boolean,
+    seen: boolean,
     createdAt: string
 }

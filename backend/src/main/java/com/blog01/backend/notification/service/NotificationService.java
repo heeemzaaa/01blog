@@ -10,8 +10,11 @@ import com.blog01.backend.notification.repository.NotificationRepository;
 import com.blog01.backend.notification.response.NotificationResponse;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,7 +42,7 @@ public class NotificationService {
     }
 
     public ResponseData<List<NotificationResponse>> getMyNotifications(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         List<Notification> list = notificationRepository.findByRecipientOrderByCreatedAtDesc(user);
 
         List<NotificationResponse> response = list.stream()
@@ -50,8 +53,8 @@ public class NotificationService {
     }
 
     public ResponseData<String> markAsRead(String email, UUID notificationId) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
 
@@ -66,9 +69,9 @@ public class NotificationService {
     }
 
     public ResponseData<String> markAllAsRead(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         List<Notification> unread = notificationRepository.findByRecipientOrderByCreatedAtDesc(user);
-        
+
         for (Notification n : unread) {
             if (!n.isSeen()) {
                 n.setSeen(true);
@@ -76,6 +79,23 @@ public class NotificationService {
             }
         }
         return ResponseData.success("All notifications marked as read", null);
+    }
+
+    public ResponseData<String> deleteNotification(String email, UUID notificationId) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new NoSuchElementException("Notification not found"));
+
+        if (!notification.getRecipient().getId().equals(user.getId())) {
+            throw new AccessDeniedException("This is not your notification!");
+        }
+
+        notificationRepository.delete(notification);
+
+        return ResponseData.success("Notification deleted successfully!", null);
     }
 
     private NotificationResponse mapToNotificationResponse(Notification n) {
