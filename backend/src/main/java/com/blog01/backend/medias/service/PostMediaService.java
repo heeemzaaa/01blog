@@ -156,7 +156,7 @@ public class PostMediaService {
         return PostMediaResponse.builder()
                 .id(media.getId())
                 .type(media.getType())
-                .url(buildPublicUrl(media))
+                .filePath(buildPublicUrl(media))
                 .build();
     }
 

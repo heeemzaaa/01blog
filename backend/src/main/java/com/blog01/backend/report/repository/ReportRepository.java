@@ -5,10 +5,19 @@ import org.springframework.stereotype.Repository;
 
 import com.blog01.backend.report.model.Report;
 import com.blog01.backend.report.model.Report.StatusOfReports;
+import com.blog01.backend.report.model.Report.Target;
+
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, UUID> {
+
+    // Existing
     List<Report> findByStatusOrderByCreatedAtDesc(StatusOfReports status);
+
+
+    long countByTargetType(Target targetType);
+
+    long countByStatus(StatusOfReports status);
 }
