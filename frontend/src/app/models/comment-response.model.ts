@@ -1,9 +1,9 @@
 import { UserResponse } from "./user-response.model";
 
 export interface CommentResponse {
-    id: string,
-    user: UserResponse,
-    content: string,
-    myComment: boolean,
-    commentedAt: string
+    id: string;
+    user: UserResponse;
+    content: string;
+    commentedAt: string;
+    myComment: boolean;
 }

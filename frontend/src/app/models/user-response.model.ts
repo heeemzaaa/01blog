@@ -1,3 +1,5 @@
+import { Role } from "./user-role.model";
+
 export interface UserResponse {
     id: string;
     firstName: string;
@@ -5,6 +7,7 @@ export interface UserResponse {
     username: string;
     profileImage: string;
     nbr_of_posts: number;
+    role: Role;
     nbr_of_followers: number;
     nbr_of_following: number;
     nbr_of_notifications: number;

@@ -2,6 +2,8 @@ package com.blog01.backend.auth.response;
 
 import java.util.UUID;
 
+import com.blog01.backend.auth.model.User.Role;
+
 import lombok.*;
 
 @Data
@@ -19,4 +21,5 @@ public class UserResponse {
     private long nbr_of_notifications;
     private String profileImage;
     private String token;
+    private Role role;
 }

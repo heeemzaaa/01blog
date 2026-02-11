@@ -1,8 +1,6 @@
 import { UserResponse } from "./user-response.model";
 import { PostMediaResponse } from "./post-media-response.model";
 
-
-
 export interface PostResponse {
     id: string;
     user: UserResponse;
@@ -17,4 +15,7 @@ export interface PostResponse {
     likesCount: number;
     commentsCount: number;
     myPost: boolean;
+
+    visible: boolean;
+    reviewed: boolean;
 }

@@ -1,4 +1,4 @@
- package com.blog01.backend.auth.service;
+package com.blog01.backend.auth.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -67,6 +67,7 @@ public class AuthService {
                     .nbr_of_followers(nbr_of_followers)
                     .nbr_of_following(nbr_of_following)
                     .nbr_of_notifications(nbr_of_notifications)
+                    .role(user.getRole())
                     .build();
 
             return ResponseData.success("User logged in successfully !", userResponse);
@@ -115,6 +116,7 @@ public class AuthService {
                 .nbr_of_followers(nbr_of_followers)
                 .nbr_of_following(nbr_of_following)
                 .nbr_of_notifications(nbr_of_notifications)
+                .role(saved.getRole())
                 .build();
 
         return ResponseData.success("User registered successfully !", userResponse);
@@ -138,6 +140,7 @@ public class AuthService {
                 .nbr_of_followers(nbr_of_followers)
                 .nbr_of_following(nbr_of_following)
                 .nbr_of_notifications(nbr_of_notifications)
+                .role(user.getRole())
                 .build();
 
         return ResponseData.success("User validated", me);

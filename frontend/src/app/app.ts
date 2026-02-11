@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core'; 
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from './services/auth.service'; 
+import { AuthService } from './services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
-  standalone: true, 
+  standalone: true,
   imports: [RouterOutlet, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
-  constructor(private authService: AuthService) {}
+export class App {
 
-  ngOnInit() {
+  constructor(private authService: AuthService) {
     this.authService.getMe().subscribe();
   }
+
 }
