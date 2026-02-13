@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,10 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
 
             User user = ur.findByEmail(requestUser.getEmail()).orElseThrow();
+
+            if (!user.isActive()) {
+                throw new BadCredentialsException("You are banned from the application !");
+            }
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
             String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
@@ -126,7 +131,9 @@ public class AuthService {
 
     public ResponseData<UserResponse> getMe(String email) {
         User user = ur.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned from the application !");
+        }
         long nbr_of_posts = postRepository.countByUser(user);
         long nbr_of_following = subscribesRepository.countBySubscriber(user);
         long nbr_of_followers = subscribesRepository.countByUser(user);
