@@ -1,5 +1,6 @@
 package com.blog01.backend.post.service;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.blog01.backend.auth.model.User;
@@ -118,6 +119,10 @@ public class PostService {
 
                 Post post = postRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Cannot find this post !"));
+
+                if (!post.isVisible()) {
+                        throw new AccessDeniedException("You can't update an invisible post !");
+                }
 
                 if (!post.getUser().getId().equals(user.getId())) {
                         return ResponseData.error("You can't modify this post because it is not yours !");

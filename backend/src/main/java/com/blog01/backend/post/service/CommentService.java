@@ -1,5 +1,6 @@
 package com.blog01.backend.post.service;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,10 @@ public class CommentService {
     public ResponseData<CommentResponse> createComment(String email, UUID postId, CommentRequest request) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found !"));
+
+        if (!post.isVisible()) {
+            throw new AccessDeniedException("You can't comment on an invisible post !");
+        }
 
         Comment comment = Comment.builder()
                 .user(user)

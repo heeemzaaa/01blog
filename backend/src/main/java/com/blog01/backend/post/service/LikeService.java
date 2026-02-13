@@ -11,6 +11,8 @@ import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.LikeRepository;
 import com.blog01.backend.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,10 @@ public class LikeService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
 
+        if (!post.isVisible()) {
+            throw new AccessDeniedException("You can't like or dislike an invisible post !");
+        }
+
         Optional<Like> existingLike = likeRepository.findByUserAndPost(user, post);
 
         if (existingLike.isPresent()) {
@@ -46,11 +52,10 @@ public class LikeService {
             likeRepository.save(like);
 
             notificationService.sendNotification(
-                    post.getUser(), 
-                    user, 
+                    post.getUser(),
+                    user,
                     NotificationType.LIKE,
-                    post.getId()
-            );
+                    post.getId());
             return ResponseData.success("Post liked successfully", null);
         }
     }
