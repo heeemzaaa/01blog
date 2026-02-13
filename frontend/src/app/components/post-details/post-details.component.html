@@ -2,7 +2,7 @@
 
     <section class="w-50 d-flex flex-column justify-content-center">
         @if (post()) {
-        <app-post [post]="post()!" [showActions]="false">
+        <app-post [post]="post()!" [showActions]="false" (postUpdated)="onPostUpdated($event)">
         </app-post>
         }
     </section>
@@ -14,23 +14,32 @@
 
         @if (comments() && comments()!.length > 0) {
         @for (comment of comments(); track comment.id) {
-        <app-comment [comment]="comment" [postId]="post()?.id" />
+        <app-comment [comment]="comment" [postId]="post()?.id" [postOwnerId]="post()!.user.id">
+        </app-comment>
         }
         } @else {
         <p class="fs-5 text-white text-center">There is no comments in this post !</p>
         }
 
 
+        @if (post()?.visible) {
 
         <div class="add-comment d-flex gap-2">
             <img src="/profile.png" alt="user-profile" class="c-image">
             <input type="text" placeholder="Write a comment..." class="w-100 pe-4"
-                (input)="onCommentChange($any($event.target).value)"
-                [value]="commentRequest().content" />
+                (input)="onCommentChange($any($event.target).value)" [value]="commentRequest().content" />
             <button class="bg-white fw-bold text-black c-border px-3 py-1" (click)="addComment()">
                 Comment
             </button>
         </div>
+        } @else {
+
+        <div class="hidden-comment-warning text-center text-secondary">
+            Comments are disabled because this post is hidden.
+        </div>
+
+        }
+
     </section>
 
 

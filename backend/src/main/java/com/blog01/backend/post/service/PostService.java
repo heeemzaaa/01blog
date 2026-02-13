@@ -187,6 +187,8 @@ public class PostService {
                                 .commentsCount(commentsCount)
                                 .isLiked(isLiked)
                                 .isMyPost(isMyPost)
+                                .visible(p.isVisible())
+                                .reviewed(p.isReviewed())
                                 .user(UserResponse.builder()
                                                 .id(p.getUser().getId())
                                                 .firstName(p.getUser().getFirstName())

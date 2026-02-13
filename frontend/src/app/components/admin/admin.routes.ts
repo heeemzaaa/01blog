@@ -13,21 +13,29 @@ export const ADMIN_ROUTES: Routes = [
         path: '',
         component: AdminDashboard
       },
+      // {
+      //   path: 'users',
+      //   loadComponent: () =>
+      //     import('./users/users.component').then(m => m.UsersComponent)
+      // },
+      // {
+      //   path: 'posts',
+      //   loadComponent: () =>
+      //     import('./posts/posts.component').then(m => m.PostsComponent)
+      // },
+      // {
+      //   path: 'reports',
+      //   loadComponent: () =>
+      //     import('./reports/reports.component').then(m => m.ReportsComponent)
+      // },
       {
-        path: 'users',
+        path: 'reports/:id',
         loadComponent: () =>
-          import('./users/users.component').then(m => m.UsersComponent)
-      },
-      {
-        path: 'posts',
-        loadComponent: () =>
-          import('./posts/posts.component').then(m => m.PostsComponent)
-      },
-      {
-        path: 'reports',
-        loadComponent: () =>
-          import('./reports/reports.component').then(m => m.ReportsComponent)
+          import('./report-details/admin-report-details.component')
+            .then(m => m.AdminReportDetails),
+        canActivate: [adminGuard]
       }
+
     ]
   }
 ];

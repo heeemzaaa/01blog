@@ -101,6 +101,12 @@ export class AdminService {
         );
     }
 
+    getReportById(id: string): Observable<ApiResponse<ReportResponse>> {
+        return this.http.get<ApiResponse<ReportResponse>>(
+            `${this.basedUrl}/reports/${id}`
+        )
+    }
+
     reviewReport(reportId: string): Observable<ApiResponse<string>> {
         return this.http.put<ApiResponse<string>>(
             `${this.basedUrl}/reports/${reportId}/review`,
@@ -113,6 +119,20 @@ export class AdminService {
             `${this.basedUrl}/reports/${reportId}/resolve`,
             {}
         );
+    }
+
+    dismissReport(reportId: string): Observable<ApiResponse<string>> {
+        return this.http.put<ApiResponse<string>>(
+            `${this.basedUrl}/reports/${reportId}/dismiss`,
+            null
+        )
+    }
+
+    actionReport(reportId: string): Observable<ApiResponse<string>> {
+        return this.http.put<ApiResponse<string>>(
+            `${this.basedUrl}/reports/${reportId}/action`,
+            null
+        )
     }
 
     // ======================== DASHBOARD ========================

@@ -54,11 +54,12 @@ public class CommentService {
                 user,
                 NotificationType.COMMENT,
                 post.getId());
-                
+
         return ResponseData.success("Comment added successfully !", mapToCommentResponse(saved, user.getId()));
     }
 
-    public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate, MultipartFile commentImage) {
+    public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate,
+            MultipartFile commentImage) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found !"));
@@ -97,6 +98,8 @@ public class CommentService {
                         .build())
                 .content(comment.getContent())
                 .commentedAt(comment.getCommentedAt())
+                .visible(comment.isVisible())
+                .reviewed(comment.isReviewed())
                 .isMyComment(comment.getUser().getId().equals(currentUserId))
                 .build();
     }

@@ -1,8 +1,16 @@
 import { UserResponse } from "./user-response.model";
 
-export type ReportTarget = 'POST' | 'COMMENT' | 'USER';
+export type ReportStatus =
+  | 'PENDING'
+  | 'REVIEWED'
+  | 'DISMISSED'
+  | 'ACTIONED';
 
-export type ReportStatus = 'PENDING' | 'REVIEWED' | 'RESOLVED';
+export type ReportTarget =
+  | 'POST'
+  | 'COMMENT'
+  | 'USER';
+
 
 export interface ReportResponse {
   id: string;

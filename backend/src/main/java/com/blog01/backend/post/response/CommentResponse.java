@@ -21,6 +21,8 @@ public class CommentResponse {
     private UserResponse user;
     private String content;
     private LocalDateTime commentedAt;
+    private boolean visible;
+    private boolean reviewed;
     private boolean isMyComment;
 
     public static CommentResponse fromEntity(Comment comment) {
@@ -37,6 +39,8 @@ public class CommentResponse {
                 )
                 .content(comment.getContent())
                 .commentedAt(comment.getCommentedAt())
+                .visible(comment.isVisible())
+                .reviewed(comment.isReviewed())
                 .isMyComment(false) // set later in service
                 .build();
     }

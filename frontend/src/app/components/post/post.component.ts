@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   ViewChild,
+  computed,
   effect,
   inject,
   input,
@@ -15,7 +16,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
-
+import { AuthService } from '../../services/auth.service';
 import { PostResponse } from '../../models/post-response.model';
 import { LikeService } from '../../services/like.service';
 import { ReportService } from '../../services/report.service';
@@ -43,6 +44,8 @@ export class Post {
   post = input.required<PostResponse>();
   @Input() showActions = true;
   @Output() postDeleted = new EventEmitter<string>();
+  @Output() postUpdated = new EventEmitter<PostResponse>();
+
 
   @ViewChild(MatMenuTrigger) deleteMenuTrigger!: MatMenuTrigger;
 
@@ -71,6 +74,13 @@ export class Post {
     title: '',
     content: '',
   });
+
+  private authService = inject(AuthService);
+
+  isAdmin = computed(() =>
+    this.authService.currentUser()?.role === 'ADMIN'
+  );
+
 
   constructor() {
     effect(() => {
@@ -267,4 +277,45 @@ export class Post {
 
     this.newMediaPreviews.set([]);
   }
+
+  adminHidePost() {
+    const post = this.postState();
+    if (!post) return;
+
+    this.postService.hidePost(post.id).subscribe({
+      next: () => {
+        const updated = { ...post, visible: false };
+        this.postState.set(updated);
+        this.postUpdated.emit(updated); 
+      }
+    });
+  }
+
+
+  adminRestorePost() {
+    const post = this.postState();
+    if (!post) return;
+
+    this.postService.restorePost(post.id).subscribe({
+      next: () => {
+        const updated = { ...post, visible: true };
+        this.postState.set(updated);
+        this.postUpdated.emit(updated); 
+      }
+    });
+  }
+
+  canViewPost = computed(() => {
+    const post = this.postState();
+    if (!post) return false;
+
+    const isAdmin = this.isAdmin();
+    const isOwner = post.myPost;
+
+    if (post.visible) return true;
+
+    return isAdmin || isOwner;
+  });
+
+
 }

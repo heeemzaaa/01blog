@@ -1,37 +1,15 @@
-<main class="admin-bg min-vh-100 py-5 px-4">
+<app-nav-bar></app-nav-bar>
 
-  <!-- HEADER -->
-  <div class="d-flex justify-content-between align-items-center mb-5">
-    <h4 class="fw-bold text-white d-flex align-items-center gap-2">
-      <mat-icon>shield</mat-icon>
-      01Blog Admin
-    </h4>
+<main class="container py-4">
 
-    <span class="admin-badge">Administrator</span>
+  <!-- PAGE TITLE -->
+  <div class="mb-4">
+    <h3 class="fw-bold">Admin Dashboard</h3>
+    <p class="text-secondary">
+      Manage users, posts, and reports across the platform.
+    </p>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs-container mb-4 d-flex">
-    <a routerLink="/admin" routerLinkActive="active-tab" [routerLinkActiveOptions]="{ exact: true }" class="tab-btn">
-      Dashboard
-    </a>
-
-    <a routerLink="/admin/users" routerLinkActive="active-tab" class="tab-btn">
-      Users
-    </a>
-
-    <a routerLink="/admin/posts" routerLinkActive="active-tab" class="tab-btn">
-      Posts
-    </a>
-
-    <a routerLink="/admin/reports" routerLinkActive="active-tab" class="tab-btn">
-      Reports
-    </a>
-  </div>
-
-  <!-- CHILD CONTENT -->
-  <div class="content-box p-4">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
 
 </main>

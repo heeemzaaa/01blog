@@ -15,6 +15,7 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String username;
+    private boolean active;
     private long nbr_of_posts;
     private long nbr_of_followers;
     private long nbr_of_following;

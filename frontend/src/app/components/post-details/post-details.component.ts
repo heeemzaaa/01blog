@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, effect } from '@angular/core';
+import { Component, computed, inject, signal, effect, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -43,6 +43,9 @@ export class PostDetailsComponent {
   });
 
   loadingComments = signal(false);
+ 
+
+
 
   /* -------------------- EFFECTS -------------------- */
 
@@ -67,6 +70,11 @@ export class PostDetailsComponent {
       this.fetchComments(id);
     });
   }
+
+  onPostUpdated(updatedPost: PostResponse) {
+    this.post.set(updatedPost);
+  }
+
 
   /* -------------------- COMMENTS -------------------- */
 

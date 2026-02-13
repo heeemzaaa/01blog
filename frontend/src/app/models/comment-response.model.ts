@@ -5,5 +5,7 @@ export interface CommentResponse {
     user: UserResponse;
     content: string;
     commentedAt: string;
+    visible: boolean;
+    reviewed: boolean;
     myComment: boolean;
 }

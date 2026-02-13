@@ -1,3 +1,6 @@
+@if (canViewPost()) {
+
+
 <div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1 w-100">
 
     <div class="d-flex justify-content-between">
@@ -26,24 +29,65 @@
         </button>
 
         <mat-menu #postMenu="matMenu" panelClass="post-menu-panel">
+
+            <!-- OWNER -->
             @if (postState()?.myPost) {
+
             <button mat-menu-item (click)="openEditPopup()">
                 <mat-icon>edit</mat-icon>
                 <span>Update Post</span>
             </button>
 
-            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent" #deleteMenuTrigger="matMenuTrigger">
+            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent">
                 <mat-icon>delete</mat-icon>
-                <span>Delete post</span>
+                <span>Delete Post</span>
+            </button>
+
+            }
+
+            <!-- ADMIN (but not owner) -->
+            @if (!postState()?.myPost && isAdmin()) {
+            @if(postState()?.visible) {
+            <button mat-menu-item (click)="adminHidePost()">
+                <mat-icon>visibility_off</mat-icon>
+                <span>Hide Post</span>
             </button>
             } @else {
-            <button mat-menu-item (click)="reportPost()">
-                <mat-icon color="warn">flag</mat-icon>
-                <span>Report post</span>
+            <button mat-menu-item (click)="adminRestorePost()">
+                <mat-icon>visibility_on</mat-icon>
+                <span>Restore Post</span>
             </button>
             }
+
+
+
+            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent">
+                <mat-icon>delete</mat-icon>
+                <span>Delete Post</span>
+            </button>
+
+            }
+
+            <!-- NORMAL USER -->
+            @if (!postState()?.myPost && !isAdmin()) {
+
+            <button mat-menu-item (click)="reportPost()">
+                <mat-icon color="warn">flag</mat-icon>
+                <span>Report Post</span>
+            </button>
+
+            }
+
         </mat-menu>
+
     </div>
+
+    @if (!postState()?.visible && (isAdmin() || postState()?.myPost)) {
+    <div class="hidden-badge mb-3">
+        This post is hidden
+    </div>
+    }
+
 
     <mat-menu #deleteCurrent="matMenu" panelClass="delete-post">
         <div class="p-3">
@@ -106,7 +150,7 @@
     <div id="reactions" class="d-flex gap-5">
 
         <div class="d-flex align-items-center gap-1">
-            <button mat-icon-button (click)="toggleLike()" class="bg-black c-border">
+            <button mat-icon-button [disabled]="!postState()?.visible" (click)="toggleLike()" class="bg-black c-border">
                 <mat-icon [class.liked]="postState()?.liked" class="custom-heart">
                     {{ postState()?.liked ? 'favorite' : 'favorite_border' }}
                 </mat-icon>
@@ -116,7 +160,8 @@
             </span>
         </div>
 
-        <div role="button" class="d-flex align-items-center gap-1" [routerLink]="['/post', postState()?.id]">
+        <div role="button" class="d-flex align-items-center gap-1" [class.disabled-reaction]="!postState()?.visible"
+            [routerLink]="postState()?.visible ? ['/post', postState()?.id] : null">
             <button mat-icon-button class="bg-black c-border">
                 <mat-icon class="custom-comment">chat_bubble_outline</mat-icon>
             </button>
@@ -205,4 +250,5 @@
         </form>
     </div>
 </div>
+}
 }

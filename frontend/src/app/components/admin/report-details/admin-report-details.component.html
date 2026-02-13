@@ -1,0 +1,139 @@
+<div class="container py-4">
+
+  <div class="admin-card p-4">
+
+    @if (report()) {
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+      <div>
+        <h5 class="fw-bold m-0">Report Details</h5>
+        <small class="text-secondary">
+          Review and take action on this report
+        </small>
+      </div>
+
+      <div class="d-flex gap-2">
+
+        <button class="action-btn"
+                (click)="goBack()">
+          Back
+        </button>
+
+        <button class="action-btn"
+                (click)="viewTarget()">
+          Details
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- REPORT INFO -->
+    <div class="report-section p-3 mb-4">
+
+      <div class="d-flex justify-content-between mb-3">
+        <span class="text-secondary small">Status</span>
+
+        <span class="status-badge"
+              [class.pending-status]="report()?.status === 'PENDING'"
+              [class.reviewed-status]="report()?.status === 'REVIEWED'"
+              [class.dismissed-status]="report()?.status === 'DISMISSED'"
+              [class.actioned-status]="report()?.status === 'ACTIONED'">
+          {{ report()?.status }}
+        </span>
+      </div>
+
+      <div class="mb-2">
+        <strong>Target Type:</strong> {{ report()?.targetType }}
+      </div>
+
+      <div class="mb-2">
+        <strong>Reporter:</strong>
+        {{ report()?.reporter?.firstName }}
+        {{ report()?.reporter?.lastName }}
+      </div>
+
+      <div class="mb-2">
+        <strong>Reason:</strong> {{ report()?.reason }}
+      </div>
+
+      <div>
+        <strong>Description:</strong>
+        <div class="text-secondary mt-1">
+          {{ report()?.description }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TARGET ACTIONS -->
+    <div class="action-section mb-4">
+
+      <div class="section-title mb-2">
+        Target Actions
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+
+        @if (report()?.targetType === 'POST') {
+          <button class="action-btn danger"
+                  (click)="hideTargetPost()">
+            Hide Post
+          </button>
+
+          <button class="action-btn delete bg-danger text-white"
+                  (click)="deleteTargetPost()">
+            Delete Post
+          </button>
+        }
+
+        @if (report()?.targetType === 'COMMENT') {
+          <button class="action-btn danger"
+                  (click)="hideTargetComment()">
+            Hide Comment
+          </button>
+
+          <button class="action-btn delete"
+                  (click)="deleteTargetComment()">
+            Delete Comment
+          </button>
+        }
+
+        @if (report()?.targetType === 'USER') {
+          <button class="action-btn danger"
+                  (click)="banTargetUser()">
+            Ban User
+          </button>
+        }
+
+      </div>
+
+    </div>
+
+    <!-- REPORT DECISION -->
+    <div class="action-section">
+
+      <div class="section-title mb-2">
+        Report Decision
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+
+        @if (report()?.status !== 'DISMISSED' && report()?.status !== 'ACTIONED') {
+          <button class="action-btn"
+                  (click)="dismissReport()">
+            Dismiss Report
+          </button>
+        }
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+</div>

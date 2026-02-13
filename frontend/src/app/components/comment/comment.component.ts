@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input, Input, signal } from '@angular/core';
+import { Component, computed, effect, inject, Input, input, signal } from '@angular/core';
 import { CommentResponse } from '../../models/comment-response.model';
 import { ReportService } from '../../services/report.service';
 import { CommentService } from '../../services/comment.service';
@@ -8,8 +8,9 @@ import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportTarget } from '../../models/report-target.enum';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UtilsService } from '../../services/utils.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-comment',
@@ -19,19 +20,33 @@ import { UtilsService } from '../../services/utils.service';
   styleUrl: './comment.component.css',
 })
 export class CommentComponent {
+
   comment = input<CommentResponse>();
   postId = input<string>();
+
   commentState = signal<CommentResponse | null>(null);
+
   private dialog = inject(MatDialog);
   private reportService = inject(ReportService);
   private commentService = inject(CommentService);
   private utilsService = inject(UtilsService);
+  private authService = inject(AuthService);
+
+  currentUser = this.authService.currentUser;
+
+  isAdmin = computed(() => this.currentUser()?.role === 'ADMIN');
+
   showEditPopup = signal(false);
+
+  @Input() postOwnerId!: string;
+  isPostOwner = computed(() =>
+    this.currentUser()?.id === this.postOwnerId
+  );
+
   editForm = {
     content: '',
     commentImage: null as File | null
   };
-
 
   constructor() {
     effect(() => {
@@ -46,6 +61,8 @@ export class CommentComponent {
     return this.utilsService.timeAgo(date);
   }
 
+  /* ================= USER ACTIONS ================= */
+
   reportComment() {
     const dialogRef = this.dialog.open(ReportDialogComponent, {
       width: '400px',
@@ -58,20 +75,15 @@ export class CommentComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-
-      this.reportService.createReport(result).subscribe({
-        next: () => {
-          console.log('Report sent successfully');
-        },
-        error: () => {
-          console.error('Error while reporting');
-        },
-      });
+      this.reportService.createReport(result).subscribe();
     });
   }
 
-
   openEditPopup() {
+    const comment = this.commentState();
+    if (!comment) return;
+
+    this.editForm.content = comment.content;
     this.showEditPopup.set(true);
   }
 
@@ -94,9 +106,7 @@ export class CommentComponent {
     formData.append(
       'data',
       new Blob(
-        [JSON.stringify({
-          content: this.editForm.content,
-        })],
+        [JSON.stringify({ content: this.editForm.content })],
         { type: 'application/json' }
       )
     );
@@ -105,40 +115,64 @@ export class CommentComponent {
       formData.append('commentImage', this.editForm.commentImage);
     }
 
-
     this.commentService.updateComment(comment.id, formData).subscribe({
       next: (res) => {
         if (res?.success) {
           this.commentState.set(res.data);
           this.closeEditPopup();
         }
-      },
-
-      error: (err) => {
-        console.error(err);
       }
-    })
+    });
   }
-
 
   deleteComment() {
     const comment = this.commentState();
     const postId = this.postId();
-
     if (!comment || !postId) return;
 
     this.commentService.deleteComment(comment.id, postId).subscribe({
-      next: (res) => {
-        if (res?.success) {
-          this.commentState.set(null);
-        }
-      },
-
-      error: (err) => {
-        console.error(err);
+      next: () => {
+        this.commentState.set(null);
       }
-    })
+    });
   }
 
+  /* ================= ADMIN ACTIONS ================= */
 
+  adminHideComment() {
+    const comment = this.commentState();
+    if (!comment) return;
+
+    this.commentService.hideComment(comment.id).subscribe({
+      next: () => {
+        this.commentState.update(c =>
+          c ? { ...c, visible: false } : c
+        );
+      }
+    });
+  }
+
+  adminRestoreComment() {
+    const comment = this.commentState();
+    if (!comment) return;
+
+    this.commentService.restoreComment(comment.id).subscribe({
+      next: () => {
+        this.commentState.update(c =>
+          c ? { ...c, visible: true } : c
+        );
+      }
+    });
+  }
+
+  adminDeleteComment() {
+    const comment = this.commentState();
+    if (!comment) return;
+
+    this.commentService.adminDeleteComment(comment.id).subscribe({
+      next: () => {
+        this.commentState.set(null);
+      }
+    });
+  }
 }

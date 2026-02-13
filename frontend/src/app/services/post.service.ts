@@ -49,4 +49,19 @@ export class PostService {
             formData
         );
     }
+
+    hidePost(postId: string) {
+        return this.http.put<ApiResponse<string>>(
+            `http://localhost:8080/api/admin/posts/${postId}/hide`,
+            {}
+        );
+    }
+
+    restorePost(postId: string) {
+        return this.http.put<ApiResponse<string>>(
+            `http://localhost:8080/api/admin/posts/${postId}/restore`,
+            {}
+        );
+    }
+
 }

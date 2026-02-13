@@ -37,4 +37,24 @@ export class CommentService {
             data
         )
     }
+
+    hideComment(commentId: string): Observable<ApiResponse<string>> {
+        return this.http.put<ApiResponse<string>>(
+            `http://localhost:8080/api/admin/comments/${commentId}/hide`,
+            null
+        );
+    }
+
+    restoreComment(commentId: string): Observable<ApiResponse<string>> {
+        return this.http.put<ApiResponse<string>>(
+            `http://localhost:8080/api/admin/comments/${commentId}/restore`,
+            null
+        );
+    }
+
+    adminDeleteComment(commentId: string): Observable<ApiResponse<string>> {
+        return this.http.delete<ApiResponse<string>>(
+            `http://localhost:8080/api/admin/comments/${commentId}`
+        );
+    }
 }

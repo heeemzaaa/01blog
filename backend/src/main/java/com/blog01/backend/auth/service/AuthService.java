@@ -68,6 +68,7 @@ public class AuthService {
                     .nbr_of_following(nbr_of_following)
                     .nbr_of_notifications(nbr_of_notifications)
                     .role(user.getRole())
+                    .active(user.isActive())
                     .build();
 
             return ResponseData.success("User logged in successfully !", userResponse);
@@ -117,6 +118,7 @@ public class AuthService {
                 .nbr_of_following(nbr_of_following)
                 .nbr_of_notifications(nbr_of_notifications)
                 .role(saved.getRole())
+                .active(saved.isActive())
                 .build();
 
         return ResponseData.success("User registered successfully !", userResponse);
@@ -141,6 +143,7 @@ public class AuthService {
                 .nbr_of_following(nbr_of_following)
                 .nbr_of_notifications(nbr_of_notifications)
                 .role(user.getRole())
+                .active(user.isActive())
                 .build();
 
         return ResponseData.success("User validated", me);

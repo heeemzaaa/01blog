@@ -155,6 +155,19 @@ public class AdminService {
         return ResponseData.success("Comment hidden successfully", null);
     }
 
+    public ResponseData<String> restoreComment(UUID commentId) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            return ResponseData.error("Comment not found");
+        }
+
+        Comment comment = optionalComment.get();
+        comment.setVisible(true);
+
+        commentRepository.save(comment);
+        return ResponseData.success("Comment hidden successfully", null);
+    }
+
     public ResponseData<String> deleteComment(UUID commentId) {
         if (!commentRepository.existsById(commentId)) {
             return ResponseData.error("Comment not found");
@@ -174,6 +187,14 @@ public class AdminService {
                 .collect(Collectors.toList());
 
         return ResponseData.success("All reports fetched successfully", responses);
+    }
+
+    public ResponseData<ReportResponse> getReportById(UUID id) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Report not found"));
+
+        return ResponseData.success("Report fetched successfully",
+                ReportResponse.fromEntity(report));
     }
 
     public ResponseData<String> reviewReport(UUID id) {
@@ -202,6 +223,26 @@ public class AdminService {
         reportRepository.save(report);
 
         return ResponseData.success("Report actioned successfully", null);
+    }
+
+    public ResponseData<String> dismissReport(UUID id) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Report not found"));
+
+        report.setStatus(StatusOfReports.DISMISSED);
+        reportRepository.save(report);
+
+        return ResponseData.success("Report dismissed", null);
+    }
+
+    public ResponseData<String> actionReport(UUID id) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Report not found"));
+
+        report.setStatus(StatusOfReports.ACTIONED);
+        reportRepository.save(report);
+
+        return ResponseData.success("Report marked as actioned", null);
     }
 
     // ======================== DASHBOARD ========================
@@ -238,6 +279,8 @@ public class AdminService {
                 .lastName(user.getLastName())
                 .username(user.getUsername())
                 .profileImage(user.getProfileImage())
+                .role(user.getRole())
+                .active(user.isActive())
                 .build();
     }
 }

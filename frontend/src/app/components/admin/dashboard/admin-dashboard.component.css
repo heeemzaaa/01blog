@@ -1,69 +1,148 @@
-/* GRID BACKGROUND */
-.admin-bg {
-  background-color: #0b0b0b;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* BADGE */
-.admin-badge {
-  font-size: 12px;
-  background-color: #1a1a1a;
-  border: 1px solid #2c2c2c;
-  padding: 4px 10px;
-  border-radius: 20px;
-  color: white;
-}
-
-/* STAT CARDS */
-.stat-card {
-  background-color: #111111;
-  border: 1px solid #2c2c2c;
+/* CARD */
+.admin-card {
+  border: .2px solid #2c2c2c;
   border-radius: 16px;
-  padding: 20px;
-  color: white;
+  background-color: #0f0f0f;
   transition: all 0.3s ease;
 }
 
-.stat-card:hover {
+.admin-card:hover {
   border-color: #3a3a3a;
-  transform: translateY(-2px);
+}
+
+/* ICON */
+.icon-muted {
+  font-size: 20px;
+  color: #666;
+}
+
+/* BREAKDOWN */
+.breakdown-list span {
+  font-size: 14px;
 }
 
 /* TABS */
-.tabs-container {
-  background-color: #111111;
-  border: 1px solid #2c2c2c;
-  border-radius: 12px;
+.admin-tabs {
+  border: .2px solid #2c2c2c;
+  border-radius: 10px;
   overflow: hidden;
+  background-color: #0f0f0f;
 }
 
-.tab-btn {
+.tab {
   flex: 1;
   padding: 12px;
-  background: transparent;
-  border: none;
+  text-align: center;
   color: #aaa;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.tab-btn:hover {
+.tab:hover {
   background-color: #1a1a1a;
   color: white;
 }
 
-.active-tab {
+.tab.active {
   background-color: #1a1a1a;
   color: white;
 }
 
-/* CONTENT BOX */
-.content-box {
-  background-color: #111111;
+/* SEARCH */
+.admin-search {
+  background-color: #1a1a1a;
+  border: .5px solid #2c2c2c;
+  color: white;
+  border-radius: 8px;
+  width: 250px;
+}
+
+.admin-search:focus {
+  border-color: #878787;
+  box-shadow: 0 0 0 3px #585858;
+}
+
+/* USER ITEM */
+.user-item {
+  border: .2px solid #2c2c2c;
+  border-radius: 12px;
+  background-color: #0a0a0a;
+  transition: all 0.3s ease;
+}
+
+.user-item:hover {
+  background-color: #151515;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.active-status {
+  background-color: #1a1a1a;
   border: 1px solid #2c2c2c;
-  border-radius: 16px;
   color: white;
 }
+
+.admin-status {
+  background-color: #1a1a1a;
+  border: 1px solid #2c2c2c;
+  color: #4da3ff;
+}
+
+.inactive-status {
+  background-color: #1a1a1a;
+  border: 1px solid #2c2c2c;
+  color: #ff5c5c;
+}
+
+.pending-status {
+  background-color: #1a1a1a;
+  border: 1px solid #2c2c2c;
+  color: #ff5c5c;
+}
+
+.reviewed-status {
+  background-color: #1a1a1a;
+  border: 1px solid #2c2c2c;
+  color: #4da3ff;
+}
+
+.resolved-status {
+  background-color: #1a1a1a;
+  border: 1px solid #2c2c2c;
+  color: #00c853;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #2c2c2c;
+  background-color: #111;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #1a1a1a;
+}
+
+.action-btn.danger {
+  color: #ff5c5c;
+}
+
+.action-btn.success {
+  color: #00c853;
+}
+
+.action-btn.delete {
+  border-color: #3a1a1a;
+}
+
+

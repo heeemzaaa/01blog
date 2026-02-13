@@ -73,6 +73,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.hideComment(id));
     }
 
+    @PutMapping("/comments/{id}/restore")
+    public ResponseEntity<ResponseData<String>> restoreComment(@PathVariable UUID id) {
+        return ResponseEntity.ok(adminService.restoreComment(id));
+    }
+
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<ResponseData<String>> deleteComment(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.deleteComment(id));
@@ -84,6 +89,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllReports());
     }
 
+    @GetMapping("/reports/{id}")
+    public ResponseEntity<ResponseData<ReportResponse>> getReportById(@PathVariable UUID id) {
+        return ResponseEntity.ok(adminService.getReportById(id));
+    }
+
     @PutMapping("/reports/{id}/review")
     public ResponseEntity<ResponseData<String>> reviewReport(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.reviewReport(id));
@@ -92,6 +102,16 @@ public class AdminController {
     @PutMapping("/reports/{id}/resolve")
     public ResponseEntity<ResponseData<String>> resolveReport(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.resolveReport(id));
+    }
+
+    @PutMapping("/reports/{id}/dismiss")
+    public ResponseEntity<ResponseData<String>> dismissReport(@PathVariable UUID id) {
+        return ResponseEntity.ok(adminService.dismissReport(id));
+    }
+
+    @PutMapping("/reports/{id}/action")
+    public ResponseEntity<ResponseData<String>> actionReport(@PathVariable UUID id) {
+        return ResponseEntity.ok(adminService.actionReport(id));
     }
 
     // ========================= DASHBOARD =========================

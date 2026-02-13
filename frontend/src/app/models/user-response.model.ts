@@ -8,6 +8,7 @@ export interface UserResponse {
     profileImage: string;
     nbr_of_posts: number;
     role: Role;
+    active: boolean;
     nbr_of_followers: number;
     nbr_of_following: number;
     nbr_of_notifications: number;

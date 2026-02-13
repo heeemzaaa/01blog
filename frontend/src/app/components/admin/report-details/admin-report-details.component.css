@@ -1,0 +1,66 @@
+.report-section {
+  border: 0.5px solid #2c2c2c;
+  border-radius: 12px;
+  background-color: #111;
+}
+
+.action-section {
+  border-top: 0.5px solid #2c2c2c;
+  padding-top: 16px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pending-status {
+  color: #ff5c5c;
+  font-weight: bold;
+}
+
+.reviewed-status {
+  color: #4da3ff;
+  font-weight: bold;
+}
+
+.dismissed-status {
+  color: #999;
+  font-weight: bold;
+}
+
+.actioned-status {
+  color: #00c853;
+  font-weight: bold;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #2c2c2c;
+  background-color: #111;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #1a1a1a;
+}
+
+.action-btn.danger {
+  color: #ff5c5c;
+}
+
+.action-btn.success {
+  color: #00c853;
+}
+
+.action-btn.delete {
+  color: #ff5c5c;
+  border-color: #3a1a1a;
+}
