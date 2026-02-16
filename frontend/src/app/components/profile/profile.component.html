@@ -35,10 +35,11 @@
 
                 <div class="d-flex align-items-center justify-content-center" [matMenuTriggerFor]="profileMenu">
                     @if (profile() && !isMyProfile) {
-                        <button mat-icon-button class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
-                            <mat-icon>more_horiz</mat-icon>
-                        </button>
-                    } 
+                    <button mat-icon-button
+                        class="c-b d-flex justify-content-center bg-black fw-bold text-white h-25 p-1">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                    }
 
                     <mat-menu #profileMenu="matMenu" panelClass="profile-menu-panel">
                         <button mat-menu-item (click)="reportProfile()" class="profile-menu-item">
@@ -198,15 +199,26 @@
         <div class="d-flex flex-column gap-3">
 
             @for (user of connections(); track user.id) {
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3 justify-content-between">
 
-                <img [src]="user.profileImage
+                <div>
+                    <img [src]="user.profileImage
                 ? 'http://localhost:8080' + user.profileImage
                 : '/profile.png'" class="rounded-circle" width="45" height="45" />
 
-                <span class="fw-bold">
-                    {{ user.username }}
-                </span>
+                    <span class="fw-bold">
+                        {{ user.username }}
+                    </span>
+                </div>
+                @if (popupTitle() == "Following") {
+                <button class="c-1 px-3 py-2 fw-bold" (click)="unsubscribe(user.id)">
+                    Unfollow
+                </button>
+                } @else {
+                <button class="c-1 px-3 py-2 fw-bold bg-danger">
+                    Delete Subscriber 
+                </button>
+                }
 
             </div>
             }
