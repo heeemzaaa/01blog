@@ -6,6 +6,7 @@ import { Post } from '../post/post.component';
 import { PostService } from '../../services/post.service';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
+import { UserResponse } from '../../models/user-response.model';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ import { signal } from '@angular/core';
 })
 export class HomeComponent {
 
-  currentUser = inject(AuthService).currentUser;
+  currentUser = signal<UserResponse | null>(null);
+  private authService = inject(AuthService);
   private postService = inject(PostService);
 
   posts = signal<PostResponse[]>([]);
@@ -32,5 +34,11 @@ export class HomeComponent {
         this.posts.set(res.data);
       }
     });
+
+    this.authService.getMe().subscribe(res => {
+      if (res?.success) {
+        this.currentUser?.set(res.data);
+      }
+    })
   }
 }

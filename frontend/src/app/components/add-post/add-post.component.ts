@@ -6,6 +6,7 @@ import { PostRequest } from '../../models/post-request.model';
 import { PostService } from '../../services/post.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-post',
@@ -21,7 +22,7 @@ export class AddPost {
   mediaPreviews = signal<MediaPreview[]>([]);
   title = signal('');
   content = signal('');
-
+  
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
@@ -93,7 +94,6 @@ export class AddPost {
         this.content.set('');
         this.selectedFiles.set([]);
         this.mediaPreviews.set([]);
-        console.log(res.data);
         this.router.navigate(['/']);
       },
       error: (err) => {

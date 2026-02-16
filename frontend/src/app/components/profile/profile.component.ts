@@ -219,6 +219,11 @@ export class Profile {
 
   onPostDeleted(postId: string) {
     this.posts.update(posts => posts.filter(p => p.id !== postId));
+
+    this.profile.update(p => p && ({
+        ...p,
+        nbr_of_posts: p.nbr_of_posts - 1
+      }));
   }
 
   reportProfile() {

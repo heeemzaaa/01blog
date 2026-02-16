@@ -83,19 +83,16 @@ export class Notifications {
     switch (n.type) {
       case NotificationType.LIKE:
         return `${fullName} liked your post`;
-
       case NotificationType.COMMENT:
         return `${fullName} commented on your post`;
-
       case NotificationType.NEW_POST:
         return `${fullName} published a new post`;
-
       case NotificationType.REPORT_CREATED:
         return `${fullName} created a report`;
-
       case NotificationType.REPORT_UPDATE:
         return `${fullName} updated a report`;
-
+      case NotificationType.FOLLOW:
+        return `${fullName} subscribed to your account`
       default:
         return 'You have a new notification';
     }

@@ -7,6 +7,8 @@ import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
 import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.common.response.ResponseData;
+import com.blog01.backend.notification.model.Notification.NotificationType;
+import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
@@ -18,6 +20,7 @@ public class SubscribeService {
 
     private final SubscribesRepository sr;
     private final UserRepository ur;
+    private final NotificationService us;
 
     /* ===================== GET SUBSCRIBERS ===================== */
     public ResponseData<List<UserResponse>> getSubscribers(UUID userId) {
@@ -66,6 +69,8 @@ public class SubscribeService {
                 .subscriber(subscriber)
                 .user(target)
                 .build());
+
+        us.sendNotification(target, subscriber, NotificationType.FOLLOW, targetUserId);
 
         return ResponseData.success("You are now a subscriber to this user", null);
     }
