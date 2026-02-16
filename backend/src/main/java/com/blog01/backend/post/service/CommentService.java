@@ -70,7 +70,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("Comment not found !"));
 
         if (!user.getId().equals(comment.getUser().getId())) {
-            return ResponseData.error("You cannot update a comment that is not yours !");
+            throw new AccessDeniedException("You cannot update a comment that is not yours !");
         }
 
         comment.setContent(commentToUpdate.getContent());
@@ -88,7 +88,7 @@ public class CommentService {
             commentRepository.delete(comment);
             return ResponseData.success("Comment is deleted successfully !", null);
         }
-        return ResponseData.error("You cannot delete this comment !");
+        throw new AccessDeniedException("You cannot delete this comment !");
     }
 
     private CommentResponse mapToCommentResponse(Comment comment, UUID currentUserId) {

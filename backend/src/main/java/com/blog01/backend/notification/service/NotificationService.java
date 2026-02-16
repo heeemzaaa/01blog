@@ -59,7 +59,7 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
 
         if (!notification.getRecipient().getId().equals(user.getId())) {
-            return ResponseData.error("You are not authorized to access this notification");
+            throw new AccessDeniedException("You are not authorized to access this notification");
         }
 
         notification.setSeen(true);

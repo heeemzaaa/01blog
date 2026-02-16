@@ -48,7 +48,7 @@ public class AdminService {
     public ResponseData<String> banUser(UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            return ResponseData.error("User not found");
+            throw new NoSuchElementException("User not found");
         }
 
         User user = optionalUser.get();
@@ -62,7 +62,7 @@ public class AdminService {
     public ResponseData<String> unbanUser(UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            return ResponseData.error("User not found");
+            throw new NoSuchElementException("User not found");
         }
 
         User user = optionalUser.get();
@@ -75,7 +75,7 @@ public class AdminService {
 
     public ResponseData<String> deleteUser(UUID userId) {
         if (!userRepository.existsById(userId)) {
-            return ResponseData.error("User not found");
+            throw new NoSuchElementException("User not found");
         }
         userRepository.deleteById(userId);
         return ResponseData.success("User deleted successfully", null);
@@ -96,7 +96,7 @@ public class AdminService {
     public ResponseData<String> hidePost(UUID postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            return ResponseData.error("Post not found");
+            throw new NoSuchElementException("Post not found");
         }
 
         Post post = optionalPost.get();
@@ -110,7 +110,7 @@ public class AdminService {
     public ResponseData<String> restorePost(UUID postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
-            return ResponseData.error("Post not found");
+            throw new NoSuchElementException("Post not found");
         }
 
         Post post = optionalPost.get();
@@ -122,7 +122,7 @@ public class AdminService {
 
     public ResponseData<String> deletePost(UUID postId) {
         if (!postRepository.existsById(postId)) {
-            return ResponseData.error("Post not found");
+            throw new NoSuchElementException("Post not found");
         }
 
         postRepository.deleteById(postId);
@@ -144,7 +144,7 @@ public class AdminService {
     public ResponseData<String> hideComment(UUID commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
-            return ResponseData.error("Comment not found");
+            throw new NoSuchElementException("Comment not found");
         }
 
         Comment comment = optionalComment.get();
@@ -158,7 +158,7 @@ public class AdminService {
     public ResponseData<String> restoreComment(UUID commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
-            return ResponseData.error("Comment not found");
+            throw new NoSuchElementException("Comment not found");
         }
 
         Comment comment = optionalComment.get();
@@ -170,7 +170,7 @@ public class AdminService {
 
     public ResponseData<String> deleteComment(UUID commentId) {
         if (!commentRepository.existsById(commentId)) {
-            return ResponseData.error("Comment not found");
+            throw new NoSuchElementException("Comment not found");
         }
 
         commentRepository.deleteById(commentId);

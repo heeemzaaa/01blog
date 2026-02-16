@@ -17,6 +17,8 @@ import com.blog01.backend.report.repository.ReportRepository;
 import com.blog01.backend.report.response.ReportResponse;
 import java.util.UUID;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -44,7 +46,7 @@ public class ReportService {
         }
 
         if (!targetExists) {
-            return ResponseData.error("The " + request.getTargetType() + " you are trying to report does not exist.");
+            throw new NoSuchElementException("The " + request.getTargetType() + " you are trying to report does not exist.");
         }
 
         Report report = Report.builder()

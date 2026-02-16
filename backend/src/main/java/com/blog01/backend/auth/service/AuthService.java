@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,7 +79,7 @@ public class AuthService {
 
             return ResponseData.success("User logged in successfully !", userResponse);
         } catch (AuthenticationException e) {
-            return ResponseData.error("Invalid credentials !");
+            throw new BadCredentialsException("Invalid credentials !");
         }
     }
 
@@ -86,7 +87,7 @@ public class AuthService {
             UserRegister userRequest,
             MultipartFile profileImage) {
         if (ur.existsByEmail(userRequest.getEmail())) {
-            return ResponseData.error("Email already existed, try another one !");
+            throw new DataIntegrityViolationException("Email already existed, try another one !");
         }
 
         String imagePath = saveProfileImage(profileImage);

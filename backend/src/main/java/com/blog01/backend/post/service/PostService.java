@@ -125,7 +125,7 @@ public class PostService {
                 }
 
                 if (!post.getUser().getId().equals(user.getId())) {
-                        return ResponseData.error("You can't modify this post because it is not yours !");
+                        throw new AccessDeniedException("You can't modify this post because it is not yours !");
                 }
 
                 post.setTitle(postToUpdate.getTitle());
@@ -152,7 +152,7 @@ public class PostService {
                                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
                 if (!post.getUser().getId().equals(user.getId())) {
-                        return ResponseData.error("You are not authorized to delete this post");
+                        throw new AccessDeniedException("You are not authorized to delete this post");
                 }
 
                 postMediaService.deleteAllByPost(post);
