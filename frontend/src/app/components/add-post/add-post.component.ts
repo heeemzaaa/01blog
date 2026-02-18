@@ -7,6 +7,7 @@ import { PostService } from '../../services/post.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-add-post',
@@ -18,11 +19,12 @@ import { AuthService } from '../../services/auth.service';
 export class AddPost {
   postService = inject(PostService);
   router = inject(Router);
+  toast = inject(ToastService);
   selectedFiles = signal<File[]>([]);
   mediaPreviews = signal<MediaPreview[]>([]);
   title = signal('');
   content = signal('');
-  
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
@@ -31,7 +33,7 @@ export class AddPost {
 
     for (const file of files) {
       if (this.selectedFiles().length >= 5) {
-        console.log('Maximum 5 media files allowed');
+        this.toast.showError('Maximum 5 media files allowed');
         break;
       }
 
@@ -86,10 +88,17 @@ export class AddPost {
   }
 
   addPost() {
+    if (this.title() === '' || this.content() === '') {
+      this.toast.showError("The title and the content are required !");
+      console.log('object :>> ');
+      return;
+    }
     const formData = this.buildFormData();
 
     this.postService.createPost(formData).subscribe({
       next: (res) => {
+        this.toast.showSuccess("Post created successfully !");
+
         this.title.set('');
         this.content.set('');
         this.selectedFiles.set([]);
@@ -97,7 +106,7 @@ export class AddPost {
         this.router.navigate(['/']);
       },
       error: (err) => {
-        console.error("Post creation failed: ", err);
+        this.toast.showError("Post creation failed, Please try again later !")
       }
     })
   }

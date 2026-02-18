@@ -45,7 +45,7 @@
                     (change)="onFileSelected($event)" />
 
 
-                <button type="button" class="upload-btn" (click)="fileInput.click()">
+                <button type="button" class="upload-btn" (click)="fileInput.click()" [disabled]="selectedFiles().length === 5">
                     <mat-icon class="me-2">upload</mat-icon>
                     Choose File
                 </button>
@@ -79,7 +79,7 @@
             <button type="button" class="px-3 py-1 c-border fw-bold fs-6">
                 Cancel
             </button>
-            <button type="submit" class="px-3 py-1 c-border-1 fw-bold fs-6">
+            <button type="submit" class="px-3 py-1 c-border-1 fw-bold fs-6" [disabled]="title() !== '' && content() !== ''">
                 Share Post
             </button>
         </div>

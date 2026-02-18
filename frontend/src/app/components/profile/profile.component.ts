@@ -19,6 +19,7 @@ import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
   imports: [CommonModule, MatIconModule, Post, FormsModule, MatMenuModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',

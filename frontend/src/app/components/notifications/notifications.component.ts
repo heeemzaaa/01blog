@@ -8,6 +8,7 @@ import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-notifications',
+  standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',

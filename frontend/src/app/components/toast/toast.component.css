@@ -1,0 +1,41 @@
+/* .toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 20px;
+  background: red !important;
+  color: white;
+  z-index: 9999999 !important;
+  font-size: 18px;
+} */
+
+.toast {
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  background: rgb(192, 0, 0);
+  color: white;
+  padding: 20px;
+  z-index: 9999999;
+}
+
+
+
+.success {
+  background-color: #2e7d32;
+}
+
+.error {
+  background-color: #c62828;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

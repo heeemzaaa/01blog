@@ -46,13 +46,13 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
   padding: 8px 14px;
   border: 1px solid #2c2c2c;
   background: transparent;
   color: white;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .upload-btn:hover {
