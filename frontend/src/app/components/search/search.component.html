@@ -1,0 +1,98 @@
+<div class="search-container px-c">
+
+    <!-- 🔎 Header -->
+    <h3 class="fw-bold mb-4">
+        Search Results
+    </h3>
+
+    <!-- 🔄 Loading -->
+    @if (loading()) {
+    <div class="text-center py-5">
+        <p class="text-secondary">Searching...</p>
+    </div>
+    }
+
+    <!-- ❌ No Results -->
+    @if (!loading()
+    && results()
+    && results()?.users?.content?.length === 0
+    && results()?.posts?.content?.length === 0) {
+
+    <div class="text-center py-5">
+        <p class="text-secondary">No results found.</p>
+    </div>
+    }
+
+    <!-- 👤 Users Section -->
+    @if (!loading() && results()?.users?.content?.length > 0) {
+
+    <div class="mb-5">
+        <h5 class="mb-3">Users</h5>
+
+        <div class="d-flex flex-column gap-3">
+            @for (user of results()?.users?.content; track user.id) {
+
+            <div class="user-card d-flex align-items-center gap-3 clickable" [routerLink]="['/profile', user.id]">
+
+                <img [src]="user.profileImage 
+              ? 'http://localhost:8080' + user.profileImage 
+              : '/profile.png'" class="user-image" />
+
+                <div>
+                    <p class="fw-bold m-0">@{{ user.username }}</p>
+                    <span class="text-secondary small">
+                        {{ user.firstName }} {{ user.lastName }}
+                    </span>
+                </div>
+
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- 📝 Posts Section -->
+    @if (!loading() && results()?.posts?.content?.length > 0) {
+
+    <div>
+        <h5 class="mb-3">Posts</h5>
+
+        <div class="d-flex flex-column gap-3">
+            @for (post of results()?.posts?.content; track post.id) {
+
+            <div class="post-card clickable" [routerLink]="['/post', post.id]">
+
+                <h6 class="fw-bold">{{ post.title }}</h6>
+                <p class="text-secondary small">
+                    by @{{ post.user?.username }}
+                </p>
+
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- 📄 Pagination -->
+    @if (!loading() && totalPages() > 1) {
+
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-5">
+
+        <button class="c-button px-3 py-2 rounded" (click)="previousPage(route.snapshot.queryParams['q'])"
+            [disabled]="currentPage() === 0">
+            Previous
+        </button>
+
+        <span class="text-secondary">
+            Page {{ currentPage() + 1 }} of {{ totalPages() }}
+        </span>
+
+        <button class="c-button px-3 py-2 rounded" (click)="nextPage(route.snapshot.queryParams['q'])"
+            [disabled]="currentPage() === totalPages() - 1">
+            Next
+        </button>
+
+    </div>
+    }
+
+</div>

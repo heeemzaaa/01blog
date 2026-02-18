@@ -2,6 +2,7 @@ package com.blog01.backend.auth.response;
 
 import java.util.UUID;
 
+import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.model.User.Role;
 
 import lombok.*;
@@ -23,4 +24,13 @@ public class UserResponse {
     private String profileImage;
     private String token;
     private Role role;
+
+    public UserResponse(User user) {
+    this.id = user.getId();
+    this.username = user.getUsername();
+    this.firstName = user.getFirstName();
+    this.lastName = user.getLastName();
+    this.profileImage = user.getProfileImage();
+}
+
 }

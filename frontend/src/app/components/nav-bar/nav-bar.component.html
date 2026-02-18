@@ -2,7 +2,60 @@
 
   <div class="d-flex gap-5 align-items-center">
     <h2 class="fw-bolder" role="button" (click)="toHome()">01Blog</h2>
-    <input type="search" class="form-control custom-input" placeholder="Search posts, users, topics..." />
+    <div style="position: relative;">
+
+      <input type="search" class="form-control custom-input" placeholder="Search posts, users..."
+        [formControl]="searchControl" (focus)="showDropdown.set(true)" />
+
+      @if (showDropdown()) {
+      <div class="search-live-dropdown">
+
+        <!-- Loading -->
+        @if (loading()) {
+        <div class="p-3 text-secondary">Searching...</div>
+        }
+
+        <!-- No Results -->
+        @if (!loading()
+        && searchResults()
+        && searchResults()?.users?.content?.length === 0
+        && searchResults()?.posts?.content?.length === 0) {
+
+        <div class="p-3 text-secondary">No results found.</div>
+        }
+
+        <!-- Users -->
+        @if (searchResults()?.users?.content?.length > 0) {
+        <div class="p-2">
+          <small class="text-secondary">Users</small>
+
+          @for (user of searchResults()?.users?.content; track user.id) {
+          <div class="dropdown-item" [routerLink]="['/profile', user.id]" (click)="showDropdown.set(false)">
+
+            @{{ user.username }}
+          </div>
+          }
+        </div>
+        }
+
+        <!-- Posts -->
+        @if (searchResults()?.posts?.content?.length > 0) {
+        <div class="p-2 border-top">
+          <small class="text-secondary">Posts</small>
+
+          @for (post of searchResults()?.posts?.content; track post.id) {
+          <div class="dropdown-item" [routerLink]="['/post', post.id]" (click)="showDropdown.set(false)">
+
+            {{ post.title }}
+          </div>
+          }
+        </div>
+        }
+
+      </div>
+      }
+
+    </div>
 
   </div>
 

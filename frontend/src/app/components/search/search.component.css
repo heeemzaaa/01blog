@@ -1,0 +1,27 @@
+.search-container {
+  min-height: 80vh;
+}
+
+.user-card, .post-card {
+  padding: 12px;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #111;
+}
+
+.user-card:hover,
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.clickable {
+  cursor: pointer;
+}

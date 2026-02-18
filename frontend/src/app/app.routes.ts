@@ -3,6 +3,7 @@ import { Login } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
+import { SearchComponent } from './components/search/search.component';
 
 export const routes: Routes = [
 
@@ -23,5 +24,9 @@ export const routes: Routes = [
 
     { path: 'login', component: Login, canActivate: [guestGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+    {
+        path: 'search',
+        component: SearchComponent
+    }
 
 ];
