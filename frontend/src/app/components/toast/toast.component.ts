@@ -12,6 +12,7 @@ import { ToastService } from '../../services/toast.service';
 export class ToastComponent {
 
   private toastService = inject(ToastService);
+  toast = this.toastService.toast;
 
   constructor() {
     effect(() => {
@@ -20,5 +21,4 @@ export class ToastComponent {
   }
 
 
-  toast = this.toastService.toast;
 }

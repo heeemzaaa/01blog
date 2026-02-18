@@ -1,25 +1,14 @@
-/* .toast {
+.toast {
   position: fixed;
   top: 20px;
   right: 20px;
   padding: 20px;
-  background: red !important;
+  background-color: gray; /* fallback */
   color: white;
-  z-index: 9999999 !important;
-  font-size: 18px;
-} */
-
-.toast {
-  position: fixed;
-  top: 50%;
-  right: 50%;
-  background: rgb(192, 0, 0);
-  color: white;
-  padding: 20px;
   z-index: 9999999;
+  font-size: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* debug helper */
 }
-
-
 
 .success {
   background-color: #2e7d32;
