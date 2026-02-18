@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { UtilsService } from '../../services/utils.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-comment',
@@ -31,6 +32,7 @@ export class CommentComponent {
   private commentService = inject(CommentService);
   private utilsService = inject(UtilsService);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   currentUser = this.authService.currentUser;
 
@@ -118,9 +120,13 @@ export class CommentComponent {
     this.commentService.updateComment(comment.id, formData).subscribe({
       next: (res) => {
         if (res?.success) {
+          this.toast.showSuccess("Comment updated successfully !");
           this.commentState.set(res.data);
           this.closeEditPopup();
         }
+      },
+      error: (err) => {
+        this.toast.showError("Comment not updated due to some errors, please try again later !")
       }
     });
   }
@@ -132,6 +138,7 @@ export class CommentComponent {
 
     this.commentService.deleteComment(comment.id, postId).subscribe({
       next: () => {
+        this.toast.showSuccess("Comment deleted successfully !");
         this.commentState.set(null);
       }
     });
@@ -145,6 +152,7 @@ export class CommentComponent {
 
     this.commentService.hideComment(comment.id).subscribe({
       next: () => {
+        this.toast.showSuccess("Comment hidden successfully !");
         this.commentState.update(c =>
           c ? { ...c, visible: false } : c
         );
@@ -158,6 +166,7 @@ export class CommentComponent {
 
     this.commentService.restoreComment(comment.id).subscribe({
       next: () => {
+        this.toast.showSuccess("Comment restored successfully !");
         this.commentState.update(c =>
           c ? { ...c, visible: true } : c
         );
@@ -171,6 +180,7 @@ export class CommentComponent {
 
     this.commentService.adminDeleteComment(comment.id).subscribe({
       next: () => {
+        this.toast.showSuccess("Comment deleted successfully !");
         this.commentState.set(null);
       }
     });

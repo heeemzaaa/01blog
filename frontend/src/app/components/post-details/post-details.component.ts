@@ -13,6 +13,7 @@ import { CommentService } from '../../services/comment.service';
 import { PostResponse } from '../../models/post-response.model';
 import { CommentResponse } from '../../models/comment-response.model';
 import { CommentRequest } from '../../models/comment-request.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-post-details',
@@ -26,6 +27,7 @@ export class PostDetailsComponent {
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);
   private commentService = inject(CommentService);
+  private toast = inject(ToastService);
   private paramMapSignal = toSignal(this.route.paramMap);
 
   readonly postId = computed(() =>
@@ -87,7 +89,7 @@ export class PostDetailsComponent {
         this.loadingComments.set(false);
       },
       error: err => {
-        console.error('Error:', err);
+        this.toast.showError(err.data)
         this.loadingComments.set(false);
       }
     });
@@ -102,7 +104,7 @@ export class PostDetailsComponent {
     this.commentService.createComment(postId, request).subscribe({
       next: res => {
         if (!res?.data) return;
-
+        this.toast.showSuccess("Comment created successfully !")
         this.comments.update(prev => [...prev, res.data]);
 
         this.post.update(post =>
@@ -112,7 +114,7 @@ export class PostDetailsComponent {
         );
         this.commentRequest.set({ content: '' });
       },
-      error: err => console.error('Error:', err),
+      error: err => this.toast.showError(err.data),
     });
   }
 

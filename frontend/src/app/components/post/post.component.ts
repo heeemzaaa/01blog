@@ -24,6 +24,7 @@ import { PostService } from '../../services/post.service';
 import { ReportTarget } from '../../models/report-target.enum';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { UtilsService } from '../../services/utils.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-post',
@@ -56,6 +57,7 @@ export class Post {
   private postService = inject(PostService);
   private dialog = inject(MatDialog);
   private utilsService = inject(UtilsService);
+  private toast = inject(ToastService);
 
   /* ================= State ================= */
 
@@ -170,7 +172,10 @@ export class Post {
     if (!post) return;
 
     this.postService.deletePost(post.id).subscribe({
-      next: () => this.postDeleted.emit(post.id),
+      next: () => {
+        this.toast.showSuccess("Post deleted successfully !")
+        this.postDeleted.emit(post.id)
+      },
     });
   }
 
@@ -265,13 +270,14 @@ export class Post {
     this.postService.updatePost(formData, post.id).subscribe({
       next: res => {
         if (res?.success) {
+          this.toast.showSuccess("This post is updated successfully !")
           this.postState.set(res.data);
           this.closeEditPopup();
         }
       },
 
       error: (err) => {
-        console.log(err);
+        this.toast.showError("This action is not done due to some error !")
       }
     });
 
@@ -284,9 +290,10 @@ export class Post {
 
     this.postService.hidePost(post.id).subscribe({
       next: () => {
+        this.toast.showSuccess("Post hidden successfully !")
         const updated = { ...post, visible: false };
         this.postState.set(updated);
-        this.postUpdated.emit(updated); 
+        this.postUpdated.emit(updated);
       }
     });
   }
@@ -298,9 +305,10 @@ export class Post {
 
     this.postService.restorePost(post.id).subscribe({
       next: () => {
+        this.toast.showSuccess("Post restored successfully !")
         const updated = { ...post, visible: true };
         this.postState.set(updated);
-        this.postUpdated.emit(updated); 
+        this.postUpdated.emit(updated);
       }
     });
   }

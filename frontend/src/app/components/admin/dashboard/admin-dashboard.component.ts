@@ -7,6 +7,7 @@ import { UserResponse } from '../../../models/user-response.model';
 import { PostResponse } from '../../../models/post-response.model';
 import { ReportResponse } from '../../../models/report-response.model';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -19,6 +20,7 @@ export class AdminDashboard {
 
   adminService = inject(AdminService);
   router = inject(Router);
+  toast = inject(ToastService);
 
   activeTab = signal<'users' | 'posts' | 'reports'>('users');
 
@@ -87,12 +89,16 @@ export class AdminDashboard {
     this.adminService.banUser(userId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("the user is banned !")
           this.users.update(users =>
             users.map(u =>
               u.id === userId ? { ...u, active: false } : u
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The user is not banned due to some error !")
       }
     });
   }
@@ -101,12 +107,16 @@ export class AdminDashboard {
     this.adminService.unbanUser(userId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The user is unbanned !")
           this.users.update(users =>
             users.map(u =>
               u.id === userId ? { ...u, active: true } : u
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The user is not unbanned due to some error !")
       }
     });
   }
@@ -115,10 +125,14 @@ export class AdminDashboard {
     this.adminService.deleteUser(userId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The user is deleted !")
           this.users.update(users =>
             users.filter(u => u.id !== userId)
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The user is not deleted due to some error !")
       }
     });
   }
@@ -127,12 +141,16 @@ export class AdminDashboard {
     this.adminService.hidePost(postId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The post is hidden !")
           this.posts.update(posts =>
             posts.map(p =>
               p.id === postId ? { ...p, visible: false } : p
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The post is not hidden due to some error !")
       }
     });
   }
@@ -141,12 +159,16 @@ export class AdminDashboard {
     this.adminService.restorePost(postId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The post is restored !")
           this.posts.update(posts =>
             posts.map(p =>
               p.id === postId ? { ...p, visible: true } : p
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The post is not restored due to some error !")
       }
     });
   }
@@ -155,10 +177,14 @@ export class AdminDashboard {
     this.adminService.deletePost(postId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The post is deleted !")
           this.posts.update(posts =>
             posts.filter(p => p.id !== postId)
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The post is not deleted due to some error !")
       }
     });
   }
@@ -167,6 +193,7 @@ export class AdminDashboard {
     this.adminService.reviewReport(reportId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The report is reviewed !")
           this.reports.update(reports =>
             reports.map(r =>
               r.id === reportId
@@ -175,6 +202,9 @@ export class AdminDashboard {
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The report is not reviewed due to some error !")
       }
     });
   }
@@ -183,6 +213,7 @@ export class AdminDashboard {
     this.adminService.resolveReport(reportId).subscribe({
       next: (res) => {
         if (res.success) {
+          this.toast.showSuccess("The report is resolved !")
           this.reports.update(reports =>
             reports.map(r =>
               r.id === reportId
@@ -191,6 +222,9 @@ export class AdminDashboard {
             )
           );
         }
+      },
+      error: (err) => {
+        this.toast.showError("The report is not resolved due to some error !")
       }
     });
   }

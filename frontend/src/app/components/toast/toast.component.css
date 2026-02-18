@@ -1,13 +1,14 @@
-.toast {
+.custom-toast {
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 20px;
-  background-color: gray; /* fallback */
+  padding: 14px 22px;
+  border-radius: 10px;
   color: white;
-  z-index: 9999999;
-  font-size: 18px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* debug helper */
+  font-weight: 500;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideIn 0.25s ease-in-out;
 }
 
 .success {
@@ -23,6 +24,7 @@
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);

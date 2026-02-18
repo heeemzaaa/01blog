@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportDialogComponent } from '../report-dialog/report-dialogcomponent';
 import { ReportTarget } from '../../models/report-target.enum';
 import { ReportService } from '../../services/report.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +32,7 @@ export class Profile {
   private postService = inject(PostService);
   private subscribeService = inject(SubscribeService);
   private reportService = inject(ReportService);
+  private toast = inject(ToastService);
 
   showConnectionsPopup = signal(false);
   popupTitle = signal<'Followers' | 'Following'>('Followers');
@@ -76,7 +78,6 @@ export class Profile {
   loadPosts(userId: string) {
     this.postService.getProfilePosts(userId).subscribe(res => {
       if (res.success) {
-        console.log('res.data :>> ', res.data);
         this.posts.set(res.data);
       }
     });
@@ -197,6 +198,7 @@ export class Profile {
   subscribe(userId: string) {
     this.subscribeService.subscribe(userId).subscribe(res => {
       if (res.success) {
+        this.toast.showSuccess("You subscribed successfully !")
         this.profile.update(p => p && ({
           ...p,
           following: true,
@@ -209,6 +211,7 @@ export class Profile {
   unsubscribe(userId: string) {
     this.subscribeService.unsubscribe(userId).subscribe(res => {
       if (res.success) {
+        this.toast.showSuccess("You unsubscribed successfully !")
         this.profile.update(p => p && ({
           ...p,
           following: false,
@@ -222,9 +225,9 @@ export class Profile {
     this.posts.update(posts => posts.filter(p => p.id !== postId));
 
     this.profile.update(p => p && ({
-        ...p,
-        nbr_of_posts: p.nbr_of_posts - 1
-      }));
+      ...p,
+      nbr_of_posts: p.nbr_of_posts - 1
+    }));
   }
 
   reportProfile() {
@@ -242,10 +245,10 @@ export class Profile {
 
       this.reportService.createReport(result).subscribe({
         next: () => {
-          console.log('Report sent successfully');
+          this.toast.showSuccess('Report sent successfully');
         },
         error: () => {
-          console.error('Error while reporting');
+          this.toast.showError('Error while reporting');
         },
       });
     });

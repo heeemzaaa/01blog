@@ -7,6 +7,7 @@ import { PostService } from '../../services/post.service';
 import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 import { UserResponse } from '../../models/user-response.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,6 @@ export class HomeComponent {
   loadFeed() {
     this.postService.getFeedPosts().subscribe(res => {
       if (res.success) {
-        console.log(res.data);
         this.posts.set(res.data);
       }
     });

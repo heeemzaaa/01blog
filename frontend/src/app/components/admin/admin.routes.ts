@@ -13,21 +13,6 @@ export const ADMIN_ROUTES: Routes = [
         path: '',
         component: AdminDashboard
       },
-      // {
-      //   path: 'users',
-      //   loadComponent: () =>
-      //     import('./users/users.component').then(m => m.UsersComponent)
-      // },
-      // {
-      //   path: 'posts',
-      //   loadComponent: () =>
-      //     import('./posts/posts.component').then(m => m.PostsComponent)
-      // },
-      // {
-      //   path: 'reports',
-      //   loadComponent: () =>
-      //     import('./reports/reports.component').then(m => m.ReportsComponent)
-      // },
       {
         path: 'reports/:id',
         loadComponent: () =>

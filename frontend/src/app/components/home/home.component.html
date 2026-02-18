@@ -44,8 +44,14 @@
 
   <section id="second_part" class="w-75 d-flex flex-column justify-content-start px-5 gap-3 feed">
     <h2 class="fw-bold">Your Feed</h2>
-    @for (post of posts(); track post.id) {
-    <app-post [post]="post" />
+    @if (posts().length > 0) {
+      @for (post of posts(); track post.id) {
+      <app-post [post]="post" />
+      }
+    } @else {
+      <div class="d-flex justify-content-center align-items-center border border-1 border-white">
+        <p class="text-center text-secondary p-0 m-0">Be the first one to post !</p>
+      </div>
     }
   </section>
 
