@@ -9,7 +9,7 @@ commentState()?.myComment
 {
 <div class="d-flex flex-column gap-3">
 
-  <div class="comment d-flex justify-content-start align-items-start gap-2">
+  <div role="button" class="comment d-flex justify-content-start align-items-start gap-2" (click)="toProfile(commentState()!.user.id)">
 
     <img [src]="commentState()?.user?.profileImage 
         ? 'http://localhost:8080' + commentState()?.user?.profileImage 

@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { UtilsService } from '../../services/utils.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comment',
@@ -33,6 +34,7 @@ export class CommentComponent {
   private utilsService = inject(UtilsService);
   private authService = inject(AuthService);
   private toast = inject(ToastService);
+  private router = inject(Router);
 
   currentUser = this.authService.currentUser;
 
@@ -184,5 +186,9 @@ export class CommentComponent {
         this.commentState.set(null);
       }
     });
+  }
+
+  toProfile(userId: string) {
+    this.router.navigate([`/profile/${userId}`])
   }
 }

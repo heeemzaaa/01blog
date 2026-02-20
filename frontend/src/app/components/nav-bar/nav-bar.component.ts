@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -15,7 +15,6 @@ import { SearchService } from '../../services/search.service';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css',
 })
-
 export class NavBar {
   router = inject(Router);
   authService = inject(AuthService);
@@ -24,6 +23,8 @@ export class NavBar {
   currentUser = this.authService.currentUser;
 
   isMenuOpen = signal<boolean>(false);
+  isAdmin = computed(() => this.currentUser()?.role === 'ADMIN');
+
 
   searchControl = new FormControl('');
   searchResults = signal<any>(null);
@@ -76,6 +77,10 @@ export class NavBar {
     if (this.router.url !== '/add-post') {
       this.router.navigate(['/add-post']);
     }
+  }
+
+  toAdminPanel() {
+    this.router.navigate(['/admin']);
   }
 
   toHome() {

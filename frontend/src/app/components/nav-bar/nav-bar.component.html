@@ -62,9 +62,16 @@
   <div class="d-flex gap-4 align-items-center profile-menu-wrapper">
     <mat-icon class="c-icon" (click)="toNotifications()">notifications</mat-icon>
 
-    <button role="button" class="c-button px-4 py-2 rounded fw-bold" (click)="toAddPost()">
-      + New Post
-    </button>
+    <div class="d-flex gap-2">
+      @if (isAdmin()) {
+      <button role="button" class="c-button px-4 py-2 rounded fw-bold" (click)="toAdminPanel()">
+        Admin Panel
+      </button>
+      }
+      <button role="button" class="c-button px-4 py-2 rounded fw-bold" (click)="toAddPost()">
+        + New Post
+      </button>
+    </div>
 
     <img [src]="currentUser()?.profileImage 
       ? 'http://localhost:8080' + currentUser()?.profileImage 

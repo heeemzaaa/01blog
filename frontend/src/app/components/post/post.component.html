@@ -4,7 +4,7 @@
 <div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1 w-100">
 
     <div class="d-flex justify-content-between">
-        <div id="image_and_name" class="d-flex gap-2 align-items-center">
+        <div role="button" id="image_and_name" class="d-flex gap-2 align-items-center" (click)="toProfile(postState()!.user.id)">
             <div id="image">
                 <img [src]="postState()?.user?.profileImage 
                         ? 'http://localhost:8080' + postState()?.user?.profileImage 

@@ -58,6 +58,7 @@ export class Post {
   private dialog = inject(MatDialog);
   private utilsService = inject(UtilsService);
   private toast = inject(ToastService);
+  private router = inject(Router);
 
   /* ================= State ================= */
 
@@ -325,5 +326,8 @@ export class Post {
     return isAdmin || isOwner;
   });
 
+  toProfile(userId: string) {
+    this.router.navigate([`/profile/${userId}`])
+  }
 
 }

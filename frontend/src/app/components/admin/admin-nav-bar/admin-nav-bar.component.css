@@ -1,0 +1,22 @@
+.c-border {
+    border-bottom: .2px solid rgb(38, 38, 38);
+}
+
+.custom-h {
+    height: 70px;
+}
+
+.px-c {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.cc-b {
+    border: .2px solid rgb(38, 38, 38);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.cc-b:hover {
+    background-color: rgb(35, 35, 35);
+}
