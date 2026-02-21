@@ -31,7 +31,6 @@ export class Login {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        console.log('Login successfull !');
 
         if (response.data.token) {
           this.authService.saveToken(response.data.token);
@@ -41,8 +40,8 @@ export class Login {
       },
 
       error: (err) => {
-        console.error(err);
-        this.errorMessage.set('Invalid email or password');
+        console.log('err :>> ', err);
+        this.errorMessage.set(err.error.message);
       }
     })
   }

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { SearchService } from '../../services/search.service';
+import { NotificationService } from '../../services/notification.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class NavBar {
   router = inject(Router);
   authService = inject(AuthService);
   searchService = inject(SearchService);
+  notificationService = inject(NotificationService);
 
   currentUser = this.authService.currentUser;
 
@@ -43,7 +45,7 @@ export class NavBar {
         })
       )
       .subscribe(res => {
-        this.searchResults.set(res.data); // because of ResponseData
+        this.searchResults.set(res.data);
         this.loading.set(false);
         this.showDropdown.set(true);
       });

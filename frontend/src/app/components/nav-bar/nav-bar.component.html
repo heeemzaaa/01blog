@@ -1,4 +1,4 @@
-<nav class="c-border custom-h d-flex justify-content-between align-items-center px-c bg-black mb-4">
+<nav class="cc-border custom-h d-flex justify-content-between align-items-center px-c bg-black mb-4">
 
   <div class="d-flex gap-5 align-items-center">
     <h2 class="fw-bolder" role="button" (click)="toHome()">01Blog</h2>
@@ -60,7 +60,15 @@
   </div>
 
   <div class="d-flex gap-4 align-items-center profile-menu-wrapper">
-    <mat-icon class="c-icon" (click)="toNotifications()">notifications</mat-icon>
+    <div class="notification-wrapper" (click)="toNotifications()">
+      <mat-icon class="c-icon">notifications</mat-icon>
+
+      @if (currentUser()!.nbr_of_notifications > 0) {
+      <div class="notification-badge">
+        {{ currentUser()?.nbr_of_notifications }}
+      </div>
+      }
+    </div>
 
     <div class="d-flex gap-2">
       @if (isAdmin()) {
@@ -93,8 +101,8 @@
           <button class="dropdown-item" [routerLink]="['profile', currentUser()?.id]">
             Profile
           </button>
-          <button class="dropdown-item" routerLink="/profile">
-            Settings
+          <button class="dropdown-item" routerLink="/about">
+            About the blog
           </button>
         </div>
         <button class="dropdown-item logout gap-5 d-flex" (click)="logout()">

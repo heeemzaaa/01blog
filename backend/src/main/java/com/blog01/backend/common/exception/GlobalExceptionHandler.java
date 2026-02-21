@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseData<Object>> handleConflict(DataIntegrityViolationException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ResponseData.error("Duplicate resource"));
+                .body(ResponseData.error(ex.getMessage()));
     }
 
     // 2. Handle 403 Forbidden (Security Block)
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseData<Object>> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
-                .body(ResponseData.error("You do not have permission to access this resource"));
+                .body(ResponseData.error(ex.getMessage()));
     }
 
     // 3. Handle Login Errors (Bad Credentials)
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseData<Object>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ResponseData.error("Invalid email or password"));
+                .body(ResponseData.error(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -65,6 +65,6 @@ public class GlobalExceptionHandler {
         ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ResponseData.error("An unexpected error occurred: " + ex.getMessage()));
+                .body(ResponseData.error(ex.getMessage()));
     }
 }

@@ -8,6 +8,7 @@ import { PostResponse } from '../../models/post-response.model';
 import { signal } from '@angular/core';
 import { UserResponse } from '../../models/user-response.model';
 import { ToastService } from '../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -21,11 +22,16 @@ export class HomeComponent {
   currentUser = signal<UserResponse | null>(null);
   private authService = inject(AuthService);
   private postService = inject(PostService);
+  private router = inject(Router);
 
   posts = signal<PostResponse[]>([]);
 
   constructor() {
     this.loadFeed();
+  }
+
+    toProfile(userId: string) {
+    this.router.navigate([`/profile/${userId}`])
   }
 
   loadFeed() {

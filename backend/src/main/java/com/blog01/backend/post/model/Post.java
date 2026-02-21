@@ -2,6 +2,9 @@ package com.blog01.backend.post.model;
 
 import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.medias.model.PostMedias;
 
@@ -23,12 +26,14 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<PostMedias> medias;
+    @Builder.Default
+    private List<PostMedias> medias = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;

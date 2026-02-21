@@ -17,3 +17,7 @@
     padding-left: 10%;
     padding-right: 10%;
 }
+
+.c-height {
+    min-height: 700px;
+}

@@ -29,11 +29,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResponseData<UserResponse>> login(@RequestBody UserLogin request) {
         ResponseData<UserResponse> response = us.login(request);
-
-        if (!response.isSuccess()) {
-            return ResponseEntity.status(401).body(response);
-        }
-
         return ResponseEntity.ok(response);
     }
 

@@ -1,10 +1,12 @@
 package com.blog01.backend.notification.model;
 
-
 import com.blog01.backend.auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,17 +23,19 @@ public class Notification {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "recipient_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User recipient;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "actor_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User actor;
 
     public enum NotificationType {
-        LIKE,           
+        LIKE,
         COMMENT,
-        NEW_POST,       
+        NEW_POST,
         REPORT_CREATED,
         REPORT_UPDATE,
         FOLLOW

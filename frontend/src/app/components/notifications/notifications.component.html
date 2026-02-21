@@ -8,10 +8,12 @@
                 </span>
             </div>
             <div id="actions" class="d-flex gap-2">
-                <button role="button" class="b_1 px-3 py-1 fw-bold d-flex gap-2" (click)="markAllAsRead()">
-                    <mat-icon>done</mat-icon>
-                    Mark all as read
-                </button>
+                @if (getUnreadCount() > 0) {
+                    <button role="button" class="b_1 px-3 py-1 fw-bold d-flex gap-2" (click)="markAllAsRead()">
+                        <mat-icon>done</mat-icon>
+                        Mark all as read
+                    </button>
+                }
 
             </div>
         </section>

@@ -26,7 +26,6 @@ import com.blog01.backend.security.CustomUserDetailsService;
 import com.blog01.backend.security.JwtUtils;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -44,43 +43,40 @@ public class AuthService {
     private final SubscribesRepository subscribesRepository;
 
     public ResponseData<UserResponse> login(UserLogin requestUser) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
 
-            User user = ur.findByEmail(requestUser.getEmail()).orElseThrow();
+        User user = ur.findByEmail(requestUser.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (!user.isActive()) {
-                throw new BadCredentialsException("You are banned from the application !");
-            }
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-            String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
-
-            long nbr_of_posts = postRepository.countByUser(user);
-            long nbr_of_following = subscribesRepository.countBySubscriber(user);
-            long nbr_of_followers = subscribesRepository.countByUser(user);
-            long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
-
-            UserResponse userResponse = UserResponse.builder()
-                    .token(jwtToken)
-                    .id(user.getId())
-                    .username(user.getUsername())
-                    .firstName(user.getFirstName())
-                    .lastName(user.getLastName())
-                    .profileImage(user.getProfileImage())
-                    .nbr_of_posts(nbr_of_posts)
-                    .nbr_of_followers(nbr_of_followers)
-                    .nbr_of_following(nbr_of_following)
-                    .nbr_of_notifications(nbr_of_notifications)
-                    .role(user.getRole())
-                    .active(user.isActive())
-                    .build();
-
-            return ResponseData.success("User logged in successfully !", userResponse);
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid credentials !");
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
         }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        String jwtToken = jwtUtils.generateToken(userDetails, user.getId());
+
+        long nbr_of_posts = postRepository.countByUser(user);
+        long nbr_of_following = subscribesRepository.countBySubscriber(user);
+        long nbr_of_followers = subscribesRepository.countByUser(user);
+        long nbr_of_notifications = notificationRepository.countByRecipientAndSeenFalse(user);
+
+        UserResponse userResponse = UserResponse.builder()
+                .token(jwtToken)
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .profileImage(user.getProfileImage())
+                .nbr_of_posts(nbr_of_posts)
+                .nbr_of_followers(nbr_of_followers)
+                .nbr_of_following(nbr_of_following)
+                .nbr_of_notifications(nbr_of_notifications)
+                .role(user.getRole())
+                .active(user.isActive())
+                .build();
+
+        return ResponseData.success("User logged in successfully !", userResponse);
+
     }
 
     public ResponseData<UserResponse> register(

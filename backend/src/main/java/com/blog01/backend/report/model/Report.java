@@ -1,8 +1,10 @@
 package com.blog01.backend.report.model;
 
-
 import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.blog01.backend.auth.model.User;
 import java.util.UUID;
 import jakarta.persistence.*;
@@ -20,8 +22,9 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reporter_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User reporter;
 
     public enum Target {
@@ -40,7 +43,7 @@ public class Report {
     @Column(nullable = false)
     private String reason;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     public enum StatusOfReports {

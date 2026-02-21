@@ -54,7 +54,6 @@ export class AuthService {
         );
     }
 
-
     register(userData: any): Observable<ApiResponse<UserResponse>> {
         return this.http.post<ApiResponse<UserResponse>>(
             `${this.baseUrl}/register`,
