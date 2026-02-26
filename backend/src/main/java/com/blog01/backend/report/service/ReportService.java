@@ -1,6 +1,8 @@
 package com.blog01.backend.report.service;
 
 import java.util.stream.Collectors;
+
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import com.blog01.backend.auth.model.User;
 import com.blog01.backend.auth.repository.UserRepository;
@@ -32,7 +34,10 @@ public class ReportService {
 
     public ResponseData<ReportResponse> createReport(String email, ReportRequest request) {
         User reporter = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email not Found !"));
-
+        if (!reporter.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
+        
         boolean targetExists;
 
         if (request.getTargetType() == Report.Target.POST) {
@@ -46,7 +51,8 @@ public class ReportService {
         }
 
         if (!targetExists) {
-            throw new NoSuchElementException("The " + request.getTargetType() + " you are trying to report does not exist.");
+            throw new NoSuchElementException(
+                    "The " + request.getTargetType() + " you are trying to report does not exist.");
         }
 
         Report report = Report.builder()

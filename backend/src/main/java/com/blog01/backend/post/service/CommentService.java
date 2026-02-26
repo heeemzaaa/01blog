@@ -1,6 +1,7 @@
 package com.blog01.backend.post.service;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,9 @@ public class CommentService {
 
     public ResponseData<List<CommentResponse>> getCommentsByPost(UUID postId, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found !"));
         List<Comment> comments = commentRepository.findByPostOrderByCommentedAtAsc(post);
         List<CommentResponse> response = comments.stream()
@@ -40,6 +44,9 @@ public class CommentService {
 
     public ResponseData<CommentResponse> createComment(String email, UUID postId, CommentRequest request) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found !"));
 
         if (!post.isVisible()) {
@@ -66,8 +73,15 @@ public class CommentService {
     public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate,
             MultipartFile commentImage) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found !"));
+
+        if (!comment.isVisible()) {
+            throw new AccessDeniedException("You can't update a hidden comment !");
+        }
 
         if (!user.getId().equals(comment.getUser().getId())) {
             throw new AccessDeniedException("You cannot update a comment that is not yours !");
@@ -80,8 +94,12 @@ public class CommentService {
 
     public ResponseData<String> deleteComment(String email, UUID postId, UUID commentId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found !"));
+
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found !"));
 
         if (user.getId().equals(post.getUser().getId()) || user.getId().equals(comment.getUser().getId())) {

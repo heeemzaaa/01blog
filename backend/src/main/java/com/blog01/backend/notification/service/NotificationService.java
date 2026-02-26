@@ -12,6 +12,7 @@ import com.blog01.backend.notification.response.NotificationResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -43,6 +44,9 @@ public class NotificationService {
 
     public ResponseData<List<NotificationResponse>> getMyNotifications(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         List<Notification> list = notificationRepository.findByRecipientOrderByCreatedAtDesc(user);
 
         List<NotificationResponse> response = list.stream()
@@ -54,7 +58,9 @@ public class NotificationService {
 
     public ResponseData<String> markAsRead(String email, UUID notificationId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
 
@@ -70,6 +76,9 @@ public class NotificationService {
 
     public ResponseData<String> markAllAsRead(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         List<Notification> unread = notificationRepository.findByRecipientOrderByCreatedAtDesc(user);
 
         for (Notification n : unread) {
@@ -85,6 +94,10 @@ public class NotificationService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
 
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NoSuchElementException("Notification not found"));

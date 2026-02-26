@@ -13,6 +13,7 @@ import com.blog01.backend.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public class LikeService {
 
     public ResponseData<String> toggleLike(String email, UUID postId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        if (!user.isActive()) {
+            throw new BadCredentialsException("You are banned !");
+        }
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
 
         if (!post.isVisible()) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,12 +27,15 @@ import com.blog01.backend.security.CustomUserDetailsService;
 import com.blog01.backend.security.JwtUtils;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthService {
     private final UserRepository ur;
     private final PasswordEncoder pe;
@@ -82,12 +86,12 @@ public class AuthService {
     public ResponseData<UserResponse> register(
             UserRegister userRequest,
             MultipartFile profileImage) {
+
         if (ur.existsByEmail(userRequest.getEmail())) {
             throw new DataIntegrityViolationException("Email already existed, try another one !");
         }
 
-        String imagePath = saveProfileImage(profileImage);
-
+        // 1️⃣ Create user without image
         User userToCreate = User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
@@ -95,11 +99,19 @@ public class AuthService {
                 .email(userRequest.getEmail())
                 .about(userRequest.getAbout())
                 .password(pe.encode(userRequest.getPassword()))
-                .profileImage(imagePath)
                 .build();
 
         User saved = ur.save(userToCreate);
 
+        // 2️⃣ Save image using generated ID
+        String imagePath = saveProfileImage(saved.getId(), profileImage);
+
+        if (imagePath != null) {
+            saved.setProfileImage(imagePath);
+            ur.save(saved);
+        }
+
+        // 3️⃣ Continue normally
         UserDetails userDetails = userDetailsService.loadUserByUsername(saved.getEmail());
         String jwtToken = jwtUtils.generateToken(userDetails, saved.getId());
 
@@ -153,26 +165,33 @@ public class AuthService {
         return ResponseData.success("User validated", me);
     }
 
-    private String saveProfileImage(MultipartFile file) {
+    private String saveProfileImage(UUID userId, MultipartFile file) {
+
         if (file == null || file.isEmpty()) {
             return null;
         }
 
         try {
-            String uploadDir = "uploads/users/";
-            Files.createDirectories(Paths.get(uploadDir));
+            String uploadDir = "uploads/users/" + userId;
+            Path uploadPath = Paths.get(uploadDir);
+
+            Files.createDirectories(uploadPath);
 
             String extension = Optional.ofNullable(file.getOriginalFilename())
                     .filter(name -> name.contains("."))
                     .map(name -> name.substring(name.lastIndexOf(".")))
                     .orElse(".jpg");
 
-            String fileName = UUID.randomUUID() + extension;
-            Path filePath = Paths.get(uploadDir + fileName);
+            String fileName = "profile" + extension; // always same name
 
-            Files.write(filePath, file.getBytes());
+            Path filePath = uploadPath.resolve(fileName);
 
-            return "/media/users/" + fileName;
+            Files.copy(
+                    file.getInputStream(),
+                    filePath,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            return "/media/users/" + userId + "/" + fileName;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to store profile image", e);

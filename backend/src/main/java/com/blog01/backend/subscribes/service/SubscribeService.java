@@ -1,5 +1,6 @@
 package com.blog01.backend.subscribes.service;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -18,113 +19,133 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SubscribeService {
 
-    private final SubscribesRepository sr;
-    private final UserRepository ur;
-    private final NotificationService us;
+        private final SubscribesRepository sr;
+        private final UserRepository ur;
+        private final NotificationService us;
 
-    /* ===================== GET SUBSCRIBERS ===================== */
-    public ResponseData<List<UserResponse>> getSubscribers(UUID userId) {
+        /* ===================== GET SUBSCRIBERS ===================== */
+        public ResponseData<List<UserResponse>> getSubscribers(UUID userId) {
 
-        User user = ur.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                User user = ur.findById(userId)
+                                .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        List<UserResponse> subscribers = sr.findByUser(user).stream()
-                .map(sub -> mapToUserResponse(sub.getSubscriber()))
-                .toList();
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
-        return ResponseData.success("Subscribers fetched successfully", subscribers);
-    }
+                List<UserResponse> subscribers = sr.findByUser(user).stream()
+                                .map(sub -> mapToUserResponse(sub.getSubscriber()))
+                                .toList();
 
-    /* ===================== GET SUBSCRIBED ===================== */
-    public ResponseData<List<UserResponse>> getSubscribed(UUID userId) {
-
-        User user = ur.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-        List<UserResponse> subscribed = sr.findBySubscriber(user).stream()
-                .map(sub -> mapToUserResponse(sub.getUser()))
-                .toList();
-
-        return ResponseData.success("Subscribed users fetched successfully", subscribed);
-    }
-
-    /* ===================== SUBSCRIBE ===================== */
-    public ResponseData<Void> subscribe(String email, UUID targetUserId) {
-
-        User subscriber = ur.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
-
-        User target = ur.findById(targetUserId)
-                .orElseThrow(() -> new NoSuchElementException("User to subscribe doesn't exist"));
-
-        if (subscriber.getId().equals(target.getId())) {
-            throw new IllegalArgumentException("You cannot subscribe to yourself");
+                return ResponseData.success("Subscribers fetched successfully", subscribers);
         }
 
-        if (sr.existsBySubscriberAndUser(subscriber, target)) {
-            throw new IllegalArgumentException("You are already a subscriber to this user");
+        /* ===================== GET SUBSCRIBED ===================== */
+        public ResponseData<List<UserResponse>> getSubscribed(UUID userId) {
+
+                User user = ur.findById(userId)
+                                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
+
+                List<UserResponse> subscribed = sr.findBySubscriber(user).stream()
+                                .map(sub -> mapToUserResponse(sub.getUser()))
+                                .toList();
+
+                return ResponseData.success("Subscribed users fetched successfully", subscribed);
         }
 
-        sr.save(Subscribe.builder()
-                .subscriber(subscriber)
-                .user(target)
-                .build());
+        /* ===================== SUBSCRIBE ===================== */
+        public ResponseData<Void> subscribe(String email, UUID targetUserId) {
 
-        us.sendNotification(target, subscriber, NotificationType.FOLLOW, targetUserId);
+                User subscriber = ur.findByEmail(email)
+                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
 
-        return ResponseData.success("You are now a subscriber to this user", null);
-    }
+                if (!subscriber.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
-    /* ===================== UNSUBSCRIBE ===================== */
-    public ResponseData<Void> unsubscribe(String email, UUID targetUserId) {
+                User target = ur.findById(targetUserId)
+                                .orElseThrow(() -> new NoSuchElementException("User to subscribe doesn't exist"));
 
-        User user = ur.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+                if (subscriber.getId().equals(target.getId())) {
+                        throw new IllegalArgumentException("You cannot subscribe to yourself");
+                }
 
-        User target = ur.findById(targetUserId)
-                .orElseThrow(() -> new NoSuchElementException("User to unsubscribe doesn't exist"));
+                if (sr.existsBySubscriberAndUser(subscriber, target)) {
+                        throw new IllegalArgumentException("You are already a subscriber to this user");
+                }
 
-        if (user.getId().equals(target.getId())) {
-            throw new IllegalArgumentException("You cannot unsubscribe from yourself");
+                sr.save(Subscribe.builder()
+                                .subscriber(subscriber)
+                                .user(target)
+                                .build());
+
+                us.sendNotification(target, subscriber, NotificationType.FOLLOW, targetUserId);
+
+                return ResponseData.success("You are now a subscriber to this user", null);
         }
 
-        Subscribe subscribe = sr.findBySubscriberAndUser(user, target)
-                .orElseThrow(() -> new NoSuchElementException("You are not a subscriber to this user"));
+        /* ===================== UNSUBSCRIBE ===================== */
+        public ResponseData<Void> unsubscribe(String email, UUID targetUserId) {
 
-        sr.delete(subscribe);
+                User user = ur.findByEmail(email)
+                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
 
-        return ResponseData.success("You are now unsubscribed from this user", null);
-    }
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
-    /* ===================== DELETE SUBSCRIBER ===================== */
-    public ResponseData<Void> deleteSubscriber(String email, UUID deletedUserId) {
+                User target = ur.findById(targetUserId)
+                                .orElseThrow(() -> new NoSuchElementException("User to unsubscribe doesn't exist"));
 
-        User user = ur.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+                if (user.getId().equals(target.getId())) {
+                        throw new IllegalArgumentException("You cannot unsubscribe from yourself");
+                }
 
-        User deletedUser = ur.findById(deletedUserId)
-                .orElseThrow(() -> new NoSuchElementException("User to remove doesn't exist"));
+                Subscribe subscribe = sr.findBySubscriberAndUser(user, target)
+                                .orElseThrow(() -> new NoSuchElementException("You are not a subscriber to this user"));
 
-        if (user.getId().equals(deletedUser.getId())) {
-            throw new IllegalArgumentException("You don't have any relation with yourself");
+                sr.delete(subscribe);
+
+                return ResponseData.success("You are now unsubscribed from this user", null);
         }
 
-        Subscribe subscribe = sr.findBySubscriberAndUser(deletedUser, user)
-                .orElseThrow(() -> new NoSuchElementException("This user is not your subscriber"));
+        /* ===================== DELETE SUBSCRIBER ===================== */
+        public ResponseData<Void> deleteSubscriber(String email, UUID deletedUserId) {
 
-        sr.delete(subscribe);
+                User user = ur.findByEmail(email)
+                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
 
-        return ResponseData.success("Subscriber removed successfully", null);
-    }
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
-    /* ===================== MAPPER ===================== */
-    private UserResponse mapToUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .profileImage(user.getProfileImage())
-                .build();
-    }
+                User deletedUser = ur.findById(deletedUserId)
+                                .orElseThrow(() -> new NoSuchElementException("User to remove doesn't exist"));
+
+                if (user.getId().equals(deletedUser.getId())) {
+                        throw new IllegalArgumentException("You don't have any relation with yourself");
+                }
+
+                Subscribe subscribe = sr.findBySubscriberAndUser(deletedUser, user)
+                                .orElseThrow(() -> new NoSuchElementException("This user is not your subscriber"));
+
+                sr.delete(subscribe);
+
+                return ResponseData.success("Subscriber removed successfully", null);
+        }
+
+        /* ===================== MAPPER ===================== */
+        private UserResponse mapToUserResponse(User user) {
+                return UserResponse.builder()
+                                .id(user.getId())
+                                .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                .username(user.getUsername())
+                                .profileImage(user.getProfileImage())
+                                .build();
+        }
 }

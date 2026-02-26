@@ -1,6 +1,7 @@
 package com.blog01.backend.post.service;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.blog01.backend.auth.model.User;
@@ -35,11 +36,16 @@ public class PostService {
         private final NotificationService notificationService;
         private final SubscribesRepository subscribesRepository;
         private final PostMediaService postMediaService;
-
+        
+        @Transactional
         public ResponseData<List<PostResponse>> getFeedPosts(String email) {
 
                 User currentUser = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+                if (!currentUser.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
                 List<Subscribe> subscriptions = subscribesRepository.findBySubscriber(currentUser);
 
@@ -64,6 +70,10 @@ public class PostService {
 
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
+
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
                 Post post = Post.builder()
                                 .user(user)
@@ -92,6 +102,9 @@ public class PostService {
         public ResponseData<List<PostResponse>> getProfilePosts(UUID userId, String email) {
 
                 User viewer = userRepository.findByEmail(email).orElseThrow();
+                if (!viewer.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
                 User profileUser = userRepository.findById(userId).orElseThrow();
 
                 List<Post> posts;
@@ -117,11 +130,15 @@ public class PostService {
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("There is no user with this email !"));
 
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
+
                 Post post = postRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Cannot find this post !"));
 
                 if (!post.isVisible()) {
-                        throw new AccessDeniedException("You can't update an invisible post !");
+                        throw new AccessDeniedException("You can't update a hidden post !");
                 }
 
                 if (!post.getUser().getId().equals(user.getId())) {
@@ -148,6 +165,10 @@ public class PostService {
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+                if (!user.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
+
                 Post post = postRepository.findById(postId)
                                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
@@ -166,6 +187,10 @@ public class PostService {
 
                 User currentUser = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+                if (!currentUser.isActive()) {
+                        throw new BadCredentialsException("You are banned !");
+                }
 
                 Post post = postRepository.findById(postId)
                                 .orElseThrow(() -> new RuntimeException("Post not found"));
