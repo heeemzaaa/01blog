@@ -230,3 +230,107 @@ a:hover {
         max-width: 32px;
     }
 }
+
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    .login-card {
+        width: 100%;
+        max-width: 520px;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 576px) {
+
+    .login-wrapper {
+        padding: 20px;
+        gap: 18px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .login-card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .card-title {
+        margin-bottom: 22px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    .card-title>p {
+        font-size: 14px;
+    }
+
+    /* Fix global input padding issue */
+    input {
+        width: 100%;
+        padding-right: 12px;
+    }
+
+    .form-group textarea {
+        width: 100%;
+    }
+
+    /* Buttons stacked instead of side by side */
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .submit-btn,
+    .back-btn {
+        width: 100%;
+    }
+
+    .next-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    /* Progress bar more visible */
+    .progress-wrapper {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+
+    .progress-bar {
+        max-width: 40px;
+    }
+
+    /* Improve file input tap area */
+    .file-input {
+        font-size: 14px;
+    }
+
+    .image-preview img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .btn-remove {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    .footer>p {
+        font-size: 14px;
+    }
+
+}
