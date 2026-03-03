@@ -16,3 +16,82 @@
     border-radius: 8px;
     background-color: #111;
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    main>section.w-50 {
+        width: 80% !important;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    main {
+        padding: 20px;
+    }
+
+    main>section.w-50 {
+        width: 100% !important;
+    }
+
+    /* Comments container */
+    section.c-border {
+        padding: 20px !important;
+        gap: 20px !important;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    /* Comment row stacked */
+    .add-comment {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px !important;
+    }
+
+    .add-comment .c-image {
+        width: 36px;
+        height: 36px;
+    }
+
+    .add-comment input {
+        width: 100%;
+        padding-right: 12px;
+        /* override global 200px padding */
+    }
+
+    .add-comment button {
+        width: 100%;
+    }
+
+    /* Empty message smaller */
+    section p.fs-5 {
+        font-size: 15px !important;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    .add-comment .c-image {
+        width: 32px;
+        height: 32px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+}

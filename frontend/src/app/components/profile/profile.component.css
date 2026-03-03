@@ -88,3 +88,113 @@
     border: .2px solid #2c2c2c;
     border-radius: 5px;
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    #user_details,
+    #posts_of_user {
+        width: 80% !important;
+    }
+
+    .custom-padding {
+        padding-left: 5%;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    main {
+        padding: 20px !important;
+        gap: 30px !important;
+    }
+
+    #user_details,
+    #posts_of_user {
+        width: 100% !important;
+    }
+
+    #user_details {
+        padding: 20px !important;
+    }
+
+    /* Header stacked */
+    #user_details>div:first-child>div:first-child {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .custom-padding {
+        padding-left: 0 !important;
+    }
+
+    /* Profile image + bio stacked */
+    #user_details>div:nth-child(2) {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 16px;
+    }
+
+    .custom-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    #user_details p {
+        font-size: 14px;
+    }
+
+    /* Contact + location stacked */
+    #user_details>div:nth-child(3) {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 8px;
+    }
+
+    .px-6 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* User numbers grid style */
+    #user_numbers {
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between !important;
+    }
+
+    #user_numbers>div {
+        width: 45%;
+    }
+
+    #user_numbers p {
+        font-size: 18px !important;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    .custom-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    #user_numbers>div {
+        width: 100%;
+    }
+
+    #user_details h2 {
+        font-size: 20px;
+    }
+
+}

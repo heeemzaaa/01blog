@@ -146,3 +146,99 @@
 }
 
 
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+  .admin-search {
+    width: 200px;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Stats cards spacing */
+  .admin-card {
+    padding: 20px !important;
+  }
+
+  .admin-card h3 {
+    font-size: 20px;
+  }
+
+  /* Tabs stacked */
+  .admin-tabs {
+    flex-direction: column;
+  }
+
+  .tab {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  /* Search full width */
+  .admin-search {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* User item stacked */
+  .user-item>div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+
+  /* Right side stacked */
+  .user-item .d-flex.align-items-center.gap-3,
+  .user-item .d-flex.flex-column.gap-2,
+  .user-item .d-flex.flex-column.align-items-end.gap-2 {
+    width: 100%;
+    align-items: flex-start !important;
+  }
+
+  /* Action buttons full width */
+  .action-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Status badges spacing */
+  .status-badge {
+    margin-bottom: 6px;
+  }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+  .admin-card {
+    padding: 16px !important;
+  }
+
+  .admin-card h3 {
+    font-size: 18px;
+  }
+
+  .tab {
+    font-size: 13px;
+  }
+
+  .user-item {
+    padding: 14px !important;
+  }
+
+}

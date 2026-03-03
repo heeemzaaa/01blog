@@ -79,3 +79,76 @@
     padding: 2px 8px;
     border-radius: 6px;
 }
+
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .comment {
+        align-items: flex-start !important;
+    }
+
+    .c-image {
+        width: 34px;
+        height: 34px;
+    }
+
+    .custom-border {
+        padding: 14px !important;
+    }
+
+    /* Header inside comment */
+    .custom-border>div:first-child {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 6px;
+    }
+
+    /* Name + meta stacked */
+    .custom-border>div:first-child>div:first-child {
+        flex-wrap: wrap;
+        gap: 6px !important;
+    }
+
+    .custom-border span {
+        font-size: 12px;
+    }
+
+    .custom-border .fw-bold {
+        font-size: 14px;
+    }
+
+    .custom-border p {
+        font-size: 14px;
+    }
+
+    /* Menu button smaller */
+    button[mat-icon-button] mat-icon {
+        font-size: 20px;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    .c-image {
+        width: 30px;
+        height: 30px;
+    }
+
+    .custom-border {
+        padding: 12px !important;
+    }
+
+    .hidden-comment-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+}

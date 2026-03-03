@@ -30,3 +30,64 @@
     transform: translateX(0);
   }
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Prevent overflow on all screens */
+.custom-toast {
+  max-width: 90vw;
+  word-wrap: break-word;
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+
+  .custom-toast {
+    right: 16px;
+    top: 16px;
+    padding: 12px 18px;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .custom-toast {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    top: 16px;
+    width: calc(100% - 32px);
+    max-width: 500px;
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+  .custom-toast {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+}

@@ -85,3 +85,99 @@
     background-color: #aaaaaa;
     border: .2px solid #aaaaaa;
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    form.w-50 {
+        width: 80% !important;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    main {
+        padding: 20px !important;
+    }
+
+    form.w-50 {
+        width: 100% !important;
+        padding: 20px !important;
+        border-radius: 16px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .clr {
+        font-size: 14px;
+    }
+
+    /* Fix global input padding issue */
+    input {
+        width: 100%;
+        padding-right: 12px;
+    }
+
+    .form-group textarea {
+        width: 100%;
+    }
+
+    /* Upload box */
+    .dashed {
+        padding: 16px !important;
+    }
+
+    .c-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+
+    .upload-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Media previews responsive */
+    .position-relative img,
+    .position-relative video {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    /* Bottom buttons stacked */
+    form>div:last-child {
+        flex-direction: column;
+        gap: 12px !important;
+    }
+
+    form>div:last-child button {
+        width: 100%;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .position-relative img,
+    .position-relative video {
+        width: 85px !important;
+        height: 85px !important;
+    }
+
+}

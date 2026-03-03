@@ -9,7 +9,7 @@ commentState()?.myComment
 {
 <div class="d-flex flex-column gap-3">
 
-  <div role="button" class="comment d-flex justify-content-start align-items-start gap-2" (click)="toProfile(commentState()!.user.id)">
+  <div class="comment d-flex justify-content-start align-items-start gap-2">
 
     <img [src]="commentState()?.user?.profileImage 
         ? 'http://localhost:8080' + commentState()?.user?.profileImage 
@@ -19,7 +19,7 @@ commentState()?.myComment
 
       <div class="d-flex justify-content-between">
 
-        <div class="d-flex gap-2 align-items-center">
+        <div role="button" class="d-flex gap-2 align-items-center" (click)="toProfile(commentState()!.user.id)">
 
           <span class="fw-bold">
             {{ commentState()?.user?.firstName }}
@@ -111,7 +111,7 @@ commentState()?.myComment
 
       </div>
 
-      <p class="m-0">
+      <p class="m-0 text-break">
         {{ commentState()?.content }}
       </p>
 

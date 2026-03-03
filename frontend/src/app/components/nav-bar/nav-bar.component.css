@@ -154,3 +154,103 @@
 }
 
 
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    .px-c {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .custom-input {
+        padding-right: 12px;
+        /* override 200px */
+        width: 220px;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    nav {
+        flex-wrap: wrap;
+        gap: 12px;
+        height: auto !important;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .custom-h {
+        height: auto;
+    }
+
+    .px-c {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* Stack left and right sections */
+    nav>div:first-child {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    nav>div:last-child {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Search full width */
+    .custom-input {
+        width: 100%;
+        padding-right: 12px;
+    }
+
+    .search-live-dropdown {
+        width: 100%;
+    }
+
+    /* Buttons smaller */
+    .c-button {
+        padding: 6px 12px !important;
+        font-size: 14px;
+    }
+
+    /* Profile image smaller */
+    .c-image {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* Notification icon smaller */
+    .c-icon {
+        font-size: 20px;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    h2.fw-bolder {
+        font-size: 18px;
+    }
+
+    .c-button {
+        padding: 5px 10px !important;
+        font-size: 13px;
+    }
+
+    .profile-dropdown {
+        right: 0;
+        min-width: 160px;
+    }
+
+}

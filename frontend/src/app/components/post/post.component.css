@@ -84,3 +84,101 @@ button[disabled] {
     opacity: 0.5;
     pointer-events: none;
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    .c_image.chosen {
+        height: 300px;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    #post_card {
+        padding: 16px !important;
+        gap: 20px !important;
+    }
+
+    /* Header layout tighter */
+    .custom_image {
+        width: 45px;
+        height: 45px;
+    }
+
+    #names_and_time p {
+        font-size: 15px;
+    }
+
+    #names_and_time span {
+        font-size: 12px;
+    }
+
+    /* Title & content */
+    #title_and_content h3 {
+        font-size: 18px;
+    }
+
+    #title_and_content p {
+        font-size: 14px;
+    }
+
+    /* Main media responsive */
+    .c_image.chosen {
+        height: 250px;
+    }
+
+    /* Thumbnails scroll horizontally instead of breaking */
+    #all_images {
+        overflow-x: auto;
+    }
+
+    #all_images .c_image {
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+
+    /* Reactions tighter */
+    #reactions {
+        gap: 25px !important;
+    }
+
+    .custom-heart,
+    .custom-comment {
+        font-size: 26px;
+        width: 26px;
+        height: 26px;
+    }
+
+    #reactions span {
+        font-size: 16px !important;
+    }
+
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    #post_card {
+        padding: 14px !important;
+    }
+
+    .c_image.chosen {
+        height: 200px;
+    }
+
+    .custom_image {
+        width: 40px;
+        height: 40px;
+    }
+
+}

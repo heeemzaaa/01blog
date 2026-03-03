@@ -21,3 +21,100 @@
 .c-height {
     min-height: 700px;
 }
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    .px-custom {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    #first_part {
+        width: 35% !important;
+    }
+
+    #second_part {
+        width: 65% !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    main {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+
+    .px-custom {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* Sidebar becomes full width */
+    #first_part {
+        width: 100% !important;
+    }
+
+    #second_part {
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* User info card adjustments */
+    #user_infos,
+    #user_interactions {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    /* Profile image smaller */
+    .custom_image {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Numbers more balanced */
+    #user_numbers p {
+        font-size: 18px !important;
+    }
+
+    #user_numbers span {
+        font-size: 12px;
+    }
+
+    /* Remove forced big height */
+    .c-height {
+        min-height: 300px;
+    }
+
+}
+
+
+/* Small Phones */
+@media (max-width: 480px) {
+
+    .custom_image {
+        width: 45px;
+        height: 45px;
+    }
+
+    #names p {
+        font-size: 15px !important;
+    }
+
+    #names span {
+        font-size: 12px !important;
+    }
+
+}

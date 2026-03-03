@@ -33,33 +33,31 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register", consumes = "multipart/form-data")
-public ResponseEntity<ResponseData<UserResponse>> register(
-        @RequestParam String firstName,
-        @RequestParam String lastName,
-        @RequestParam String username,
-        @RequestParam String email,
-        @RequestParam String password,
-        @RequestParam(required = false) String about,
-        @RequestParam(required = false) MultipartFile profileImage
-) {
+    public ResponseEntity<ResponseData<UserResponse>> register(
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) String about,
+            @RequestParam(required = false) MultipartFile profileImage) {
 
-    UserRegister request = new UserRegister();
-    request.setFirstName(firstName);
-    request.setLastName(lastName);
-    request.setUsername(username);
-    request.setEmail(email);
-    request.setPassword(password);
-    request.setAbout(about);
+        UserRegister request = new UserRegister();
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setUsername(username);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setAbout(about);
 
-    ResponseData<UserResponse> response = us.register(request, profileImage);
+        ResponseData<UserResponse> response = us.register(request, profileImage);
 
-    if (!response.isSuccess()) {
-        return ResponseEntity.status(409).body(response);
+        if (!response.isSuccess()) {
+            return ResponseEntity.status(409).body(response);
+        }
+
+        return ResponseEntity.status(201).body(response);
     }
-
-    return ResponseEntity.status(201).body(response);
-}
-
 
     @GetMapping("/me")
     public ResponseEntity<ResponseData<UserResponse>> getMe(Principal principal) {
