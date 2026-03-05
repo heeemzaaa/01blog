@@ -24,10 +24,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-             HttpServletRequest request,
-             HttpServletResponse response,
-             FilterChain filterChain
-    ) throws ServletException, IOException {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -39,28 +38,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 2. Extract the token (Remove "Bearer " prefix)
-        jwt = authHeader.substring(7);
-        
-        // 3. Extract the User Email from the token
-        userEmail = jwtUtils.extractEmail(jwt); 
+        try {
+            jwt = authHeader.substring(7);
+            userEmail = jwtUtils.extractEmail(jwt);
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 4. If email exists and user is not already authenticated
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            
+
             // Get user details from database
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
             // 5. Validate the token
             if (jwtUtils.isTokenValid(jwt, userDetails)) {
-                
+
                 // 6. Create an Authentication Token manually
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
-                        userDetails.getAuthorities()
-                );
-                
+                        userDetails.getAuthorities());
+
                 // Add request details (IP, Session ID, etc.)
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        
+
         // Continue the filter chain
         filterChain.doFilter(request, response);
     }

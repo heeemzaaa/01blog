@@ -5,6 +5,7 @@ import { NotificationResponse } from '../../models/notification-response.model';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationType } from '../../models/notification-type.enum';
 import { UtilsService } from '../../services/utils.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notifications',
@@ -16,6 +17,7 @@ import { UtilsService } from '../../services/utils.service';
 export class Notifications {
   private notificationService = inject(NotificationService);
   private utilsService = inject(UtilsService);
+  private router = inject(Router);
   notifications = this.notificationService.notifications;
 
 
@@ -40,7 +42,12 @@ export class Notifications {
         );
       },
       error: (err) => {
-        console.error('Failed to mark notification as read', err);
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        console.error('Failed to mark notification as read');
       },
     });
   }
@@ -55,7 +62,12 @@ export class Notifications {
         );
       },
       error: (err) => {
-        console.error('Failed to mark all as read', err);
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        console.error('Failed to mark all as read');
       },
     });
   }
@@ -63,12 +75,17 @@ export class Notifications {
   deleteNotification(notificationId: string) {
     this.notificationService.deleteNotification(notificationId).subscribe({
       next: () => {
-        this.notifications.update(list => 
+        this.notifications.update(list =>
           list.filter(n => n.id !== notificationId)
         );
       },
       error: (err) => {
-        console.log("Error while deleting the notification: ", err);
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        console.log("Error while deleting the notification: ");
       }
     })
   }

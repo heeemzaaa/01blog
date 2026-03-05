@@ -128,6 +128,11 @@ export class CommentComponent {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("Comment not updated due to some errors, please try again later !")
       }
     });
@@ -142,6 +147,14 @@ export class CommentComponent {
       next: () => {
         this.toast.showSuccess("Comment deleted successfully !");
         this.commentState.set(null);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error deleting the comment, please try again later !")
       }
     });
   }
@@ -158,6 +171,14 @@ export class CommentComponent {
         this.commentState.update(c =>
           c ? { ...c, visible: false } : c
         );
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error hidding the comment !")
       }
     });
   }
@@ -172,6 +193,14 @@ export class CommentComponent {
         this.commentState.update(c =>
           c ? { ...c, visible: true } : c
         );
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error restoring the comment !")
       }
     });
   }
@@ -184,6 +213,14 @@ export class CommentComponent {
       next: () => {
         this.toast.showSuccess("Comment deleted successfully !");
         this.commentState.set(null);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error deleting the comment !")
       }
     });
   }

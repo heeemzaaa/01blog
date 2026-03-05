@@ -12,7 +12,7 @@
             Comments
         </h3>
 
-        @if (comments() && comments()!.length > 0) {
+        @if (post() && comments().length > 0) {
         @for (comment of comments(); track comment.id) {
         <app-comment [comment]="comment" [postId]="post()?.id" [postOwnerId]="post()!.user.id">
         </app-comment>

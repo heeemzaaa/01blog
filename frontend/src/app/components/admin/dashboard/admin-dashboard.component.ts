@@ -46,6 +46,14 @@ export class AdminDashboard {
         if (res.success && res.data) {
           this.dashboardStats.set(res.data);
         }
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error loading the admin dashboard !")
       }
     });
   }
@@ -57,6 +65,14 @@ export class AdminDashboard {
           this.users.set(res.data);
           console.log('res.data :>> ', res.data);
         }
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error loading the users !")
       }
     });
   }
@@ -67,6 +83,14 @@ export class AdminDashboard {
         if (res.success && res.data) {
           this.posts.set(res.data);
         }
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error loading the posts !")
       }
     });
   }
@@ -77,6 +101,14 @@ export class AdminDashboard {
         if (res.success && res.data) {
           this.reports.set(res.data);
         }
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error loading the reports !")
       }
     });
   }
@@ -98,6 +130,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The user is not banned due to some error !")
       }
     });
@@ -116,6 +153,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The user is not unbanned due to some error !")
       }
     });
@@ -132,6 +174,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The user is not deleted due to some error !")
       }
     });
@@ -150,6 +197,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The post is not hidden due to some error !")
       }
     });
@@ -168,6 +220,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The post is not restored due to some error !")
       }
     });
@@ -184,6 +241,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The post is not deleted due to some error !")
       }
     });
@@ -204,6 +266,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The report is not reviewed due to some error !")
       }
     });
@@ -224,6 +291,11 @@ export class AdminDashboard {
         }
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("The report is not resolved due to some error !")
       }
     });

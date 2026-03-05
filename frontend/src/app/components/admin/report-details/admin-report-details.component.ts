@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { ReportResponse } from '../../../models/report-response.model';
 import { MatIconModule } from '@angular/material/icon';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-admin-report-details',
@@ -16,6 +17,7 @@ export class AdminReportDetails {
 
   route = inject(ActivatedRoute);
   router = inject(Router);
+  toast = inject(ToastService)
   adminService = inject(AdminService);
 
   report = signal<ReportResponse | null>(null);
@@ -33,6 +35,14 @@ export class AdminReportDetails {
         if (res.success && res.data) {
           this.report.set(res.data);
         }
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error loading the report !")
       }
     });
   }

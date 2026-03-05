@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, effect, input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -28,6 +28,7 @@ export class PostDetailsComponent {
   private postService = inject(PostService);
   private commentService = inject(CommentService);
   private toast = inject(ToastService);
+  private router = inject(Router);
   private paramMapSignal = toSignal(this.route.paramMap);
 
   readonly postId = computed(() =>
@@ -45,7 +46,7 @@ export class PostDetailsComponent {
   });
 
   loadingComments = signal(false);
- 
+
 
 
 
@@ -60,7 +61,14 @@ export class PostDetailsComponent {
 
       this.postService.getPostById(id).subscribe({
         next: res => this.post.set(res.data),
-        error: () => console.error('Failed to load post'),
+        error: (err) => {
+          if (err.error.status == 401) {
+            localStorage.removeItem('token');
+            this.router.navigate(['/login']);
+            return
+          }
+          console.error('Failed to load post')
+        },
       });
     });
 
@@ -88,7 +96,12 @@ export class PostDetailsComponent {
         this.comments.set(res?.data ?? []);
         this.loadingComments.set(false);
       },
-      error: err => {
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError(err.data)
         this.loadingComments.set(false);
       }
@@ -114,7 +127,14 @@ export class PostDetailsComponent {
         );
         this.commentRequest.set({ content: '' });
       },
-      error: err => this.toast.showError(err.data),
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError(err.data)
+      },
     });
   }
 

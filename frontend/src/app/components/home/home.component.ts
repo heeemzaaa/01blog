@@ -23,6 +23,8 @@ export class HomeComponent {
   private authService = inject(AuthService);
   private postService = inject(PostService);
   private router = inject(Router);
+  private toast = inject(ToastService);
+
 
   posts = signal<PostResponse[]>([]);
 
@@ -30,21 +32,38 @@ export class HomeComponent {
     this.loadFeed();
   }
 
-    toProfile(userId: string) {
+  toProfile(userId: string) {
     this.router.navigate([`/profile/${userId}`])
   }
 
   loadFeed() {
-    this.postService.getFeedPosts().subscribe(res => {
-      if (res.success) {
+
+    this.postService.getFeedPosts().subscribe({
+      next: (res) => {
         this.posts.set(res.data);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error getting the posts of the feed")
       }
     });
 
-    this.authService.getMe().subscribe(res => {
-      if (res?.success) {
-        this.currentUser?.set(res.data);
+    this.authService.getMe().subscribe({
+      next: (res) => {
+        this.currentUser.set(res!.data);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error getting the user infos")
       }
-    })
+    });
   }
 }

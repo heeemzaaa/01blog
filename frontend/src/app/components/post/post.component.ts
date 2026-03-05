@@ -134,10 +134,17 @@ export class Post {
     );
 
     this.likeService.toggleLike(post.id).subscribe({
-      error: () =>
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.postState.update(p =>
           p ? { ...p, liked: prev, likesCount: count } : p
-        ),
+        );
+      }
+
     });
   }
 
@@ -177,6 +184,14 @@ export class Post {
         this.toast.showSuccess("Post deleted successfully !")
         this.postDeleted.emit(post.id)
       },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error deleting the post, please try again later !")
+      }
     });
   }
 
@@ -278,6 +293,11 @@ export class Post {
       },
 
       error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("This action is not done due to some error !")
       }
     });
@@ -295,6 +315,14 @@ export class Post {
         const updated = { ...post, visible: false };
         this.postState.set(updated);
         this.postUpdated.emit(updated);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error hidding the post !")
       }
     });
   }
@@ -310,6 +338,14 @@ export class Post {
         const updated = { ...post, visible: true };
         this.postState.set(updated);
         this.postUpdated.emit(updated);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error restoring the post !")
       }
     });
   }

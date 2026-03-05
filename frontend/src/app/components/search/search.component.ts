@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SearchService } from '../../services/search.service';
 import { switchMap } from 'rxjs';
 
@@ -14,6 +14,7 @@ export class SearchComponent {
 
     route = inject(ActivatedRoute);
     searchService = inject(SearchService);
+    router = inject(Router);
 
     results = signal<any>(null);
     loading = signal<boolean>(false);
@@ -33,19 +34,24 @@ export class SearchComponent {
     loadResults(query: string, page: number) {
         this.loading.set(true);
 
-        this.searchService.search(query, page)
-            .subscribe(res => {
-
+        this.searchService.search(query, page).subscribe({
+            next: (res) => {
                 this.results.set(res);
-
                 const usersPages = res.users?.totalPages ?? 0;
                 const postsPages = res.posts?.totalPages ?? 0;
-
                 this.totalPages.set(Math.max(usersPages, postsPages));
-
                 this.currentPage.set(page);
                 this.loading.set(false);
-            });
+            },
+            error: (err) => {
+                if (err.error.status == 401) {
+                    localStorage.removeItem('token');
+                    this.router.navigate(['/login']);
+                    return
+                }
+            }
+
+        });
     }
 
 

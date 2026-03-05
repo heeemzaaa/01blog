@@ -90,13 +90,12 @@ export class AddPost {
   addPost() {
     if (this.title() === '' || this.content() === '') {
       this.toast.showError("The title and the content are required !");
-      console.log('object :>> ');
       return;
     }
     const formData = this.buildFormData();
 
     this.postService.createPost(formData).subscribe({
-      next: (res) => {
+      next: () => {
         this.toast.showSuccess("Post created successfully !");
 
         this.title.set('');
@@ -106,6 +105,12 @@ export class AddPost {
         this.router.navigate(['/']);
       },
       error: (err) => {
+        if (err.error.status == 401) {
+          console.log("//////////////////////////////////////////////");
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
         this.toast.showError("Post creation failed, Please try again later !")
       }
     })

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Post } from '../post/post.component';
 import { ProfileService } from '../../services/profile.service';
@@ -33,6 +33,7 @@ export class Profile {
   private subscribeService = inject(SubscribeService);
   private reportService = inject(ReportService);
   private toast = inject(ToastService);
+  private router = inject(Router);
 
   showConnectionsPopup = signal(false);
   popupTitle = signal<'Followers' | 'Following'>('Followers');
@@ -68,19 +69,36 @@ export class Profile {
 
 
   loadProfile(userId: string) {
-    this.profileService.getProfile(userId).subscribe(res => {
-      if (res.success) {
+    this.profileService.getProfile(userId).subscribe({
+      next: (res) => {
         this.profile.set(res.data);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error getting the profile data, please try again later !")
       }
-    });
+    })
   }
 
   loadPosts(userId: string) {
-    this.postService.getProfilePosts(userId).subscribe(res => {
-      if (res.success) {
+
+    this.postService.getProfilePosts(userId).subscribe({
+      next: (res) => {
         this.posts.set(res.data);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error getting your posts, please try again later !")
       }
-    });
+    })
   }
 
   openEditPopup() {
@@ -143,7 +161,12 @@ export class Profile {
           }
         },
         error: (err) => {
-          console.error('Update failed', err);
+          if (err.error.status == 401) {
+            localStorage.removeItem('token');
+            this.router.navigate(['/login']);
+            return
+          }
+          this.toast.showError("Error updating the profile, please try again later !")
         }
       });
   }
@@ -155,12 +178,19 @@ export class Profile {
     this.popupTitle.set('Followers');
     this.showConnectionsPopup.set(true);
 
-    this.subscribeService.getSubscribers(profile.id)
-      .subscribe(res => {
-        if (res.success) {
-          this.connections.set(res.data);
+    this.subscribeService.getSubscribers(profile.id).subscribe({
+      next: (res) => {
+        this.connections.set(res.data);
+      },
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
         }
-      });
+        this.toast.showError("Error getting your connections, please try again later !")
+      }
+    });
   }
 
   openFollowing() {
@@ -170,12 +200,20 @@ export class Profile {
     this.popupTitle.set('Following');
     this.showConnectionsPopup.set(true);
 
-    this.subscribeService.getSubscribed(profile.id)
-      .subscribe(res => {
-        if (res.success) {
-          this.connections.set(res.data);
+    this.subscribeService.getSubscribed(profile.id).subscribe({
+      next: (res) => {
+        this.connections.set(res.data);
+      },
+
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
         }
-      });
+        this.toast.showError("Error getting your connections, please try again later !")
+      }
+    })
   }
 
 
@@ -196,27 +234,45 @@ export class Profile {
   }
 
   subscribe(userId: string) {
-    this.subscribeService.subscribe(userId).subscribe(res => {
-      if (res.success) {
+    this.subscribeService.subscribe(userId).subscribe({
+      next: (res) => {
         this.toast.showSuccess("You subscribed successfully !")
         this.profile.update(p => p && ({
           ...p,
           following: true,
           nbr_of_followers: p.nbr_of_followers + 1
         }));
+      },
+
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error subscribing to this user, please try again later !")
       }
-    });
+    })
   }
 
   unsubscribe(userId: string) {
-    this.subscribeService.unsubscribe(userId).subscribe(res => {
-      if (res.success) {
+    this.subscribeService.unsubscribe(userId).subscribe({
+      next: (res) => {
         this.toast.showSuccess("You unsubscribed successfully !")
         this.profile.update(p => p && ({
           ...p,
           following: false,
           nbr_of_followers: p.nbr_of_followers - 1
         }));
+      },
+
+      error: (err) => {
+        if (err.error.status == 401) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          return
+        }
+        this.toast.showError("Error unsubscribing to this user, please try again later !")
       }
     });
   }
@@ -247,7 +303,12 @@ export class Profile {
         next: () => {
           this.toast.showSuccess('Report sent successfully');
         },
-        error: () => {
+        error: (err) => {
+          if (err.error.status == 401) {
+            localStorage.removeItem('token');
+            this.router.navigate(['/login']);
+            return
+          }
           this.toast.showError('Error while reporting');
         },
       });
