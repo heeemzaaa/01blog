@@ -1,5 +1,5 @@
 export interface PostMediaResponse {
     id: string;
-    url: string;
+    filePath: string;
     type: string;
 }

@@ -117,11 +117,11 @@
 
         <div>
             @if (isImage(mainMedia())) {
-            <img [src]="'http://localhost:8080' + mainMedia()!.url" class="c_image chosen" />
+            <img [src]="'http://localhost:8080' + mainMedia()!.filePath" class="c_image chosen" />
             }
 
             @if (isVideo(mainMedia())) {
-            <video class="c_image chosen" controls [src]="'http://localhost:8080' + mainMedia()!.url">
+            <video class="c_image chosen" controls [src]="'http://localhost:8080' + mainMedia()!.filePath">
             </video>
             }
         </div>
@@ -131,14 +131,14 @@
             @for (media of postState()?.medias; track media.id) {
 
             @if (isImage(media)) {
-            <img [src]="'http://localhost:8080' + media.url" class="c_image" [class.chosen_one]="media === mainMedia()"
+            <img [src]="'http://localhost:8080' + media.filePath" class="c_image" [class.chosen_one]="media === mainMedia()"
                 (click)="selectMedia(media)" />
             }
 
             @if (isVideo(media)) {
             <video class="c_image" muted preload="metadata" [class.chosen_one]="media === mainMedia()"
                 (click)="selectMedia(media)">
-                <source [src]="'http://localhost:8080' + media.url" />
+                <source [src]="'http://localhost:8080' + media.filePath" />
             </video>
             }
             }
