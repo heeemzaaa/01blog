@@ -10,21 +10,27 @@ public class UserRegister {
     @NotBlank
     @Size(min = 5, max = 20, message = "Invalid first name !")
     private String firstName;
+    
     @NotBlank
     @Size(min = 5, max = 20, message = "Invalid last name !")
     private String lastName;
+
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     @Size(min = 5, max = 15, message = "Invalid user name !")
     private String username;
+
     @NotBlank
     @Size(min = 8, max = 32, message = "Invalid password !")
     private String password;
+
     @NotBlank
     @Size(min = 20, max = 200, message = "The about me part should contain between 20 and 200 character !")
     private String about;
+
     @NotBlank
     private String profileImage;
 }

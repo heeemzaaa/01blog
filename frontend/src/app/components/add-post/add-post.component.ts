@@ -110,6 +110,8 @@ export class AddPost {
           this.router.navigate(['/login']);
           return
         }
+        this.selectedFiles.set([]);
+        this.mediaPreviews.set([]);
         this.toast.showError("Post creation failed, Please try again later !")
       }
     })

@@ -10,6 +10,7 @@ public class PostRequest {
     @Size(max = 100, message = "The maximum characters in the title are 100 !")
     private String title;
     @NotBlank
+    @Size(min = 3, message = "Content must contain at least 3 characters")
     private String content;
 
 }
