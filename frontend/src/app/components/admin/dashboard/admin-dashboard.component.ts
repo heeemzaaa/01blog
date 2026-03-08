@@ -63,7 +63,6 @@ export class AdminDashboard {
       next: (res) => {
         if (res.success && res.data) {
           this.users.set(res.data);
-          console.log('res.data :>> ', res.data);
         }
       },
       error: (err) => {

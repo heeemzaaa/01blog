@@ -14,11 +14,4 @@ export class ToastComponent {
   private toastService = inject(ToastService);
   toast = this.toastService.toast;
 
-  constructor() {
-    effect(() => {
-      console.log("TOAST SIGNAL VALUE:", this.toast());
-    });
-  }
-
-
 }

@@ -15,7 +15,6 @@ export class ToastService {
   toast = signal<ToastData | null>(null);
 
   show(message: string, type: ToastType) {
-    console.log("TOAST SET:", message, type);
     this.toast.set({ message, type });
 
     setTimeout(() => {

@@ -3,6 +3,8 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Observable } from "rxjs";
 import { ApiResponse } from "../models/api-response.model";
 import { NotificationResponse } from "../models/notification-response.model";
+import { ToastService } from "./toast.service";
+import { Router } from "@angular/router";
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +12,8 @@ import { NotificationResponse } from "../models/notification-response.model";
 export class NotificationService {
     private baseUrl = 'http://localhost:8080/api/notifications';
     private http = inject(HttpClient);
+    private toast = inject(ToastService);
+    private router = inject(Router);
     notifications = signal<NotificationResponse[]>([]);
 
 
@@ -22,11 +26,15 @@ export class NotificationService {
     fetchMyNotifications() {
         this.getMyNotifications().subscribe({
             next: (res) => {
-                console.log('res.data :>> ', res.data);
                 this.notifications.set(res.data);
             },
             error: (err) => {
-                console.error('Error while fetching notifications', err);
+                if (err.error.status == 401) {
+                    localStorage.removeItem('token');
+                    this.router.navigate(['/login']);
+                    return
+                }
+                this.toast.showError('Error while fetching notifications');
             },
         });
     }

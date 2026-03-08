@@ -67,7 +67,7 @@ export class PostDetailsComponent {
             this.router.navigate(['/login']);
             return
           }
-          console.error('Failed to load post')
+          this.toast.showError('Failed to load post');
         },
       });
     });

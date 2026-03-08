@@ -106,7 +106,6 @@ export class AddPost {
       },
       error: (err) => {
         if (err.error.status == 401) {
-          console.log("//////////////////////////////////////////////");
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return

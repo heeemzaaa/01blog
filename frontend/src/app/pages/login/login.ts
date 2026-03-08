@@ -40,7 +40,6 @@ export class Login {
       },
 
       error: (err) => {
-        console.log('err :>> ', err);
         this.errorMessage.set(err.error.message);
       }
     })

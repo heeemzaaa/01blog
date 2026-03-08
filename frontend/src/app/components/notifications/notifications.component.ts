@@ -6,6 +6,7 @@ import { NotificationService } from '../../services/notification.service';
 import { NotificationType } from '../../models/notification-type.enum';
 import { UtilsService } from '../../services/utils.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-notifications',
@@ -18,6 +19,7 @@ export class Notifications {
   private notificationService = inject(NotificationService);
   private utilsService = inject(UtilsService);
   private router = inject(Router);
+  private toast = inject(ToastService);
   notifications = this.notificationService.notifications;
 
 
@@ -47,7 +49,7 @@ export class Notifications {
           this.router.navigate(['/login']);
           return
         }
-        console.error('Failed to mark notification as read');
+        this.toast.showError('Failed to mark notification as read');
       },
     });
   }
@@ -67,7 +69,7 @@ export class Notifications {
           this.router.navigate(['/login']);
           return
         }
-        console.error('Failed to mark all as read');
+        this.toast.showError('Failed to mark all as read');
       },
     });
   }
@@ -85,7 +87,7 @@ export class Notifications {
           this.router.navigate(['/login']);
           return
         }
-        console.log("Error while deleting the notification: ");
+        this.toast.showError("Error while deleting the notification");
       }
     })
   }

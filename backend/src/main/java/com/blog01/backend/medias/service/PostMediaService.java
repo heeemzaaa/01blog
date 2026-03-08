@@ -1,5 +1,6 @@
 package com.blog01.backend.medias.service;
 
+import com.blog01.backend.common.validator.FileValidator;
 import com.blog01.backend.medias.model.PostMedias;
 import com.blog01.backend.medias.repository.PostMediaRepository;
 import com.blog01.backend.medias.response.PostMediaResponse;
@@ -26,6 +27,7 @@ public class PostMediaService {
     private static final Path UPLOAD_ROOT = Paths.get(System.getProperty("user.dir"), "uploads");
 
     private final PostMediaRepository postMediaRepository;
+    private final FileValidator fileValidator;
 
     public void handlePostMedias(Post post, List<MultipartFile> medias) {
 
@@ -47,6 +49,8 @@ public class PostMediaService {
             if (media.getSize() > MAX_MEDIA_SIZE) {
                 throw new IllegalArgumentException("Media size must not be more than 10MB");
             }
+
+            fileValidator.validate(media);
 
             String contentType = media.getContentType();
             if (contentType == null ||

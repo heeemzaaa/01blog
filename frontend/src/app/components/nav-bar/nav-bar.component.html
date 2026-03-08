@@ -63,7 +63,7 @@
     <div class="notification-wrapper" (click)="toNotifications()">
       <mat-icon class="c-icon">notifications</mat-icon>
 
-      @if (currentUser()!.nbr_of_notifications > 0) {
+      @if (currentUser()!.nbr_of_notifications && currentUser()!.nbr_of_notifications > 0) {
       <div class="notification-badge">
         {{ currentUser()?.nbr_of_notifications }}
       </div>
