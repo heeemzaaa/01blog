@@ -24,5 +24,15 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
             """)
     Page<Post> searchByTitle(String keyword, Pageable pageable);
 
+    @Query("""
+            SELECT p
+            FROM Post p
+            LEFT JOIN Like l ON l.post = p
+            WHERE p.visible = true
+            GROUP BY p
+            ORDER BY COUNT(l) DESC
+            """)
+    List<Post> findTopPosts(Pageable pageable);
+
     long countByUser(User user);
 }

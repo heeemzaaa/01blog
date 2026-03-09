@@ -1,5 +1,6 @@
 package com.blog01.backend.profile.controller;
 
+import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import com.blog01.backend.profile.dto.EditProfileRequest;
 import com.blog01.backend.profile.response.ProfileResponse;
 import com.blog01.backend.profile.service.ProfileService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,9 +35,15 @@ public class ProfileController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseData<ProfileResponse>> editProfile(
             @PathVariable UUID id,
-            @RequestPart("data") EditProfileRequest request,
-            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
-        ProfileResponse response = profileService.editProfile(id, request, profileImage);
+            @Valid @RequestPart("data") EditProfileRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage,
+            Principal principal) {
+
+        ProfileResponse response = profileService.editProfile(
+                principal.getName(),
+                id,
+                request,
+                profileImage);
 
         return ResponseEntity.ok(
                 ResponseData.success("Profile updated successfully", response));

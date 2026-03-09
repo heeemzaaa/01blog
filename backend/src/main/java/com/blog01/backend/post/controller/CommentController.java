@@ -4,6 +4,8 @@ import com.blog01.backend.common.response.ResponseData;
 import com.blog01.backend.post.dto.CommentRequest;
 import com.blog01.backend.post.response.CommentResponse;
 import com.blog01.backend.post.service.CommentService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class CommentController {
 
     // POST /api/posts/{postId}/comments
     @PostMapping("/{postId}/comments")
-    public ResponseEntity<ResponseData<CommentResponse>> addComment(@PathVariable UUID postId,
+    public ResponseEntity<ResponseData<CommentResponse>> addComment(@Valid @PathVariable UUID postId,
             @RequestBody CommentRequest request,
             Principal principal) {
         return ResponseEntity.ok(commentService.createComment(principal.getName(), postId, request));

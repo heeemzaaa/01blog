@@ -16,7 +16,7 @@ public class UserRegister {
     private String lastName;
 
     @NotBlank
-    @Email
+    @Email(message = "Invalid Email !")
     private String email;
 
     @NotBlank
@@ -30,7 +30,4 @@ public class UserRegister {
     @NotBlank
     @Size(min = 20, max = 200, message = "The about me part should contain between 20 and 200 character !")
     private String about;
-
-    @NotBlank
-    private String profileImage;
 }

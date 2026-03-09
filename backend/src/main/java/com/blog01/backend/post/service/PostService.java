@@ -1,5 +1,6 @@
 package com.blog01.backend.post.service;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,15 @@ import com.blog01.backend.post.dto.PostRequest;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.*;
 import com.blog01.backend.post.response.PostResponse;
+import com.blog01.backend.post.response.TopPostResponse;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
 import jakarta.transaction.Transactional;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +40,7 @@ public class PostService {
         private final NotificationService notificationService;
         private final SubscribesRepository subscribesRepository;
         private final PostMediaService postMediaService;
-        
+
         @Transactional
         public ResponseData<List<PostResponse>> getFeedPosts(String email) {
 
@@ -198,6 +202,21 @@ public class PostService {
                 return ResponseData.success(
                                 "Post fetched successfully",
                                 mapToPostResponse(post, currentUser));
+        }
+
+        public List<TopPostResponse> getTopPosts() {
+
+                List<Post> posts = postRepository.findTopPosts(PageRequest.of(0, 5));
+
+                return posts.stream().map(post -> TopPostResponse.builder()
+                                .id(post.getId())
+                                .title(post.getTitle())
+                                .content(post.getContent())
+                                .authorId(post.getUser().getId())
+                                .likesCount(likeRepository.countByPost(post))
+                                .createdAt(post.getCreatedAt())
+                                .build())
+                                .collect(Collectors.toList());
         }
 
         private PostResponse mapToPostResponse(Post p, User currentUser) {

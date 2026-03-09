@@ -61,7 +61,7 @@ public class SubscribeService {
         public ResponseData<Void> subscribe(String email, UUID targetUserId) {
 
                 User subscriber = ur.findByEmail(email)
-                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+                                .orElseThrow(() -> new NoSuchElementException("user not found"));
 
                 if (!subscriber.isActive()) {
                         throw new BadCredentialsException("You are banned !");
@@ -92,7 +92,7 @@ public class SubscribeService {
         public ResponseData<Void> unsubscribe(String email, UUID targetUserId) {
 
                 User user = ur.findByEmail(email)
-                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+                                .orElseThrow(() -> new NoSuchElementException("user not found"));
 
                 if (!user.isActive()) {
                         throw new BadCredentialsException("You are banned !");
@@ -117,7 +117,7 @@ public class SubscribeService {
         public ResponseData<Void> deleteSubscriber(String email, UUID deletedUserId) {
 
                 User user = ur.findByEmail(email)
-                                .orElseThrow(() -> new NoSuchElementException("Current user not found"));
+                                .orElseThrow(() -> new NoSuchElementException("user not found"));
 
                 if (!user.isActive()) {
                         throw new BadCredentialsException("You are banned !");

@@ -5,6 +5,8 @@ import com.blog01.backend.report.dto.ReportRequest;
 import com.blog01.backend.report.response.ReportResponse;
 // import com.blog01.backend.report.model.Report.StatusOfReports;
 import com.blog01.backend.report.service.ReportService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ public class ReportController {
 
 
     @PostMapping("/api/reports")
-    public ResponseEntity<ResponseData<ReportResponse>> createReport(@RequestBody ReportRequest request, Principal principal) {
+    public ResponseEntity<ResponseData<ReportResponse>> createReport(@Valid @RequestBody ReportRequest request, Principal principal) {
         return ResponseEntity.ok(reportService.createReport(principal.getName(), request));
     }
 

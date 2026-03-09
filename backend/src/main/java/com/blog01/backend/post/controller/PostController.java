@@ -8,7 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.blog01.backend.common.response.ResponseData;
 import com.blog01.backend.post.dto.PostRequest;
 import com.blog01.backend.post.response.PostResponse;
+import com.blog01.backend.post.response.TopPostResponse;
 import com.blog01.backend.post.service.PostService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +29,7 @@ public class PostController {
 
         private final PostService postService;
 
-        @GetMapping("/{id}")
+        @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
         public ResponseEntity<ResponseData<PostResponse>> getPostById(
                         @PathVariable UUID id,
                         Principal principal) {
@@ -52,7 +55,7 @@ public class PostController {
 
         @PostMapping(value = "/create", consumes = "multipart/form-data")
         public ResponseEntity<ResponseData<PostResponse>> createPost(
-                        @RequestPart("post") PostRequest request,
+                        @Valid @RequestPart("post") PostRequest request,
                         @RequestPart(value = "medias", required = false) List<MultipartFile> medias,
                         Principal principal) {
                 return ResponseEntity.ok(
@@ -81,5 +84,19 @@ public class PostController {
                         Principal principal) {
                 return ResponseEntity.ok(
                                 postService.deletePost(principal.getName(), id));
+        }
+
+        @GetMapping("/top")
+        public ResponseEntity<ResponseData<List<TopPostResponse>>> getTopPosts() {
+
+                List<TopPostResponse> posts = postService.getTopPosts();
+
+                if (posts.isEmpty()) {
+                        return ResponseEntity.ok(
+                                        new ResponseData<>(true, "No posts available", null));
+                }
+
+                return ResponseEntity.ok(
+                                new ResponseData<>(true, "Top posts retrieved successfully", posts));
         }
 }

@@ -30,7 +30,7 @@ public class CommentService {
     private final NotificationService notificationService;
 
     public ResponseData<List<CommentResponse>> getCommentsByPost(UUID postId, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
             throw new BadCredentialsException("You are banned !");
         }
@@ -43,7 +43,7 @@ public class CommentService {
     }
 
     public ResponseData<CommentResponse> createComment(String email, UUID postId, CommentRequest request) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
             throw new BadCredentialsException("You are banned !");
         }
@@ -72,7 +72,7 @@ public class CommentService {
 
     public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate,
             MultipartFile commentImage) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
             throw new BadCredentialsException("You are banned !");
         }
@@ -93,7 +93,7 @@ public class CommentService {
     }
 
     public ResponseData<String> deleteComment(String email, UUID postId, UUID commentId) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found !"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
             throw new BadCredentialsException("You are banned !");
         }

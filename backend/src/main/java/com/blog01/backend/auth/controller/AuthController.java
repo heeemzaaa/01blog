@@ -11,6 +11,7 @@ import com.blog01.backend.auth.response.UserResponse;
 import com.blog01.backend.auth.service.AuthService;
 import com.blog01.backend.common.response.ResponseData;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Principal;
@@ -27,28 +28,15 @@ public class AuthController {
     private final AuthService us;
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseData<UserResponse>> login(@RequestBody UserLogin request) {
+    public ResponseEntity<ResponseData<UserResponse>> login(@Valid @RequestBody UserLogin request) {
         ResponseData<UserResponse> response = us.login(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/register", consumes = "multipart/form-data")
     public ResponseEntity<ResponseData<UserResponse>> register(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String username,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam(required = false) String about,
+            @Valid UserRegister request,
             @RequestParam(required = false) MultipartFile profileImage) {
-
-        UserRegister request = new UserRegister();
-        request.setFirstName(firstName);
-        request.setLastName(lastName);
-        request.setUsername(username);
-        request.setEmail(email);
-        request.setPassword(password);
-        request.setAbout(about);
 
         ResponseData<UserResponse> response = us.register(request, profileImage);
 

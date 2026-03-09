@@ -78,45 +78,48 @@ public class ProfileService {
     }
 
     public ProfileResponse editProfile(
-            UUID userId,
+            String authenticatedUserEmail,
+            UUID profileUserId,
             EditProfileRequest request,
             MultipartFile profileImage) {
 
-        // 1️⃣ Find user
-        User user = userRepository.findById(userId)
+        User authenticatedUser = userRepository.findByEmail(authenticatedUserEmail).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!authenticatedUser.getId().equals(profileUserId)) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You are not allowed to edit this profile");
+        }
+
+        User user = userRepository.findById(profileUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!user.isActive()) {
             throw new BadCredentialsException("You are banned !");
         }
 
-        // 2️⃣ Update text fields
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setAbout(request.getAbout());
 
-        // 3️⃣ Handle image (optional)
         if (profileImage != null && !profileImage.isEmpty()) {
-            String imagePath = saveProfileImage(userId, profileImage);
+            String imagePath = saveProfileImage(profileUserId, profileImage);
             user.setProfileImage(imagePath);
         }
 
-        // 4️⃣ Save user
         userRepository.save(user);
 
-        // 5️⃣ Build response manually
-        ProfileResponse response = new ProfileResponse();
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setUsername(user.getUsername());
-        response.setEmail(user.getEmail());
-        response.setAbout(user.getAbout());
-        response.setProfileImage(user.getProfileImage());
-
-        return response;
+        return ProfileResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .about(user.getAbout())
+                .profileImage(user.getProfileImage())
+                .isMyProfile(true)
+                .build();
     }
 
     private String saveProfileImage(UUID userId, MultipartFile file) {
