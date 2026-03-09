@@ -35,6 +35,10 @@ public class Post {
     @Builder.Default
     private List<PostMedias> medias = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
     @Column(nullable = false)
     private String title;
 

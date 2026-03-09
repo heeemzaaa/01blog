@@ -79,8 +79,9 @@ export class RegisterComponent {
     payload.append('username', this.formData.username);
     payload.append('email', this.formData.email);
     payload.append('password', this.formData.password);
-    payload.append('about', this.formData.about);
-
+    if (this.formData.about && this.formData.about.trim() !== '') {
+      payload.append('about', this.formData.about.trim());
+    }
     if (this.selectedImage) {
       payload.append('profileImage', this.selectedImage);
     }

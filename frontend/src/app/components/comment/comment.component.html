@@ -49,7 +49,6 @@ commentState()?.myComment
 
         <mat-menu #commentMenu="matMenu">
 
-          <!-- COMMENT OWNER -->
           @if (commentState()?.myComment) {
 
           <button mat-menu-item (click)="openEditPopup()">
@@ -57,14 +56,13 @@ commentState()?.myComment
             <span>Update Comment</span>
           </button>
 
-          <button mat-menu-item (click)="deleteComment()">
+          <button mat-menu-item (click)="openDeletePopup()">
             <mat-icon>delete</mat-icon>
             <span>Delete Comment</span>
           </button>
 
           }
 
-          <!-- ADMIN (but not comment owner) -->
           @else if (isAdmin()) {
 
           @if (commentState()?.visible) {
@@ -79,17 +77,11 @@ commentState()?.myComment
           </button>
           }
 
-          <button mat-menu-item (click)="adminDeleteComment()">
-            <mat-icon color="warn">delete</mat-icon>
-            <span>Delete Comment</span>
-          </button>
-
           }
 
-          <!-- POST OWNER (only if not admin & not comment owner) -->
           @else if (isPostOwner()) {
 
-          <button mat-menu-item (click)="deleteComment()">
+          <button mat-menu-item (click)="openDeletePopup()">
             <mat-icon color="warn">delete</mat-icon>
             <span>Delete Comment</span>
           </button>
@@ -118,5 +110,68 @@ commentState()?.myComment
     </div>
   </div>
 </div>
+
+@if (showDeletePopup()) {
+<div class="popup-backdrop">
+
+  <div class="popup-container bg-black p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold">Delete Comment</h3>
+      <mat-icon role="button" (click)="closeDeletePopup()">close</mat-icon>
+    </div>
+
+    <p class="text-secondary mb-4">
+      Are you sure you want to delete this comment? This action cannot be undone.
+    </p>
+
+    <div class="d-flex justify-content-end gap-3">
+      <button class="custom-button-1 px-3 py-1" (click)="closeDeletePopup()">
+        Cancel
+      </button>
+
+      <button class="custom-button px-3 py-1 bg-danger fw-bold text-white" (click)="confirmDelete()">
+        Delete
+      </button>
+    </div>
+
+  </div>
+
+</div>
+}
+
+@if(showEditPopup()) {
+<div class="popup-backdrop">
+
+  <div class="popup-container bg-black p-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold">Edit Comment</h3>
+      <mat-icon role="button" (click)="closeEditPopup()">close</mat-icon>
+    </div>
+
+    <form class="d-flex flex-column gap-3" (ngSubmit)="editComment()">
+
+      <input class="custom-input" type="text" placeholder="First name" [(ngModel)]="editForm.content"
+        name="firstName" />
+
+
+      <div class="d-flex justify-content-end gap-3 mt-3">
+        <button type="button" class="custom-button-1 fw-bold px-3 py-1" (click)="closeEditPopup()">
+          Cancel
+        </button>
+        <button type="submit" class="custom-button px-3 fw-bold">
+          Save
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+}
+
 
 }

@@ -228,4 +228,19 @@ export class CommentComponent {
   toProfile(userId: string) {
     this.router.navigate([`/profile/${userId}`])
   }
+
+  showDeletePopup = signal(false);
+
+  openDeletePopup() {
+    this.showDeletePopup.set(true);
+  }
+
+  closeDeletePopup() {
+    this.showDeletePopup.set(false);
+  }
+
+  confirmDelete() {
+    this.closeDeletePopup();
+    this.deleteComment();
+  }
 }

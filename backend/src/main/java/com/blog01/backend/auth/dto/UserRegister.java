@@ -27,7 +27,6 @@ public class UserRegister {
     @Size(min = 8, max = 32, message = "Invalid password !")
     private String password;
 
-    @NotBlank
     @Size(min = 20, max = 200, message = "The about me part should contain between 20 and 200 character !")
     private String about;
 }

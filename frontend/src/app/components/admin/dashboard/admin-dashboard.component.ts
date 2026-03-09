@@ -28,6 +28,9 @@ export class AdminDashboard {
   users = signal<UserResponse[]>([]);
   posts = signal<PostResponse[]>([]);
   reports = signal<ReportResponse[]>([]);
+  showDeletePopup = signal(false);
+  deleteType = signal<'user' | 'post' | null>(null);
+  deleteId = signal<string | null>(null);
 
   constructor() {
     this.loadDashboardStats();
@@ -245,6 +248,7 @@ export class AdminDashboard {
           this.router.navigate(['/login']);
           return
         }
+        console.log(err.error.message)
         this.toast.showError("The post is not deleted due to some error !")
       }
     });
@@ -298,6 +302,37 @@ export class AdminDashboard {
         this.toast.showError("The report is not resolved due to some error !")
       }
     });
+  }
+
+
+  openDeletePopup(type: 'user' | 'post', id: string) {
+    this.deleteType.set(type);
+    this.deleteId.set(id);
+    this.showDeletePopup.set(true);
+  }
+
+  closeDeletePopup() {
+    this.showDeletePopup.set(false);
+    this.deleteType.set(null);
+    this.deleteId.set(null);
+  }
+
+
+  confirmDelete() {
+    const type = this.deleteType();
+    const id = this.deleteId();
+
+    if (!type || !id) return;
+
+    if (type === 'user') {
+      this.deleteUser(id);
+    }
+
+    if (type === 'post') {
+      this.deletePost(id);
+    }
+
+    this.closeDeletePopup();
   }
 
 }

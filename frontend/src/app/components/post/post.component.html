@@ -1,10 +1,10 @@
 @if (canViewPost()) {
 
-
 <div id="post_card" class="p-4 d-flex flex-column bg-black gap-4 custom1 w-100">
 
     <div class="d-flex justify-content-between">
-        <div role="button" id="image_and_name" class="d-flex gap-2 align-items-center" (click)="toProfile(postState()!.user.id)">
+        <div role="button" id="image_and_name" class="d-flex gap-2 align-items-center"
+            (click)="toProfile(postState()!.user.id)">
             <div id="image">
                 <img [src]="postState()?.user?.profileImage 
                         ? 'http://localhost:8080' + postState()?.user?.profileImage 
@@ -38,15 +38,16 @@
                 <span>Update Post</span>
             </button>
 
-            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent">
+            <button mat-menu-item (click)="openDeletePopup()">
                 <mat-icon>delete</mat-icon>
                 <span>Delete Post</span>
             </button>
 
             }
 
-            <!-- ADMIN (but not owner) -->
+            <!-- ADMIN -->
             @if (!postState()?.myPost && isAdmin()) {
+
             @if(postState()?.visible) {
             <button mat-menu-item (click)="adminHidePost()">
                 <mat-icon>visibility_off</mat-icon>
@@ -59,9 +60,7 @@
             </button>
             }
 
-
-
-            <button mat-menu-item [matMenuTriggerFor]="deleteCurrent">
+            <button mat-menu-item (click)="openDeletePopup()">
                 <mat-icon>delete</mat-icon>
                 <span>Delete Post</span>
             </button>
@@ -88,30 +87,12 @@
     </div>
     }
 
-
-    <mat-menu #deleteCurrent="matMenu" panelClass="delete-post">
-        <div class="p-3">
-            <p class="text-black fw-bold mb-3">
-                Are you sure you want to delete this post?
-            </p>
-
-            <div class="d-flex justify-content-end gap-3">
-                <button mat-button class="custom-button" (click)="closeDeleteMenu()">
-                    Cancel
-                </button>
-
-                <button mat-button class="custom-button-1 p-2" (click)="confirmDelete()">
-                    Delete
-                </button>
-            </div>
-        </div>
-    </mat-menu>
-
     <div id="title_and_content" class="d-flex flex-column gap-3">
         <h3 class="fw-bold text-break">{{ postState()?.title }}</h3>
         <p class="fs-6 text-break">{{ postState()?.content }}</p>
     </div>
 
+    <!-- MEDIA -->
     @if (postState()?.medias && postState()?.medias!.length > 0) {
     <div id="images" class="d-flex flex-column gap-2">
 
@@ -131,8 +112,8 @@
             @for (media of postState()?.medias; track media.id) {
 
             @if (isImage(media)) {
-            <img [src]="'http://localhost:8080' + media.filePath" class="c_image" [class.chosen_one]="media === mainMedia()"
-                (click)="selectMedia(media)" />
+            <img [src]="'http://localhost:8080' + media.filePath" class="c_image"
+                [class.chosen_one]="media === mainMedia()" (click)="selectMedia(media)" />
             }
 
             @if (isVideo(media)) {
@@ -141,12 +122,14 @@
                 <source [src]="'http://localhost:8080' + media.filePath" />
             </video>
             }
+
             }
         </div>
         }
     </div>
     }
 
+    <!-- REACTIONS -->
     <div id="reactions" class="d-flex gap-5">
 
         <div class="d-flex align-items-center gap-1">
@@ -162,9 +145,11 @@
 
         <div role="button" class="d-flex align-items-center gap-1" [class.disabled-reaction]="!postState()?.visible"
             [routerLink]="postState()?.visible ? ['/post', postState()?.id] : null">
+
             <button mat-icon-button class="bg-black c-border">
                 <mat-icon class="custom-comment">chat_bubble_outline</mat-icon>
             </button>
+
             <span class="fw-bold fs-5">
                 {{ postState()?.commentsCount }}
             </span>
@@ -173,82 +158,35 @@
     </div>
 </div>
 
-@if (showEditPopup()) {
+
+
+@if (showDeletePopup()) {
 <div class="popup-backdrop">
 
     <div class="popup-container bg-black custom-border p-4">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold">Edit Profile</h3>
-            <mat-icon role="button" (click)="closeEditPopup()">close</mat-icon>
+            <h3 class="fw-bold">Delete Post</h3>
+            <mat-icon role="button" (click)="closeDeletePopup()">close</mat-icon>
         </div>
 
-        <form class="d-flex flex-column gap-3" (ngSubmit)="submitEdit()">
+        <p class="text-secondary mb-4">
+            Are you sure you want to delete this post? This action cannot be undone.
+        </p>
 
-            <input class="custom-input" type="text" placeholder="Title" [(ngModel)]="editForm().title" name="title" />
+        <div class="d-flex justify-content-end gap-3">
+            <button class="custom-button-1 px-3 py-1" (click)="closeDeletePopup()">
+                Cancel
+            </button>
 
-            <textarea class="custom-textarea" rows="1" placeholder="Content" [(ngModel)]="editForm().content"
-                name="content">
-            </textarea>
+            <button class="custom-button px-3 py-1 bg-danger fw-bold text-white" (click)="confirmDelete()">
+                Delete
+            </button>
+        </div>
 
-            <!-- EXISTING MEDIAS -->
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-                @for (media of existingMedias(); track media.id) {
-                <div class="d-flex align-items-center gap-2">
-
-                    @if (isImage(media)) {
-                    <img [src]="'http://localhost:8080' + media.url" class="c_image" />
-                    }
-
-                    @if (isVideo(media)) {
-                    <video class="c_image" muted preload="metadata">
-                        <source [src]="'http://localhost:8080' + media.url" />
-                    </video>
-                    }
-
-                    <button type="button" class="custom-button-1 px-2" (click)="removeExistingMedia(media.id)">
-                        ✕
-                    </button>
-                </div>
-                }
-            </div>
-
-
-            <!-- NEW MEDIAS PREVIEW -->
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-                @for (item of newMediaPreviews(); track $index) {
-                <div class="d-flex align-items-center gap-2">
-                    @if (item.file.type.startsWith('image')) {
-                    <img [src]="item.preview" class="c_image" />
-                    }
-
-                    @if (item.file.type.startsWith('video')) {
-                    <video class="c_image" muted preload="metadata" [src]="item.preview">
-                    </video>
-                    }
-
-                    <button type="button" class="custom-button-1 px-2" (click)="removeNewMedia($index)">
-                        ✕
-                    </button>
-                </div>
-                }
-            </div>
-
-
-            <input type="file" class="custom-input" accept="image/*,video/*" multiple
-                (change)="onFileSelected($event)" />
-
-            <div class="d-flex justify-content-end gap-3 mt-3">
-                <button type="button" class="custom-button-1 fw-bold px-3 py-1" (click)="closeEditPopup()">
-                    Cancel
-                </button>
-                <button type="submit" class="custom-button px-3 fw-bold">
-                    Update
-                </button>
-            </div>
-
-        </form>
     </div>
+
 </div>
 }
+
 }

@@ -47,9 +47,6 @@ export class Post {
   @Output() postDeleted = new EventEmitter<string>();
   @Output() postUpdated = new EventEmitter<PostResponse>();
 
-
-  @ViewChild(MatMenuTrigger) deleteMenuTrigger!: MatMenuTrigger;
-
   /* ================= Services ================= */
 
   private likeService = inject(LikeService);
@@ -60,13 +57,11 @@ export class Post {
   private toast = inject(ToastService);
   private router = inject(Router);
 
-  /* ================= State ================= */
 
   postState = signal<PostResponse | null>(null);
   selectedMedia = signal<any | null>(null);
   showEditPopup = signal(false);
 
-  // 🔥 Media management
   existingMedias = signal<any[]>([]);
   newMedias = signal<File[]>([]);
   deletedMediaIds = signal<string[]>([]);
@@ -166,15 +161,20 @@ export class Post {
 
   /* ================= Delete post ================= */
 
+  showDeletePopup = signal(false);
+
+  openDeletePopup() {
+    this.showDeletePopup.set(true);
+  }
+
+  closeDeletePopup() {
+    this.showDeletePopup.set(false);
+  }
+
   confirmDelete() {
-    this.deleteMenuTrigger.closeMenu();
+    this.closeDeletePopup();
     this.deletePost();
   }
-
-  closeDeleteMenu() {
-    this.deleteMenuTrigger.closeMenu();
-  }
-
   deletePost() {
     const post = this.postState();
     if (!post) return;
