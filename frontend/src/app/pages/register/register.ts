@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { FormsModule } from "@angular/forms";
@@ -26,8 +26,7 @@ export class RegisterComponent {
   selectedImage: File | null = null;
   imagePreview: string | null = null;
 
-  errorMessage = '';
-
+  errorMessage = signal<string | null>(null);
   constructor(
     private authService: AuthService,
     private router: Router
@@ -36,15 +35,15 @@ export class RegisterComponent {
   onNext() {
     if (this.part == 1) {
       if (!this.formData.firstName || !this.formData.lastName || !this.formData.email || !this.formData.password) {
-        this.errorMessage = 'Please fill in all fields before proceeding.';
+        this.errorMessage.set('Please fill in all fields before proceeding.');
         return;
       }
-      this.part = 2; this.errorMessage = '';
+      this.part = 2; this.errorMessage.set('');
     }
   }
   onBack() {
     if (this.part == 2) {
-      this.part = 1; this.errorMessage = '';
+      this.part = 1; this.errorMessage.set('');;
     }
   }
 
@@ -69,7 +68,7 @@ export class RegisterComponent {
 
   onRegister() {
     if (!this.formData.email || !this.formData.password || !this.formData.username) {
-      this.errorMessage = 'Please fill in all required fields';
+      this.errorMessage.set('Please fill in all required fields');
       return;
     }
 
@@ -93,8 +92,8 @@ export class RegisterComponent {
         }
         this.router.navigate(['/']);
       },
-      error: () => {
-        this.errorMessage = 'Registration failed. Email or Username might be taken.';
+      error: (err) => {
+        this.errorMessage.set(err.error.message);
       }
     });
   }

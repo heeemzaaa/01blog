@@ -64,4 +64,10 @@ export class PostService {
         );
     }
 
+    getTopPosts(): Observable<ApiResponse<PostResponse[]>> {
+        return this.http.get<ApiResponse<PostResponse[]>>(
+            `${this.basedUrl}/top`
+        );
+    }
+
 }

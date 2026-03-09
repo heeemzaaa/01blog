@@ -44,7 +44,7 @@ export class Notifications {
         );
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -64,7 +64,7 @@ export class Notifications {
         );
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -82,7 +82,7 @@ export class Notifications {
         );
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return

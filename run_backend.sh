@@ -1,0 +1,7 @@
+docker run --name social-postgres -e POSTGRES_USER=hamza -e POSTGRES_PASSWORD=password -e POSTGRES_DB=socialdb -p 5432:5432 -d postgres
+
+docker ps
+
+cd backend
+
+./mvnw clean spring-boot:run

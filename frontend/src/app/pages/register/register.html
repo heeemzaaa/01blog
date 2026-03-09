@@ -41,9 +41,9 @@
                     required>
             </div>
 
-            @if (errorMessage) {
+            @if (errorMessage()) {
             <div class="error-alert">
-                {{ errorMessage }}
+                {{ errorMessage() }}
             </div>
             }
 
@@ -74,9 +74,9 @@
                 <textarea name="about" id="about_me" [(ngModel)]="formData.about"></textarea>
             </div>
 
-            @if (errorMessage) {
+            @if(errorMessage()) {
             <div class="error-alert">
-                {{ errorMessage }}
+                {{ errorMessage() }}
             </div>
             }
 

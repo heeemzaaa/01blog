@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 export class HomeComponent {
 
   currentUser = signal<UserResponse | null>(null);
+  topPosts = signal<PostResponse[]>([]);
   private authService = inject(AuthService);
   private postService = inject(PostService);
   private router = inject(Router);
@@ -30,6 +31,7 @@ export class HomeComponent {
 
   constructor() {
     this.loadFeed();
+    this.loadTopPosts();
   }
 
   toProfile(userId: string) {
@@ -43,7 +45,7 @@ export class HomeComponent {
         this.posts.set(res.data);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -57,7 +59,7 @@ export class HomeComponent {
         this.currentUser.set(res!.data);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -65,5 +67,22 @@ export class HomeComponent {
         this.toast.showError("Error getting the user infos")
       }
     });
+  }
+
+  loadTopPosts() {
+
+    this.postService.getTopPosts().subscribe({
+      next: (res) => {
+        this.topPosts.set(res.data ?? []);
+      },
+      error: () => {
+        this.toast.showError("Error getting top posts");
+      }
+    });
+
+  }
+
+  toPost(postId: string) {
+    this.router.navigate([`/post/${postId}`]);
   }
 }

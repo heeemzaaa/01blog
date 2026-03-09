@@ -3,7 +3,8 @@
   <section id="first_part" class="d-flex flex-column justify-content-start gap-3 w-25">
     <div id="user_infos"
       class="d-flex flex-column justify-content-start align-items-between gap-5 custom1 bg-black px-5 py-3">
-      <div role="button" id="profile_and_names" class="d-flex justify-content-start align-items-center gap-3" (click)="toProfile(currentUser()!.id)">
+      <div role="button" id="profile_and_names" class="d-flex justify-content-start align-items-center gap-3"
+        (click)="toProfile(currentUser()!.id)">
         <div id="profile_image" class="d-flex justify-content-start">
           <img [src]="currentUser()?.profileImage 
           ? 'http://localhost:8080' + currentUser()?.profileImage 
@@ -32,26 +33,49 @@
       </div>
     </div>
 
-    <div id="user_interactions"
-      class="d-flex flex-column justify-content-start align-items-between gap-5 custom1 bg-black px-5 py-3">
-      <h2 class="p-0 m-0">in this part</h2>
-      <h2 class="p-0 m-0">we will do an</h2>
-      <h2 class="p-0 m-0">an algo for</h2>
-      <h2 class="p-0 m-0">fetching the </h2>
-      <h2 class="p-0 m-0">most interacted</h2>
+    <div id="user_interactions" class="d-flex flex-column justify-content-start gap-3 custom1 bg-black px-5 py-3">
+
+      <h5 class="fw-bold">Top Posts</h5>
+
+      @if (topPosts().length > 0) {
+
+      @for (post of topPosts(); track post.id) {
+
+      <div role="button" (click)="toPost(post.id)" class="d-flex flex-column gap-1 border-bottom pb-2">
+
+        <span class="fw-bold small text-break">
+          {{ post.title }}
+        </span>
+
+        <span class="text-secondary small text-truncate">
+          {{ post.content }}
+        </span>
+
+      </div>
+
+      }
+
+      } @else {
+
+      <span class="text-secondary small text-center">
+        No popular posts yet
+      </span>
+
+      }
+
     </div>
   </section>
 
   <section id="second_part" class="w-75 d-flex flex-column justify-content-start px-5 gap-3 feed">
     <h2 class="fw-bold">Your Feed</h2>
     @if (posts().length > 0) {
-      @for (post of posts(); track post.id) {
-      <app-post [post]="post" />
-      }
+    @for (post of posts(); track post.id) {
+    <app-post [post]="post" />
+    }
     } @else {
-      <div class="d-flex justify-content-center align-items-center c-height">
-        <p class="text-center text-secondary p-0 m-0">No posts from your connection !</p>
-      </div>
+    <div class="d-flex justify-content-center align-items-center c-height">
+      <p class="text-center text-secondary p-0 m-0">No posts from your connection !</p>
+    </div>
     }
   </section>
 

@@ -74,7 +74,7 @@ export class Profile {
         this.profile.set(res.data);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -91,7 +91,7 @@ export class Profile {
         this.posts.set(res.data);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -161,12 +161,12 @@ export class Profile {
           }
         },
         error: (err) => {
-          if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
             localStorage.removeItem('token');
             this.router.navigate(['/login']);
             return
           }
-          this.toast.showError("Error updating the profile, please try again later !")
+          this.toast.showError(err.error.message)
         }
       });
   }
@@ -183,7 +183,7 @@ export class Profile {
         this.connections.set(res.data);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -206,7 +206,7 @@ export class Profile {
       },
 
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -245,7 +245,7 @@ export class Profile {
       },
 
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -267,7 +267,7 @@ export class Profile {
       },
 
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -304,7 +304,7 @@ export class Profile {
           this.toast.showSuccess('Report sent successfully');
         },
         error: (err) => {
-          if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
             localStorage.removeItem('token');
             this.router.navigate(['/login']);
             return

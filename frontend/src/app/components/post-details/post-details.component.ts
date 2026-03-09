@@ -62,7 +62,7 @@ export class PostDetailsComponent {
       this.postService.getPostById(id).subscribe({
         next: res => this.post.set(res.data),
         error: (err) => {
-          if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
             localStorage.removeItem('token');
             this.router.navigate(['/login']);
             return
@@ -97,7 +97,7 @@ export class PostDetailsComponent {
         this.loadingComments.set(false);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -128,7 +128,7 @@ export class PostDetailsComponent {
         this.commentRequest.set({ content: '' });
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return

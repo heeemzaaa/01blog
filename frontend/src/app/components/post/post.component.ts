@@ -135,7 +135,7 @@ export class Post {
 
     this.likeService.toggleLike(post.id).subscribe({
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -185,7 +185,7 @@ export class Post {
         this.postDeleted.emit(post.id)
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -293,7 +293,7 @@ export class Post {
       },
 
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -317,7 +317,7 @@ export class Post {
         this.postUpdated.emit(updated);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
@@ -340,7 +340,7 @@ export class Post {
         this.postUpdated.emit(updated);
       },
       error: (err) => {
-        if (err.error.status == 401) {
+        if (err.error.status == 401 || err.error.message == "User not found") {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           return
