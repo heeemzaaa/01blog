@@ -17,6 +17,9 @@ import com.blog01.backend.report.model.Report;
 import com.blog01.backend.report.model.Report.StatusOfReports;
 import com.blog01.backend.report.repository.ReportRepository;
 import com.blog01.backend.report.response.ReportResponse;
+
+import jakarta.transaction.Transactional;
+
 import java.util.UUID;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,6 +35,7 @@ public class ReportService {
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
 
+    @Transactional
     public ResponseData<ReportResponse> createReport(String email, ReportRequest request) {
         User reporter = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email not Found !"));
         if (!reporter.isActive()) {
@@ -85,6 +89,7 @@ public class ReportService {
         return ResponseData.success("Pending reports fetched", response);
     }
 
+    @Transactional
     public ResponseData<ReportResponse> updateReportStatus(UUID reportId, StatusOfReports newStatus) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Report not found"));

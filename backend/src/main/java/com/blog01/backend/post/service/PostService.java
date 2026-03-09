@@ -67,6 +67,7 @@ public class PostService {
                 return ResponseData.success("Feed posts fetched successfully", response);
         }
 
+        @Transactional
         public ResponseData<PostResponse> createPost(
                         String email,
                         PostRequest postToCreate,
@@ -124,6 +125,7 @@ public class PostService {
                                 mapToPostResponse(posts, viewer));
         }
 
+        @Transactional
         public ResponseData<PostResponse> updatePost(
                         String email,
                         UUID id,

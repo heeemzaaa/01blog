@@ -35,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthService {
     private final UserRepository ur;
     private final PasswordEncoder pe;
@@ -83,6 +82,7 @@ public class AuthService {
 
     }
 
+    @Transactional
     public ResponseData<UserResponse> register(
             UserRegister userRequest,
             MultipartFile profileImage) {

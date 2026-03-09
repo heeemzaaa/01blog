@@ -9,6 +9,7 @@ import com.blog01.backend.notification.model.Notification.NotificationType;
 import com.blog01.backend.notification.repository.NotificationRepository;
 import com.blog01.backend.notification.response.NotificationResponse;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -26,6 +27,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public void sendNotification(User recipient, User actor, NotificationType type, UUID relatedId) {
         if (recipient.getId().equals(actor.getId())) {
             return;
@@ -56,6 +58,7 @@ public class NotificationService {
         return ResponseData.success("Notifications fetched", response);
     }
 
+    @Transactional
     public ResponseData<String> markAsRead(String email, UUID notificationId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
@@ -74,6 +77,7 @@ public class NotificationService {
         return ResponseData.success("Notification marked as read", null);
     }
 
+    @Transactional
     public ResponseData<String> markAllAsRead(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
@@ -90,6 +94,7 @@ public class NotificationService {
         return ResponseData.success("All notifications marked as read", null);
     }
 
+    @Transactional
     public ResponseData<String> deleteNotification(String email, UUID notificationId) {
 
         User user = userRepository.findByEmail(email)

@@ -13,6 +13,7 @@ import com.blog01.backend.notification.service.NotificationService;
 import com.blog01.backend.subscribes.model.Subscribe;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -57,7 +58,7 @@ public class SubscribeService {
                 return ResponseData.success("Subscribed users fetched successfully", subscribed);
         }
 
-        /* ===================== SUBSCRIBE ===================== */
+        @Transactional
         public ResponseData<Void> subscribe(String email, UUID targetUserId) {
 
                 User subscriber = ur.findByEmail(email)
@@ -88,7 +89,7 @@ public class SubscribeService {
                 return ResponseData.success("You are now a subscriber to this user", null);
         }
 
-        /* ===================== UNSUBSCRIBE ===================== */
+        @Transactional
         public ResponseData<Void> unsubscribe(String email, UUID targetUserId) {
 
                 User user = ur.findByEmail(email)
@@ -113,7 +114,7 @@ public class SubscribeService {
                 return ResponseData.success("You are now unsubscribed from this user", null);
         }
 
-        /* ===================== DELETE SUBSCRIBER ===================== */
+        @Transactional
         public ResponseData<Void> deleteSubscriber(String email, UUID deletedUserId) {
 
                 User user = ur.findByEmail(email)

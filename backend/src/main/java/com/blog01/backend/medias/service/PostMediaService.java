@@ -6,6 +6,7 @@ import com.blog01.backend.medias.repository.PostMediaRepository;
 import com.blog01.backend.medias.response.PostMediaResponse;
 import com.blog01.backend.post.model.Post;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,7 @@ public class PostMediaService {
     private final PostMediaRepository postMediaRepository;
     private final FileValidator fileValidator;
 
+    @Transactional
     public void handlePostMedias(Post post, List<MultipartFile> medias) {
 
         if (medias == null || medias.isEmpty()) {
@@ -103,6 +105,7 @@ public class PostMediaService {
         }
     }
 
+    @Transactional
     public void deleteSelectedMedias(Post post, List<UUID> mediaIds) {
 
         if (mediaIds == null || mediaIds.isEmpty()) {
@@ -137,6 +140,7 @@ public class PostMediaService {
                 .toList();
     }
 
+    @Transactional
     public void deleteAllByPost(Post post) {
 
         List<PostMedias> medias = postMediaRepository.findAllByPost(post);

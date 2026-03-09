@@ -10,6 +10,8 @@ import com.blog01.backend.post.model.Like;
 import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.LikeRepository;
 import com.blog01.backend.post.repository.PostRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -30,6 +32,7 @@ public class LikeService {
     private final UserRepository userRepository;
     private final NotificationService notificationService;
 
+    @Transactional
     public ResponseData<String> toggleLike(String email, UUID postId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {

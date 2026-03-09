@@ -17,6 +17,7 @@ import com.blog01.backend.report.model.Report.Target;
 import com.blog01.backend.report.repository.ReportRepository;
 import com.blog01.backend.report.response.ReportResponse;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class AdminService {
 
         return ResponseData.success("All users fetched successfully", userResponses);
     }
-
+    @Transactional
     public ResponseData<String> banUser(UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
@@ -59,6 +60,7 @@ public class AdminService {
         return ResponseData.success("User banned successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> unbanUser(UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
@@ -73,6 +75,7 @@ public class AdminService {
         return ResponseData.success("User unbanned successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> deleteUser(UUID userId) {
         if (!userRepository.existsById(userId)) {
             throw new NoSuchElementException("User not found");
@@ -93,6 +96,7 @@ public class AdminService {
         return ResponseData.success("All posts fetched successfully", responses);
     }
 
+    @Transactional
     public ResponseData<String> hidePost(UUID postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
@@ -107,6 +111,7 @@ public class AdminService {
         return ResponseData.success("Post hidden successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> restorePost(UUID postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
@@ -120,6 +125,7 @@ public class AdminService {
         return ResponseData.success("Post restored successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> deletePost(UUID postId) {
         if (!postRepository.existsById(postId)) {
             throw new NoSuchElementException("Post not found");
@@ -141,6 +147,7 @@ public class AdminService {
         return ResponseData.success("All comments fetched successfully", responses);
     }
 
+    @Transactional
     public ResponseData<String> hideComment(UUID commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
@@ -155,6 +162,7 @@ public class AdminService {
         return ResponseData.success("Comment hidden successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> restoreComment(UUID commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
@@ -168,6 +176,7 @@ public class AdminService {
         return ResponseData.success("Comment hidden successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> deleteComment(UUID commentId) {
         if (!commentRepository.existsById(commentId)) {
             throw new NoSuchElementException("Comment not found");
@@ -189,6 +198,7 @@ public class AdminService {
         return ResponseData.success("All reports fetched successfully", responses);
     }
 
+    @Transactional
     public ResponseData<ReportResponse> getReportById(UUID id) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Report not found"));
@@ -197,6 +207,7 @@ public class AdminService {
                 ReportResponse.fromEntity(report));
     }
 
+    @Transactional
     public ResponseData<String> reviewReport(UUID id) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Report not found"));
@@ -225,6 +236,7 @@ public class AdminService {
         return ResponseData.success("Report actioned successfully", null);
     }
 
+    @Transactional
     public ResponseData<String> dismissReport(UUID id) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Report not found"));
@@ -235,6 +247,7 @@ public class AdminService {
         return ResponseData.success("Report dismissed", null);
     }
 
+    @Transactional
     public ResponseData<String> actionReport(UUID id) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Report not found"));

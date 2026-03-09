@@ -22,6 +22,7 @@ import com.blog01.backend.profile.dto.EditProfileRequest;
 import com.blog01.backend.profile.response.ProfileResponse;
 import com.blog01.backend.subscribes.repository.SubscribesRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -77,6 +78,7 @@ public class ProfileService {
         return ResponseData.success("Profile fetched successfully", response);
     }
 
+    @Transactional
     public ProfileResponse editProfile(
             String authenticatedUserEmail,
             UUID profileUserId,

@@ -17,6 +17,9 @@ import com.blog01.backend.post.model.Post;
 import com.blog01.backend.post.repository.CommentRepository;
 import com.blog01.backend.post.repository.PostRepository;
 import com.blog01.backend.post.response.CommentResponse;
+
+import jakarta.transaction.Transactional;
+
 import java.util.stream.Collectors;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +45,7 @@ public class CommentService {
         return ResponseData.success("Comments fetched successfully !", response);
     }
 
+    @Transactional
     public ResponseData<CommentResponse> createComment(String email, UUID postId, CommentRequest request) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
@@ -70,6 +74,7 @@ public class CommentService {
         return ResponseData.success("Comment added successfully !", mapToCommentResponse(saved, user.getId()));
     }
 
+    @Transactional
     public ResponseData<CommentResponse> updateComment(String email, UUID commentId, CommentRequest commentToUpdate,
             MultipartFile commentImage) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
@@ -92,6 +97,7 @@ public class CommentService {
         return ResponseData.success("Comment updated successfully !", mapToCommentResponse(saved, user.getId()));
     }
 
+    @Transactional
     public ResponseData<String> deleteComment(String email, UUID postId, UUID commentId) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!user.isActive()) {
