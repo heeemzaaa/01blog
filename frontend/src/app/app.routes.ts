@@ -4,6 +4,7 @@ import { RegisterComponent } from './pages/register/register';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
 import { SearchComponent } from './components/search/search.component';
+import { ErrorPage } from './components/error-page/error-page.component';
 
 export const routes: Routes = [
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
     {
         path: 'search',
         component: SearchComponent
-    }
+    },
+    {path: '**', component: ErrorPage}
 
 ];

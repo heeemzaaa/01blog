@@ -10,6 +10,8 @@ import com.blog01.backend.admin.response.AdminDashboardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +39,8 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<ResponseData<String>> deleteUser(@PathVariable UUID id) {
-        return ResponseEntity.ok(adminService.deleteUser(id));
+    public ResponseEntity<ResponseData<String>> deleteUser(@PathVariable UUID id, Principal principal) {
+        return ResponseEntity.ok(adminService.deleteUser(id, principal.getName()));
     }
 
     // ========================= POSTS =========================

@@ -87,11 +87,10 @@ public class AuthService {
             UserRegister userRequest,
             MultipartFile profileImage) {
 
-        if (ur.existsByEmail(userRequest.getEmail())) {
-            throw new DataIntegrityViolationException("Email already existed, try another one !");
+        if (ur.existsByEmail(userRequest.getEmail()) || ur.existsByUsername(userRequest.getUsername())) {
+            throw new DataIntegrityViolationException("User already existed, try another one !");
         }
 
-        // 1️⃣ Create user without image
         User userToCreate = User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
@@ -103,7 +102,6 @@ public class AuthService {
 
         User saved = ur.save(userToCreate);
 
-        // 2️⃣ Save image using generated ID
         String imagePath = saveProfileImage(saved.getId(), profileImage);
 
         if (imagePath != null) {
@@ -111,7 +109,6 @@ public class AuthService {
             ur.save(saved);
         }
 
-        // 3️⃣ Continue normally
         UserDetails userDetails = userDetailsService.loadUserByUsername(saved.getEmail());
         String jwtToken = jwtUtils.generateToken(userDetails, saved.getId());
 

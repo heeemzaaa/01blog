@@ -1,8 +1,13 @@
 package com.blog01.backend.auth.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.blog01.backend.post.model.Comment;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,6 +47,10 @@ public class User {
         USER
     }
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
@@ -53,7 +62,6 @@ public class User {
     @Column(nullable = false)
     private boolean active = true;
 
-    
     private LocalDateTime bannedAt;
 
     @CreationTimestamp

@@ -76,9 +76,14 @@ public class AdminService {
     }
 
     @Transactional
-    public ResponseData<String> deleteUser(UUID userId) {
+    public ResponseData<String> deleteUser(UUID userId, String adminEmail) {
+        User admin = userRepository.findByEmail(adminEmail).orElseThrow(() -> new RuntimeException("User not found"));
         if (!userRepository.existsById(userId)) {
             throw new NoSuchElementException("User not found");
+        }
+
+        if (admin.getId().equals(userId)) {
+            throw new org.springframework.security.access.AccessDeniedException("You cannot delete yourself !");
         }
         userRepository.deleteById(userId);
         return ResponseData.success("User deleted successfully", null);
